@@ -36,6 +36,7 @@
             import { GLTFLoader } from 'https://unpkg.com/three@latest/examples/jsm/loaders/GLTFLoader.js';
 
             const degreesToRadians = function(angle) { return angle * math.pi / 180 }
+
             const pointsSpacedOnCircle = function(numPoints, radius, offsetAngle) {
                 offsetAngle = offsetAngle || 0
                 const incrementAngle = Math.PI * 2 / numPoints
@@ -48,6 +49,26 @@
                 }
                 return points
             }
+
+            const radialToCartesian = function(pointsRadial) {
+                return {
+                    x: pointsRadial.radius * Math.cos(pointsRadial.angle),
+                    y: pointsRadial.radius * Math.sin(pointsRadial.angle),
+                }
+            }
+
+            const cartesianToRadial = function(point) {
+                return {
+                    radius: Math.pow(
+                        Math.pow(point.x, 2) + Math.pow(point.y, 2), 
+                        0.5
+                    ),
+                    angle: Math.atan(point.y / point.x)
+                }
+            }
+
+            // const URL_ROOT = '/six-years-in-the-third-space'
+            const URL_ROOT = ''
 
             const LIGHT_AMBIENT_COLOR = 0xFFFFFF
             const LIGHT_AMBIENT_INTENSITY = 0.3
@@ -98,12 +119,16 @@
             function Satellite (modelUrl) {
                 this.modelUrl = modelUrl
                 this.model = null
+                this.radialCoordinates = {
+                    radius: 0,
+                    angle: 0,
+                }
             }
 
             Satellite.prototype.load = function() {
                 const self = this
                 return new Promise(function (resolve, reject) {
-                    loader.load(self.modelUrl, function ( gltf ) {
+                    loader.load(URL_ROOT + self.modelUrl, function ( gltf ) {
                         console.log('model loaded')
                         self.model = gltf
                         resolve(self)
@@ -118,16 +143,39 @@
                 scene.add(this.model.scene)
             }
 
+            Satellite.prototype.getPosition = function() {
+                return {
+                    x: this.model.scene.position.x,
+                    y: this.model.scene.position.y,
+                    z: this.model.scene.position.z,
+                }
+            }
+
+            Satellite.prototype.getPositionRadial = function() {
+                return cartesianToRadial(this.getPosition())
+            }
+
             Satellite.prototype.moveIncrement = function(delta) {
                 this.model.scene.position.x += delta.x || 0
                 this.model.scene.position.y += delta.y || 0
                 this.model.scene.position.z += delta.z || 0
             }
 
+            Satellite.prototype.moveIncrementRadial = function(delta) {
+                const pointRadial = this.getPositionRadial()
+                pointRadial.radius += delta.radius || 0
+                pointRadial.angle += delta.angle || 0
+                this.moveToRadial(pointRadial)
+            }
+
             Satellite.prototype.moveTo = function(point) {
                 this.model.scene.position.x = (point.x !== undefined) ? point.x : this.model.scene.position.x
                 this.model.scene.position.y = (point.y !== undefined) ? point.y : this.model.scene.position.y
                 this.model.scene.position.z = (point.z !== undefined) ? point.z : this.model.scene.position.z
+            }
+
+            Satellite.prototype.moveToRadial = function(pointRadial) {
+                this.moveTo(radialToCartesian(pointRadial))
             }
 
             Satellite.prototype.rotateIncrement = function(delta) {
@@ -151,6 +199,7 @@
                     satellite.show()
                     satellite.moveTo(startingPoints[i])
                 })
+                animate();
             })
 
             function animate() {
@@ -162,6 +211,9 @@
                         y: rotateIncrement,
                         z: rotateIncrement,
                     })
+                    // satellite.moveIncrementRadial({
+                    //     angle: Math.PI * 2 * 0.001
+                    // })
                 })
                 
                 // console.log(models[0].scene.position.x)
@@ -170,7 +222,6 @@
                 // cube.rotation.y += 0.01;
                 renderer.render( scene, camera );
             }
-            animate();
 		</script>
     </body>
 </html>
