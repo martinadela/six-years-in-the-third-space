@@ -67,7 +67,6 @@
                 }
             }
 
-            // const URL_ROOT = '/six-years-in-the-third-space'
             const URL_ROOT = ''
 
             const LIGHT_AMBIENT_COLOR = 0xFFFFFF
@@ -185,9 +184,9 @@
             }
 
             const satellites = [
-                new Satellite('/satellites/satellite2.glb'),
-                new Satellite('/satellites/satellite3.glb'),
-                new Satellite('/satellites/satellite4.glb'),
+                new Satellite('satellites/satellite2.glb'),
+                new Satellite('satellites/satellite3.glb'),
+                new Satellite('satellites/satellite4.glb'),
             ]
 
             Promise.all(satellites.map(function (satellite) {
@@ -221,6 +220,8 @@
                 // cube.rotation.y += 0.01;
                 renderer.render( scene, camera );
             }
+
+
 		</script>
     </body>
 </html>
