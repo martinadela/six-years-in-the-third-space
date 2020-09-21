@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#000000" />
+
+        <!-- page metadata -->
+        <title>REPLACE_ME</title>
+        <meta name="description" content="REPLACE_ME" />
+        <meta property="og:image" content="REPLACE_ME" />
+        <meta property="og:url" content="REPLACE_ME" />
+        <meta property="og:title" content="REPLACE_ME" />
+        <meta property="og:description" content="REPLACE_ME" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+
+        <!-- favicons -->
+        <!-- <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+        <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" /> -->
+        <!--
+            manifest.json provides metadata used when your web app is installed on a
+            user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+        -->
+        <!-- <link rel="manifest" href="%PUBLIC_URL%/manifest.json" /> -->
+
+
+        <style>
+			body { margin: 0; }
+			canvas { display: block; }
+		</style>
+    </head>
+    <body>
+		<script type="module">
+            import * as THREE from 'https://unpkg.com/three@latest/build/three.module.js';
+            import { GLTFLoader } from 'https://unpkg.com/three@latest/examples/jsm/loaders/GLTFLoader.js';
+
+            const degreesToRadians = function(angle) { return angle * math.pi / 180 }
+            const pointsSpacedOnCircle = function(numPoints, radius, offsetAngle) {
+                offsetAngle = offsetAngle || 0
+                const incrementAngle = Math.PI * 2 / numPoints
+                const points = []
+                for (let i = 0; i < numPoints; i++) {
+                    points.push({
+                        x: radius * Math.cos(offsetAngle + incrementAngle * i),
+                        y: radius * Math.sin(offsetAngle + incrementAngle * i),
+                    })
+                }
+                return points
+            }
+
+            const LIGHT_AMBIENT_COLOR = 0xFFFFFF
+            const LIGHT_AMBIENT_INTENSITY = 0.3
+
+            const LIGHT_DIRECT_COLOR = 0xFFFFFF
+            const LIGHT_DIRECT_INTENSITY = 0.8 * Math.PI
+
+            const SCENE_BG_COLOR = 0xcccccc
+
+            const CAMERA_FIELD_OF_VIEW_DEGREES = 75
+            const CAMERA_NEAR = 0.1
+            const CAMERA_FAR = 100
+            const CAMERA_Z = 30
+
+			const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera( CAMERA_FIELD_OF_VIEW_DEGREES, window.innerWidth / window.innerHeight, CAMERA_NEAR, CAMERA_FAR );
+            const renderer = new THREE.WebGLRenderer({antialias: true});
+            scene.add(camera)
+
+            const light1  = new THREE.AmbientLight(LIGHT_AMBIENT_COLOR, LIGHT_AMBIENT_INTENSITY);
+            light1.name = 'ambient_light';
+            camera.add( light1 );
+
+            const light2  = new THREE.DirectionalLight(LIGHT_DIRECT_COLOR, LIGHT_DIRECT_INTENSITY);
+            light2.position.set(0.5, 0, 0.866); // ~60º
+            light2.name = 'main_light';
+            camera.add( light2 );
+
+            renderer.physicallyCorrectLights = true;
+            // Background color
+            scene.background = new THREE.Color(SCENE_BG_COLOR)
+            renderer.setPixelRatio( window.devicePixelRatio );
+
+            renderer.outputEncoding = THREE.sRGBEncoding;
+
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            document.body.appendChild( renderer.domElement );
+
+            // var geometry = new THREE.BoxGeometry();
+            // var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+            // var cube = new THREE.Mesh( geometry, material );
+            // scene.add( cube );
+
+            camera.position.z = CAMERA_Z;
+
+            var loader = new GLTFLoader();
+
+            function Satellite (modelUrl) {
+                this.modelUrl = modelUrl
+                this.model = null
+            }
+
+            Satellite.prototype.load = function() {
+                const self = this
+                return new Promise(function (resolve, reject) {
+                    loader.load(self.modelUrl, function ( gltf ) {
+                        console.log('model loaded')
+                        self.model = gltf
+                        resolve(self)
+                    }, undefined, function (error) {
+                        console.error(error)
+                        reject(error)
+                    })
+                })
+            }
+
+            Satellite.prototype.show = function() {
+                scene.add(this.model.scene)
+            }
+
+            Satellite.prototype.moveIncrement = function(delta) {
+                this.model.scene.position.x += delta.x || 0
+                this.model.scene.position.y += delta.y || 0
+                this.model.scene.position.z += delta.z || 0
+            }
+
+            Satellite.prototype.moveTo = function(point) {
+                this.model.scene.position.x = (point.x !== undefined) ? point.x : this.model.scene.position.x
+                this.model.scene.position.y = (point.y !== undefined) ? point.y : this.model.scene.position.y
+                this.model.scene.position.z = (point.z !== undefined) ? point.z : this.model.scene.position.z
+            }
+
+            Satellite.prototype.rotateIncrement = function(delta) {
+                this.model.scene.rotation.x += delta.x || 0
+                this.model.scene.rotation.y += delta.y || 0
+                this.model.scene.rotation.z += delta.z || 0
+            }
+
+            const satellites = [
+                new Satellite('/satellites/satellite2.glb'),
+                new Satellite('/satellites/satellite3.glb'),
+                new Satellite('/satellites/satellite4.glb'),
+            ]
+
+            Promise.all(satellites.map(function (satellite) {
+                return satellite.load()
+            })).then(function() {
+                console.log('all models loaded')
+                const startingPoints = pointsSpacedOnCircle(satellites.length, 10, 0.2 * Math.PI * 2 / satellites.length)
+                satellites.forEach(function(satellite, i) {
+                    satellite.show()
+                    satellite.moveTo(startingPoints[i])
+                })
+            })
+
+            function animate() {
+                requestAnimationFrame(animate);
+                satellites.forEach(function(satellite) {
+                    const rotateIncrement = 0.005 + Math.random() * 0.005
+                    satellite.rotateIncrement({
+                        x: rotateIncrement,
+                        y: rotateIncrement,
+                        z: rotateIncrement,
+                    })
+                })
+                
+                // console.log(models[0].scene.position.x)
+
+                // cube.rotation.x += 0.01;
+                // cube.rotation.y += 0.01;
+                renderer.render( scene, camera );
+            }
+            animate();
+		</script>
+    </body>
+</html>
