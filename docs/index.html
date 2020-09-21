@@ -63,12 +63,12 @@
                         Math.pow(point.x, 2) + Math.pow(point.y, 2), 
                         0.5
                     ),
-                    angle: Math.atan(point.y / point.x)
+                    angle: Math.atan2(point.y, point.x)
                 }
             }
 
-            const URL_ROOT = '/six-years-in-the-third-space'
-            // const URL_ROOT = ''
+            // const URL_ROOT = '/six-years-in-the-third-space'
+            const URL_ROOT = ''
 
             const LIGHT_AMBIENT_COLOR = 0xFFFFFF
             const LIGHT_AMBIENT_INTENSITY = 0.3
@@ -164,7 +164,7 @@
             Satellite.prototype.moveIncrementRadial = function(delta) {
                 const pointRadial = this.getPositionRadial()
                 pointRadial.radius += delta.radius || 0
-                pointRadial.angle += delta.angle || 0
+                pointRadial.angle = (pointRadial.angle + (delta.angle || 0)) % (Math.PI * 2)
                 this.moveToRadial(pointRadial)
             }
 
@@ -204,16 +204,15 @@
 
             function animate() {
                 requestAnimationFrame(animate);
-                satellites.forEach(function(satellite) {
+                satellites.forEach(function(satellite, i) {
                     const rotateIncrement = 0.005 + Math.random() * 0.005
                     satellite.rotateIncrement({
                         x: rotateIncrement,
                         y: rotateIncrement,
-                        z: rotateIncrement,
                     })
-                    // satellite.moveIncrementRadial({
-                    //     angle: Math.PI * 2 * 0.001
-                    // })
+                    satellite.moveIncrementRadial({
+                        angle: Math.PI * 2 * 0.001
+                    })
                 })
                 
                 // console.log(models[0].scene.position.x)
