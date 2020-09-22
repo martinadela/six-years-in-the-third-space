@@ -76,10 +76,10 @@
             const URL_ROOT = ''
 
             const LIGHT_AMBIENT_COLOR = 0xFFFFFF
-            const LIGHT_AMBIENT_INTENSITY = 0.3
+            const LIGHT_AMBIENT_INTENSITY = 2
 
             const LIGHT_DIRECT_COLOR = 0xFFFFFF
-            const LIGHT_DIRECT_INTENSITY = 0.8 * Math.PI
+            const LIGHT_DIRECT_INTENSITY = 2 * Math.PI
 
             const SCENE_BG_COLOR = 0xcccccc
 
@@ -88,8 +88,11 @@
             const CAMERA_FAR = 100
             const CAMERA_Z = 40
 
+            const PLANET_RADIUS = 14
+            const PLANET_COLOR = 0xaaaaaa
             const PLANETARY_ROTATION_AXIS_RANDOMNESS = Math.PI * 0
             const PLANETARY_ROTATION_RADIUS_RANDOMNESS = 0.5
+            const PLANETARY_ROTATION_RADIUS = 17
             const PLANETARY_ROTATION_ANGLE_STEP = Math.PI / 2 * 0.005
 
             const SELF_ROTATION_INCREMENT = 0.001
@@ -150,8 +153,8 @@
             }
 
             function Planet () {
-                this.geometry = new THREE.SphereBufferGeometry( 5, 32, 32 )
-                this.material = new THREE.MeshBasicMaterial( { color: 0x00ffff } )
+                this.geometry = new THREE.SphereBufferGeometry( PLANET_RADIUS, 32, 32 )
+                this.material = new THREE.MeshBasicMaterial( { color: PLANET_COLOR } )
                 this.mesh = new THREE.Mesh( this.geometry, this.material )
             }
 
@@ -236,19 +239,21 @@
                 new Satellite('satellites/satellite2.glb'),
                 new Satellite('satellites/satellite3.glb'),
                 new Satellite('satellites/satellite4.glb'),
+                new Satellite('satellites/satellite5.glb'),
+
+                // new Satellite('satellites/satellite3.glb'),
+                // new Satellite('satellites/satellite2.glb'),
+                // new Satellite('satellites/satellite4.glb'),
+                // new Satellite('satellites/satellite5.glb'),
+
+                // new Satellite('satellites/satellite5.glb'),
+                // new Satellite('satellites/satellite2.glb'),
+                // new Satellite('satellites/satellite3.glb'),
+                // new Satellite('satellites/satellite4.glb'),
 
                 // new Satellite('satellites/satellite2.glb'),
-                // new Satellite('satellites/satellite3.glb'),
                 // new Satellite('satellites/satellite4.glb'),
-                // new Satellite('satellites/satellite2.glb'),
                 // new Satellite('satellites/satellite3.glb'),
-                // new Satellite('satellites/satellite4.glb'),
-                // new Satellite('satellites/satellite2.glb'),
-                // new Satellite('satellites/satellite3.glb'),
-                // new Satellite('satellites/satellite4.glb'),
-                // new Satellite('satellites/satellite2.glb'),
-                // new Satellite('satellites/satellite3.glb'),
-                // new Satellite('satellites/satellite4.glb'),
             ]
 
             const planet = new Planet()
@@ -275,7 +280,7 @@
 
                     sphericalPosition.phi = (sphericalPosition.phi + Math.PI / 2) % (2 * Math.PI)
                     // sphericalPosition.theta = (sphericalPosition.theta + Math.PI / 2) % (2 * Math.PI)
-                    sphericalPosition.radius = 10 * (1 + Math.random() * PLANETARY_ROTATION_RADIUS_RANDOMNESS)
+                    sphericalPosition.radius = PLANETARY_ROTATION_RADIUS * (1 + Math.random() * PLANETARY_ROTATION_RADIUS_RANDOMNESS)
 
                     satellite.moveToSpherical(sphericalPosition)
                     satellite.setPlanetaryRotationAxis(v3Axis)
