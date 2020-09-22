@@ -34,6 +34,7 @@
 		<script type="module">
             import * as THREE from 'https://unpkg.com/three@latest/build/three.module.js';
             import { GLTFLoader } from 'https://unpkg.com/three@latest/examples/jsm/loaders/GLTFLoader.js';
+            import { OrbitControls } from 'https://unpkg.com/three@latest/examples/jsm/controls/OrbitControls.js'
 
             const degreesToRadians = function(angle) { return angle * math.pi / 180 }
 
@@ -50,21 +51,26 @@
                 return points
             }
 
-            const radialToCartesian = function(pointsRadial) {
-                return {
-                    x: pointsRadial.radius * Math.cos(pointsRadial.angle),
-                    y: pointsRadial.radius * Math.sin(pointsRadial.angle),
+            const sphericalSpacedOnSphere = function(numPoints, radius) {
+                const sphericals = []
+                const rowOrColumnCount = Math.pow(numPoints, 0.5)
+                let rowCount = Math.ceil(rowOrColumnCount)
+                let columnCount = (rowCount * Math.floor(rowOrColumnCount)) < numPoints ? Math.ceil(rowOrColumnCount) : Math.floor(rowOrColumnCount)
+                for (let row = 0; row < rowCount; row++) {
+                    for (let col = 0; col < columnCount; col++) {
+                        const phi = row * (Math.PI / rowCount)
+                        const theta = col * (2 * Math.PI / columnCount)
+                        sphericals.push(new THREE.Spherical(radius, phi, theta))
+                    }
                 }
+                console.log(sphericals.map(s => [s.theta / Math.PI, s.phi / Math.PI]))
+                return sphericals
             }
 
-            const cartesianToRadial = function(point) {
-                return {
-                    radius: Math.pow(
-                        Math.pow(point.x, 2) + Math.pow(point.y, 2), 
-                        0.5
-                    ),
-                    angle: Math.atan2(point.y, point.x)
-                }
+            const sphericalToV3 = function(spherical) {
+                const v3 = new THREE.Vector3()
+                v3.setFromSpherical(spherical)
+                return v3
             }
 
             const URL_ROOT = ''
@@ -80,11 +86,20 @@
             const CAMERA_FIELD_OF_VIEW_DEGREES = 75
             const CAMERA_NEAR = 0.1
             const CAMERA_FAR = 100
-            const CAMERA_Z = 30
+            const CAMERA_Z = 40
+
+            const PLANETARY_ROTATION_AXIS_RANDOMNESS = Math.PI * 0
+            const PLANETARY_ROTATION_RADIUS_RANDOMNESS = 0.5
+            const PLANETARY_ROTATION_ANGLE_STEP = Math.PI / 2 * 0.005
+
+            const SELF_ROTATION_INCREMENT = 0.001
 
 			const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera( CAMERA_FIELD_OF_VIEW_DEGREES, window.innerWidth / window.innerHeight, CAMERA_NEAR, CAMERA_FAR );
             const renderer = new THREE.WebGLRenderer({antialias: true});
+
+            const controls = new OrbitControls( camera, renderer.domElement );
+
             scene.add(camera)
 
             const light1  = new THREE.AmbientLight(LIGHT_AMBIENT_COLOR, LIGHT_AMBIENT_INTENSITY);
@@ -115,13 +130,43 @@
 
             var loader = new GLTFLoader();
 
+            function RotationAxis(spherical) {
+                this.spherical = spherical
+            }
+
+            RotationAxis.prototype.show = function(scene) {
+                const material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+                const sphericalFurther = this.spherical.clone()
+                sphericalFurther.radius += 200
+                const points = [sphericalToV3(this.spherical), sphericalToV3(sphericalFurther)]
+                
+                var geometry = new THREE.BufferGeometry().setFromPoints( points );
+                var line = new THREE.Line( geometry, material );
+                scene.add(line)
+            }
+
+            RotationAxis.prototype.getV3 = function() {
+                return sphericalToV3(this.spherical)
+            }
+
+            function Planet () {
+                this.geometry = new THREE.SphereBufferGeometry( 5, 32, 32 )
+                this.material = new THREE.MeshBasicMaterial( { color: 0x00ffff } )
+                this.mesh = new THREE.Mesh( this.geometry, this.material )
+            }
+
+            Planet.prototype.show = function() {
+                scene.add(this.mesh)
+            }
+
             function Satellite (modelUrl) {
                 this.modelUrl = modelUrl
                 this.model = null
-                this.radialCoordinates = {
-                    radius: 0,
-                    angle: 0,
-                }
+
+                this.planetaryRotationAxis = new THREE.Vector3( 1, 1, 1 )
+                this.planetaryRotationAngleStep = PLANETARY_ROTATION_ANGLE_STEP
+                this.planetaryRotationQuaternion = new THREE.Quaternion()
+                this._updatePlanetaryRotation()
             }
 
             Satellite.prototype.load = function() {
@@ -142,16 +187,26 @@
                 scene.add(this.model.scene)
             }
 
+            Satellite.prototype.planetaryRotationStep = function() {
+                this.model.scene.position.applyQuaternion(this.planetaryRotationQuaternion)
+            }
+
+            Satellite.prototype.setPlanetaryRotationAxis = function(axis) {
+                this.planetaryRotationAxis = axis
+                this._updatePlanetaryRotation()
+            }
+
+            Satellite.prototype._updatePlanetaryRotation = function() {
+                this.planetaryRotationQuaternion.setFromAxisAngle(this.planetaryRotationAxis, this.planetaryRotationAngleStep)
+            }
+
             Satellite.prototype.getPosition = function() {
-                return {
-                    x: this.model.scene.position.x,
-                    y: this.model.scene.position.y,
-                    z: this.model.scene.position.z,
-                }
+                return this.model.scene.position
             }
 
             Satellite.prototype.getPositionRadial = function() {
-                return cartesianToRadial(this.getPosition())
+                const spherical = new THREE.Spherical()
+                return spherical.setFromVector3(spherical)
             }
 
             Satellite.prototype.moveIncrement = function(delta) {
@@ -167,14 +222,8 @@
                 this.moveToRadial(pointRadial)
             }
 
-            Satellite.prototype.moveTo = function(point) {
-                this.model.scene.position.x = (point.x !== undefined) ? point.x : this.model.scene.position.x
-                this.model.scene.position.y = (point.y !== undefined) ? point.y : this.model.scene.position.y
-                this.model.scene.position.z = (point.z !== undefined) ? point.z : this.model.scene.position.z
-            }
-
-            Satellite.prototype.moveToRadial = function(pointRadial) {
-                this.moveTo(radialToCartesian(pointRadial))
+            Satellite.prototype.moveToSpherical = function(sphericalPosition) {
+                this.getPosition().setFromSpherical(sphericalPosition)
             }
 
             Satellite.prototype.rotateIncrement = function(delta) {
@@ -187,31 +236,67 @@
                 new Satellite('satellites/satellite2.glb'),
                 new Satellite('satellites/satellite3.glb'),
                 new Satellite('satellites/satellite4.glb'),
+
+                // new Satellite('satellites/satellite2.glb'),
+                // new Satellite('satellites/satellite3.glb'),
+                // new Satellite('satellites/satellite4.glb'),
+                // new Satellite('satellites/satellite2.glb'),
+                // new Satellite('satellites/satellite3.glb'),
+                // new Satellite('satellites/satellite4.glb'),
+                // new Satellite('satellites/satellite2.glb'),
+                // new Satellite('satellites/satellite3.glb'),
+                // new Satellite('satellites/satellite4.glb'),
+                // new Satellite('satellites/satellite2.glb'),
+                // new Satellite('satellites/satellite3.glb'),
+                // new Satellite('satellites/satellite4.glb'),
             ]
+
+            const planet = new Planet()
 
             Promise.all(satellites.map(function (satellite) {
                 return satellite.load()
             })).then(function() {
                 console.log('all models loaded')
-                const startingPoints = pointsSpacedOnCircle(satellites.length, 10, 0.2 * Math.PI * 2 / satellites.length)
+                planet.show()
+                const planetaryRotationAxes = sphericalSpacedOnSphere(satellites.length)
+                    .map(function(spherical) {
+                        // spherical.phi = (spherical.phi + Math.random() * PLANETARY_ROTATION_AXIS_RANDOMNESS) % (2 * Math.PI)
+                        // spherical.theta = (spherical.theta + Math.random() * PLANETARY_ROTATION_AXIS_RANDOMNESS) % (2 * Math.PI)
+                        return new RotationAxis(spherical)
+                    })
+                
                 satellites.forEach(function(satellite, i) {
                     satellite.show()
-                    satellite.moveTo(startingPoints[i])
+                    const v3Axis = planetaryRotationAxes[i].getV3()
+                    // planetaryRotationAxes[i].show(scene)
+
+                    const sphericalPosition = new THREE.Spherical()
+                    sphericalPosition.setFromVector3(v3Axis)
+
+                    sphericalPosition.phi = (sphericalPosition.phi + Math.PI / 2) % (2 * Math.PI)
+                    // sphericalPosition.theta = (sphericalPosition.theta + Math.PI / 2) % (2 * Math.PI)
+                    sphericalPosition.radius = 10 * (1 + Math.random() * PLANETARY_ROTATION_RADIUS_RANDOMNESS)
+
+                    satellite.moveToSpherical(sphericalPosition)
+                    satellite.setPlanetaryRotationAxis(v3Axis)
                 })
                 animate();
             })
 
             function animate() {
                 requestAnimationFrame(animate);
+                controls.update();
+
                 satellites.forEach(function(satellite, i) {
-                    const rotateIncrement = 0.005 + Math.random() * 0.005
+                    const rotateIncrement = SELF_ROTATION_INCREMENT + Math.random() * 0.005
                     satellite.rotateIncrement({
                         x: rotateIncrement,
                         y: rotateIncrement,
                     })
-                    satellite.moveIncrementRadial({
-                        angle: Math.PI * 2 * 0.001
-                    })
+                    // satellite.moveIncrementRadial({
+                    //     angle: Math.PI * 2 * 0.001
+                    // })
+                    satellite.planetaryRotationStep()
                 })
                 
                 // console.log(models[0].scene.position.x)
