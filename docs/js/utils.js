@@ -48,4 +48,20 @@ TSP.utils.template = function(templateText) {
     return template.content.cloneNode(true)
 }
 
+TSP.utils.fetch = function(url) {
+    return fetch(TSP.state.get('App.rootUrl') + url)
+        .then(function(response) {
+            if (response.status !== 200) {
+                throw new Error(`fetch status ${response.status} > ${url}`)
+            }
+            return response.text()
+        })
+}
+
+TSP.utils.navigateTo = function(relativeUrl) {
+    const url = TSP.state.get('App.rootUrl') + relativeUrl
+    history.pushState({}, '', url)
+    TSP.state.set('App.currentUrl', relativeUrl)
+}
+
 })()

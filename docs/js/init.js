@@ -2,7 +2,10 @@
 const app = new TSP.components.App()
 
 window.addEventListener('popstate', function(e) {
-    TSP.state.set('app.currentUrl', document.location.pathname)
+    TSP.state.set('App.currentUrl', document.location.pathname)
 })
+
+// TODO : remove urlRoot
+TSP.utils.navigateTo(location.pathname)
 
 })()

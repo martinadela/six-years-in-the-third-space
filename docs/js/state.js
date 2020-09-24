@@ -2,10 +2,6 @@
 
 const STATE = {
     debug: false,
-    app: {
-        urlRoot: '',
-        currentUrl: document.location.pathname
-    },
     lights: {
         ambientColor: 0xFFFFFF,
         ambientIntensity: 2,
@@ -13,7 +9,8 @@ const STATE = {
         directIntensity: 2 * Math.PI,
     },
     background: {
-        color: 0xcccccc,
+        // color: 0xcccccc,
+        imageUrl: '/images/background.jpg'
     },
     camera: {
         fieldOfViewDegrees: 75,
@@ -30,20 +27,92 @@ const STATE = {
         planetaryRotationRadius: [25, 0.5],
         planetaryRotationAngleStep: Math.PI / 2 * 0.002,
         selfRotationIncrement: [0.002, 0.002],
-        satellites: {
-            golfBall: {
-                modelUrl: 'satellites/satellite2.glb'
+        satellites: [
+            {
+                url: '/contributions/bla',
+                modelUrl: 'satellites/satellite2.glb',
+                contributionUrl: '/pages/contributions/bla.html',
             },
-            discoBall: {
-                modelUrl: 'satellites/satellite3.glb'
+            {
+                url: '/contributions/blo',
+                modelUrl: 'satellites/satellite3.glb',
+                contributionUrl: '/pages/contributions/blo.html',
             },
-            diamond: {
-                modelUrl: 'satellites/satellite4.glb'
+            {
+                url: '/contributions/bli',
+                modelUrl: 'satellites/satellite4.glb',
+                contributionUrl: '/pages/contributions/bli.html',
             },
-            blueHubble: {
-                modelUrl: 'satellites/satellite5.glb'
+            {
+                url: '/contributions/blu',
+                modelUrl: 'satellites/satellite5.glb',
+                contributionUrl: '/pages/contributions/blu.html',
             },
-        }
+
+
+
+
+            {
+                url: '/contributions/bla',
+                modelUrl: 'satellites/satellite2.glb',
+                contributionUrl: '/pages/contributions/bla.html',
+            },
+            {
+                url: '/contributions/bli',
+                modelUrl: 'satellites/satellite4.glb',
+                contributionUrl: '/pages/contributions/bli.html',
+            },
+            {
+                url: '/contributions/blu',
+                modelUrl: 'satellites/satellite5.glb',
+                contributionUrl: '/pages/contributions/blu.html',
+            },
+            {
+                url: '/contributions/blo',
+                modelUrl: 'satellites/satellite3.glb',
+                contributionUrl: '/pages/contributions/blo.html',
+            },
+            {
+                url: '/contributions/bla',
+                modelUrl: 'satellites/satellite2.glb',
+                contributionUrl: '/pages/contributions/bla.html',
+            },
+            {
+                url: '/contributions/blo',
+                modelUrl: 'satellites/satellite3.glb',
+                contributionUrl: '/pages/contributions/blo.html',
+            },
+            {
+                url: '/contributions/bli',
+                modelUrl: 'satellites/satellite4.glb',
+                contributionUrl: '/pages/contributions/bli.html',
+            },
+            {
+                url: '/contributions/bla',
+                modelUrl: 'satellites/satellite2.glb',
+                contributionUrl: '/pages/contributions/bla.html',
+            },
+            {
+                url: '/contributions/blu',
+                modelUrl: 'satellites/satellite5.glb',
+                contributionUrl: '/pages/contributions/blu.html',
+            },
+            {
+                url: '/contributions/blo',
+                modelUrl: 'satellites/satellite3.glb',
+                contributionUrl: '/pages/contributions/blo.html',
+            },
+            {
+                url: '/contributions/bli',
+                modelUrl: 'satellites/satellite5.glb',
+                contributionUrl: '/pages/contributions/bli.html',
+            },
+            {
+                url: '/contributions/blu',
+                modelUrl: 'satellites/satellite4.glb',
+                contributionUrl: '/pages/contributions/blu.html',
+            },
+        ]
     },
     window: {
         width: window.innerWidth,
@@ -68,12 +137,19 @@ const STATE = {
             normal: "'Archivo', sans-serif",
         }
     },
+    App: {
+        rootUrl: '',
+        currentUrl: document.location.pathname,
+    },
     Canvas3D: {
         loaded: false,
-        zIndex: 1,
+        hoveredObject: null
     },
-    PageFrame: {
-        zIndex: 2,
+    Reader: {
+        loaded: false
+    },
+    Camera: {
+        chase: null
     }
 }
 
@@ -90,12 +166,7 @@ const _getOrThrow = function(path) {
 }
 
 TSP.state.get = function(path) {
-    const value = _getOrThrow(path)
-    if (_.isArray(value) || _.isObject(value)) {
-        return _.cloneDeep(value)
-    } else {
-        return value
-    }
+    return _getOrThrow(path)
 }
 
 TSP.state.getRandomized = function(path) {

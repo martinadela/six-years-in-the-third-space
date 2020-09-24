@@ -6,6 +6,7 @@
         .createStyleSheet({
             main: {
                 width: '30%',
+                maxWidth: '20em',
                 color: TSP.state.get('styles.colors.Green'),
             },
             innerContainer: {
@@ -26,6 +27,10 @@
                         marginBottom: '0',
                     }
                 },
+            },
+            ul: {
+                height: 0,
+                overflow: 'hidden',
             },
             li: {
                 fontFamily: TSP.state.get('styles.fontFamilies.title'),
@@ -50,7 +55,7 @@
                     <p>in the</p> 
                     <p>Third Space</p>
                 </h1>
-                <ul>
+                <ul class="${sheet.classes.ul}">
                     <li class="${sheet.classes.li}">
                         <a is="tsp-anchor" href="/contributors">
                             Contributors

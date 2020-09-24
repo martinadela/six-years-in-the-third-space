@@ -5,9 +5,7 @@ class Anchor extends HTMLAnchorElement {
         super()
         this.addEventListener('click', function(e) {
             e.preventDefault()
-            const url = TSP.state.state.get('app.rootUrl') + this.href
-            history.pushState({}, '', url)
-            TSP.state.set('app.currentUrl', document.location.pathname)
+            TSP.utils.navigateTo(this.href)
         })
     }
 }
