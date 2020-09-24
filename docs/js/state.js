@@ -1,11 +1,10 @@
 ;(function() {
 
-const LISTENERS = {}
-
 const STATE = {
     debug: false,
     app: {
-        urlRoot: ''
+        urlRoot: '',
+        currentUrl: document.location.pathname
     },
     lights: {
         ambientColor: 0xFFFFFF,
@@ -50,10 +49,37 @@ const STATE = {
         width: window.innerWidth,
         height: window.innerHeight,
     },
+    styles: {
+        colors: {
+            Green: '#00FF2E'
+        },
+        spacings: {
+            size2: '2rem',
+            size1: '1rem',
+        },
+        dimensions: {
+            borderThickness: '4px'
+        },
+        fontSizes: {
+            menu: '15%'
+        },
+        fontFamilies: {
+            title: "'Cormorant Infant', serif",
+            normal: "'Archivo', sans-serif",
+        }
+    },
     Canvas3D: {
-        loaded: false
+        loaded: false,
+        zIndex: 1,
+    },
+    PageFrame: {
+        zIndex: 2,
     }
 }
+
+TSP.state = {}
+
+const LISTENERS = {}
 
 const _getOrThrow = function(path) {
     const value = _.get(STATE, path)
@@ -63,7 +89,7 @@ const _getOrThrow = function(path) {
     return value
 }
 
-TSP.stateGet = function(path) {
+TSP.state.get = function(path) {
     const value = _getOrThrow(path)
     if (_.isArray(value) || _.isObject(value)) {
         return _.cloneDeep(value)
@@ -72,12 +98,12 @@ TSP.stateGet = function(path) {
     }
 }
 
-TSP.stateGetRandomized = function(path) {
-    const randomizationParams = TSP.stateGet(path)
+TSP.state.getRandomized = function(path) {
+    const randomizationParams = TSP.state.get(path)
     return TSP.utils.randomizeValue(randomizationParams)
 }
 
-TSP.stateSet = function(path, newValue) {
+TSP.state.set = function(path, newValue) {
     const value = _getOrThrow(path)
     if (typeof value !== typeof newValue) {
         throw new Error('Invalid types : ' + value + ' and ' + newValue)
@@ -88,7 +114,7 @@ TSP.stateSet = function(path, newValue) {
     }) 
 }
 
-TSP.stateListen = function(path, callback) {
+TSP.state.listen = function(path, callback) {
     const value = _getOrThrow(path)
     if (_.isObject(value) || _.isArray(value)) {
         throw new Error('Path "' + path.join(', ') + ' is a complex value and cant be listened to.')

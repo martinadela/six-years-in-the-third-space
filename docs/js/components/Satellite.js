@@ -6,18 +6,18 @@ function Satellite (id, modelUrl, planetaryRotationAxis) {
     this.model = null
 
     this.planetaryRotationAxis = planetaryRotationAxis
-    this.planetaryRotationAngleStep = TSP.stateGet('satellites.planetaryRotationAngleStep')
+    this.planetaryRotationAngleStep = TSP.state.get('satellites.planetaryRotationAngleStep')
     this.planetaryRotationQuaternion = new THREE.Quaternion()
 
     this._updatePlanetaryRotation()
 
-    this.selfRotationAngleStep = TSP.stateGet('satellites.selfRotationIncrement')
+    this.selfRotationAngleStep = TSP.state.get('satellites.selfRotationIncrement')
 }
 
 Satellite.prototype.load = function(loader) {
     const self = this
     return new Promise(function (resolve, reject) {
-        loader.load(TSP.stateGet('app.urlRoot') + self.modelUrl, function ( gltf ) {
+        loader.load(TSP.state.get('app.urlRoot') + self.modelUrl, function ( gltf ) {
             console.log('model loaded')
             self.model = gltf
             resolve(self)
@@ -31,7 +31,7 @@ Satellite.prototype.load = function(loader) {
 Satellite.prototype.show = function(scene) {
     // Initial position, we take a vector perpendicular to our planetaryRotationAxis
     const sphericalPosition = this.planetaryRotationAxis.getPerpendicularSpherical()
-    sphericalPosition.radius = TSP.stateGetRandomized('satellites.planetaryRotationRadius')
+    sphericalPosition.radius = TSP.state.getRandomized('satellites.planetaryRotationRadius')
     this.moveToSpherical(sphericalPosition)
     scene.add(this.model.scene)
 }
@@ -41,7 +41,7 @@ Satellite.prototype.planetaryRotationStep = function() {
 }
 
 Satellite.prototype.selfRotationStep = function() {
-    const rotateIncrement = TSP.stateGetRandomized('satellites.selfRotationIncrement')
+    const rotateIncrement = TSP.state.getRandomized('satellites.selfRotationIncrement')
     this.rotateIncrement({
         x: rotateIncrement,
         y: rotateIncrement,

@@ -1,9 +1,8 @@
 ;(function() {
 const app = new TSP.components.App()
 
-TSP.init = function() {
-    }
+window.addEventListener('popstate', function(e) {
+    TSP.state.set('app.currentUrl', document.location.pathname)
+})
 
 })()
-
-TSP.init()

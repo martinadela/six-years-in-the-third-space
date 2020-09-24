@@ -37,4 +37,15 @@ TSP.utils.randomizeValue = function(params) {
     return mean + (Math.random() * 2 - 1) * uncertainty
 }
 
+TSP.utils.template = function(templateText) {
+    const div = document.createElement('div')
+    div.innerHTML = templateText
+    const templateId = div.querySelector('template').id
+    if (!document.querySelector('#' + templateId)) {
+        document.body.insertAdjacentHTML('beforeend', templateText)
+    }
+    const template = document.querySelector('#' + templateId)
+    return template.content.cloneNode(true)
+}
+
 })()
