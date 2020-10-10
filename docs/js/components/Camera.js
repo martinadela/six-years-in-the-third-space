@@ -3,10 +3,10 @@
     class Camera {
         constructor () {
             this.camera = new THREE.PerspectiveCamera( 
-                TSP.state.get('camera.fieldOfViewDegrees'),
+                TSP.config.get('camera.fieldOfViewDegrees'),
                 TSP.state.get('window.width') / TSP.state.get('window.height'), 
-                TSP.state.get('camera.near'),
-                TSP.state.get('camera.far'),
+                TSP.config.get('camera.near'),
+                TSP.config.get('camera.far'),
             )
             TSP.state.listen('App.currentUrl', this.currentUrlChanged.bind(this))
             this.resetPosition()
@@ -16,7 +16,7 @@
         resetPosition() {
             this.camera.position.x = 0
             this.camera.position.y = 0
-            this.camera.position.z = TSP.state.get('camera.z')
+            this.camera.position.z = TSP.config.get('camera.z')
             this.camera.lookAt(new THREE.Vector3(0, 0, 0))
         }
 

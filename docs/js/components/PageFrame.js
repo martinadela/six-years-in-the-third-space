@@ -14,7 +14,7 @@ const sheet = jss.default
         innerContainer: {
             display: 'flex',
             flexDirection: 'row',
-            border: `solid ${TSP.state.get('styles.colors.Green')} ${TSP.state.get('styles.dimensions.borderThickness')}`,
+            border: `solid ${TSP.config.get('styles.colors.Green')} ${TSP.config.get('styles.dimensions.borderThickness')}`,
             width: '100%',
             height: '100%',
         },

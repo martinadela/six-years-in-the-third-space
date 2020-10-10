@@ -1,13 +1,13 @@
 ;(function() {
 
-    const borderStyle = `solid ${TSP.state.get('styles.colors.Green')} ${TSP.state.get('styles.dimensions.borderThickness')}`
+    const borderStyle = `solid ${TSP.config.get('styles.colors.Green')} ${TSP.config.get('styles.dimensions.borderThickness')}`
 
     const sheet = jss.default
         .createStyleSheet({
             main: {
                 width: '30%',
                 maxWidth: '20em',
-                color: TSP.state.get('styles.colors.Green'),
+                color: TSP.config.get('styles.colors.Green'),
             },
             innerContainer: {
                 borderLeft: borderStyle,
@@ -15,12 +15,12 @@
             },
             title: {
                 textTransform: 'uppercase',
-                fontFamily: TSP.state.get('styles.fontFamilies.title'),
+                fontFamily: TSP.config.get('styles.fontFamilies.title'),
                 fontSize: '120%',
                 fontWeight: 'normal',
                 fontStyle: 'italic',
                 textAlign: 'right',
-                padding: TSP.state.get('styles.spacings.size1'),
+                padding: TSP.config.get('styles.spacings.size1'),
                 '& p': {
                     marginBottom: '4rem',
                     '&:last-child': {
@@ -33,17 +33,17 @@
                 overflow: 'hidden',
             },
             li: {
-                fontFamily: TSP.state.get('styles.fontFamilies.title'),
+                fontFamily: TSP.config.get('styles.fontFamilies.title'),
                 fontSize: '120%',
-                color: TSP.state.get('styles.colors.Green'),
+                color: TSP.config.get('styles.colors.Green'),
                 '& a': {
-                    color: TSP.state.get('styles.colors.Green'),
+                    color: TSP.config.get('styles.colors.Green'),
                 },
                 borderTop: borderStyle,
                 borderTop: borderStyle,
                 textTransform: 'uppercase',
                 fontStyle: 'italic',
-                padding: TSP.state.get('styles.spacings.size1')
+                padding: TSP.config.get('styles.spacings.size1')
             }
         }).attach()
     

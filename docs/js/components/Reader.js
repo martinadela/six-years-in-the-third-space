@@ -22,7 +22,7 @@
 
         currentUrlChanged(url) {
             url = TSP.utils.normalizeUrl(url)
-            if (url === TSP.utils.normalizeUrl(TSP.state.get('App.rootUrl'))) {
+            if (url === '') {
                 this.innerHTML = ''
             } else if (this.contents[url]) {
                 this.innerHTML = this.contents[url]
@@ -32,7 +32,7 @@
         load() {
             const self = this
             this.contents = {}
-            const satelliteDefinitions = TSP.state.get('satellites.satellites')
+            const satelliteDefinitions = TSP.config.get('satellites.satellites')
             Promise.all(satelliteDefinitions.map(function(satelliteDefinition) {
                 return TSP.utils.fetch(satelliteDefinition.contributionUrl)
             })).then(function(contents) {

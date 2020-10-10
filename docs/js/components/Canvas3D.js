@@ -21,7 +21,7 @@ class Canvas3D extends HTMLCanvasElement {
     
         // ------------ Scene 
         this.scene = new THREE.Scene()
-        const texture = new THREE.TextureLoader().load( TSP.state.get('App.rootUrl') + TSP.state.get('background.imageUrl') )
+        const texture = new THREE.TextureLoader().load( TSP.utils.absoluteUrl(TSP.config.get('background.imageUrl')) )
         this.scene.background = texture
         this.scene.add(this.tspCamera.camera)
     
@@ -36,11 +36,11 @@ class Canvas3D extends HTMLCanvasElement {
         this.renderer.setSize( TSP.state.get('window.width'), TSP.state.get('window.height') )
     
         // ------------ Lights 
-        const ambientLight  = new THREE.AmbientLight(TSP.state.get('lights.ambientColor'), TSP.state.get('lights.ambientIntensity'))
+        const ambientLight  = new THREE.AmbientLight(TSP.config.get('lights.ambientColor'), TSP.config.get('lights.ambientIntensity'))
         ambientLight.name = 'ambient_light'
         this.tspCamera.camera.add(ambientLight)
     
-        const directionalLight  = new THREE.DirectionalLight(TSP.state.get('lights.directColor'), TSP.state.get('lights.directIntensity'))
+        const directionalLight  = new THREE.DirectionalLight(TSP.config.get('lights.directColor'), TSP.config.get('lights.directIntensity'))
         directionalLight.position.set(0.5, 0, 0.866) // ~60º
         directionalLight.name = 'main_light'
         this.tspCamera.camera.add(directionalLight)
@@ -67,7 +67,7 @@ class Canvas3D extends HTMLCanvasElement {
         const self = this
         this.planet = new TSP.components.Planet()
     
-        const satelliteDefinitions = TSP.state.get('satellites.satellites')
+        const satelliteDefinitions = TSP.config.get('satellites.satellites')
     
         const planetaryRotationAxes = TSP.utils.sphericalSpacedOnSphere(satelliteDefinitions.length)
             .map(function(spherical) {
@@ -103,12 +103,12 @@ class Canvas3D extends HTMLCanvasElement {
         this.planet.show(this.scene)
         Object.values(this.satellites).forEach(function(satellite) {
             satellite.show(self.scene)
-            if (TSP.state.get('debug') === true) {
+            if (TSP.config.get('debug') === true) {
                 satellite.planetaryRotationAxis.show(self.scene)
             }
         })
-        if (TSP.state.get('debug') === true) {
-            this.axesHelper = new THREE.AxesHelper( TSP.state.get('planet.radius') + 5 )
+        if (TSP.config.get('debug') === true) {
+            this.axesHelper = new THREE.AxesHelper( TSP.config.get('planet.radius') + 5 )
             this.scene.add( this.axesHelper )
         }
 

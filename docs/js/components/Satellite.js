@@ -8,20 +8,20 @@ class Satellite  {
         this.model = null
     
         this.planetaryRotationAxis = planetaryRotationAxis
-        this.planetaryRotationAngleStep = TSP.state.get('satellites.planetaryRotationAngleStep')
+        this.planetaryRotationAngleStep = TSP.config.get('satellites.planetaryRotationAngleStep')
         this.planetaryRotationQuaternion = new THREE.Quaternion()
         this.planetaryRotationStep = this._planetaryRotationStep.bind(this)
 
         this._updatePlanetaryRotation()
     
-        this.selfRotationAngleStep = TSP.state.get('satellites.selfRotationIncrement')
+        this.selfRotationAngleStep = TSP.config.get('satellites.selfRotationIncrement')
         TSP.state.listen('Canvas3D.hoveredObject', this.hoveredObjectChanged.bind(this))
     }
     
     load(loader) {
         const self = this
         return new Promise(function (resolve, reject) {
-            loader.load(TSP.state.get('App.rootUrl') + self.modelUrl, function ( gltf ) {
+            loader.load(TSP.utils.absoluteUrl(self.modelUrl), function ( gltf ) {
                 console.log('model loaded')
                 self.model = gltf
                 resolve(self)
@@ -35,7 +35,7 @@ class Satellite  {
     show(scene) {
         // Initial position, we take a vector perpendicular to our planetaryRotationAxis
         const sphericalPosition = this.planetaryRotationAxis.getPerpendicularSpherical()
-        sphericalPosition.radius = TSP.state.getRandomized('satellites.planetaryRotationRadius')
+        sphericalPosition.radius = TSP.config.getRandomized('satellites.planetaryRotationRadius')
         this.moveToSpherical(sphericalPosition)
         scene.add(this.model.scene)
     }
@@ -82,7 +82,7 @@ class Satellite  {
     }
 
     selfRotationStep() {
-        const rotateIncrement = TSP.state.getRandomized('satellites.selfRotationIncrement')
+        const rotateIncrement = TSP.config.getRandomized('satellites.selfRotationIncrement')
         this.rotateIncrement({
             x: rotateIncrement,
             y: rotateIncrement,

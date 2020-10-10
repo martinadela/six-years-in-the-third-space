@@ -1,144 +1,11 @@
 ;(function() {
 
 const STATE = {
-    debug: false,
-    lights: {
-        ambientColor: 0xFFFFFF,
-        ambientIntensity: 2,
-        directColor: 0xFFFFFF,
-        directIntensity: 2 * Math.PI,
-    },
-    background: {
-        // color: 0xcccccc,
-        imageUrl: '/images/background.jpg'
-    },
-    camera: {
-        fieldOfViewDegrees: 75,
-        near: 0.1,
-        far: 100,
-        z: 50,
-    },
-    planet: {
-        radius: 14,
-        color: 0xaaaaaa,
-    },
-    satellites: {
-        planetaryRotationAxisRandomness: Math.PI * 0,
-        planetaryRotationRadius: [25, 0.5],
-        planetaryRotationAngleStep: Math.PI / 2 * 0.002,
-        selfRotationIncrement: [0.002, 0.002],
-        satellites: [
-            {
-                url: '/contributions/bla',
-                modelUrl: 'satellites/satellite2.glb',
-                contributionUrl: '/pages/contributions/bla.html',
-            },
-            {
-                url: '/contributions/blo',
-                modelUrl: 'satellites/satellite3.glb',
-                contributionUrl: '/pages/contributions/blo.html',
-            },
-            {
-                url: '/contributions/bli',
-                modelUrl: 'satellites/satellite4.glb',
-                contributionUrl: '/pages/contributions/bli.html',
-            },
-            {
-                url: '/contributions/blu',
-                modelUrl: 'satellites/satellite5.glb',
-                contributionUrl: '/pages/contributions/blu.html',
-            },
-
-
-
-
-            {
-                url: '/contributions/bla',
-                modelUrl: 'satellites/satellite2.glb',
-                contributionUrl: '/pages/contributions/bla.html',
-            },
-            {
-                url: '/contributions/bli',
-                modelUrl: 'satellites/satellite4.glb',
-                contributionUrl: '/pages/contributions/bli.html',
-            },
-            {
-                url: '/contributions/blu',
-                modelUrl: 'satellites/satellite5.glb',
-                contributionUrl: '/pages/contributions/blu.html',
-            },
-            {
-                url: '/contributions/blo',
-                modelUrl: 'satellites/satellite3.glb',
-                contributionUrl: '/pages/contributions/blo.html',
-            },
-            {
-                url: '/contributions/bla',
-                modelUrl: 'satellites/satellite2.glb',
-                contributionUrl: '/pages/contributions/bla.html',
-            },
-            {
-                url: '/contributions/blo',
-                modelUrl: 'satellites/satellite3.glb',
-                contributionUrl: '/pages/contributions/blo.html',
-            },
-            {
-                url: '/contributions/bli',
-                modelUrl: 'satellites/satellite4.glb',
-                contributionUrl: '/pages/contributions/bli.html',
-            },
-            {
-                url: '/contributions/bla',
-                modelUrl: 'satellites/satellite2.glb',
-                contributionUrl: '/pages/contributions/bla.html',
-            },
-            {
-                url: '/contributions/blu',
-                modelUrl: 'satellites/satellite5.glb',
-                contributionUrl: '/pages/contributions/blu.html',
-            },
-            {
-                url: '/contributions/blo',
-                modelUrl: 'satellites/satellite3.glb',
-                contributionUrl: '/pages/contributions/blo.html',
-            },
-            {
-                url: '/contributions/bli',
-                modelUrl: 'satellites/satellite5.glb',
-                contributionUrl: '/pages/contributions/bli.html',
-            },
-            {
-                url: '/contributions/blu',
-                modelUrl: 'satellites/satellite4.glb',
-                contributionUrl: '/pages/contributions/blu.html',
-            },
-        ]
-    },
     window: {
         width: window.innerWidth,
         height: window.innerHeight,
     },
-    styles: {
-        colors: {
-            Green: '#00FF2E'
-        },
-        spacings: {
-            size2: '2rem',
-            size1: '1rem',
-        },
-        dimensions: {
-            borderThickness: '4px'
-        },
-        fontSizes: {
-            menu: '15%'
-        },
-        fontFamilies: {
-            title: "'Cormorant Infant', serif",
-            normal: "'Archivo', sans-serif",
-        }
-    },
     App: {
-        rootUrl: '',
         currentUrl: document.location.pathname,
     },
     Canvas3D: {
@@ -149,45 +16,30 @@ const STATE = {
     Reader: {
         loaded: false
     },
-    Camera: {
-        chase: null
-    }
+    Camera: {}
 }
 
 TSP.state = {}
 
 const LISTENERS = {}
 
-const _getOrThrow = function(path) {
-    const value = _.get(STATE, path)
-    if (_.isUndefined(value)) {
-        throw new Error('Unknown state path "' + path + '"')
-    }
-    return value
+TSP.state.get = (path) => {
+    return TSP.utils.getOrThrow(STATE, path)
 }
 
-TSP.state.get = function(path) {
-    return _getOrThrow(path)
-}
-
-TSP.state.getRandomized = function(path) {
-    const randomizationParams = TSP.state.get(path)
-    return TSP.utils.randomizeValue(randomizationParams)
-}
-
-TSP.state.set = function(path, newValue) {
-    const value = _getOrThrow(path)
+TSP.state.set = (path, newValue) => {
+    const value = TSP.utils.getOrThrow(STATE, path)
     if (typeof value !== typeof newValue) {
         throw new Error('Invalid types : ' + value + ' and ' + newValue)
     }
     _.set(STATE, path, newValue)
-    ;(LISTENERS[path] || []).forEach(function(callback) {
+    ;(LISTENERS[path] || []).forEach((callback) => {
         callback(newValue, value, path)
     }) 
 }
 
-TSP.state.listen = function(path, callback) {
-    const value = _getOrThrow(path)
+TSP.state.listen = (path, callback) => {
+    const value = TSP.utils.getOrThrow(STATE, path)
     if (_.isObject(value) || _.isArray(value)) {
         throw new Error('Path "' + path.join(', ') + ' is a complex value and cant be listened to.')
     }
