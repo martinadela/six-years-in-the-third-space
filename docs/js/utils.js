@@ -48,9 +48,6 @@ TSP.utils.template = (templateText) => {
     return template.content.cloneNode(true)
 }
 
-TSP.utils.absoluteUrl = (relativeUrl) => 
-    TSP.config.get('app.rootUrl') + relativeUrl
-
 TSP.utils.fetch = (url) => {
     return fetch(TSP.utils.absoluteUrl(url))
         .then((response) => {
@@ -67,13 +64,19 @@ TSP.utils.navigateTo = (relativeUrl) => {
     TSP.state.set('App.currentUrl', relativeUrl)
 }
 
-TSP.utils.normalizeUrl = (url) => {
+const normalizeUrl = TSP.utils.normalizeUrl = (url) => {
     if (url.endsWith('/')) { 
         return url.slice(0, -1) 
     } else { 
         return url
     }
 }
+
+TSP.utils.absoluteUrl = (relativeUrl) =>
+    normalizeUrl(TSP.config.get('app.rootUrl') + relativeUrl)
+
+TSP.utils.relativeUrl = (absoluteUrl) =>
+    normalizeUrl(absoluteUrl.replace(TSP.config.get('app.rootUrl'), ''))
 
 TSP.utils.getOrThrow = (source, path) => {
     const value = _.get(source, path)

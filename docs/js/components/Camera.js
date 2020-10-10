@@ -21,7 +21,6 @@
         }
 
         currentUrlChanged(url) {
-            url = TSP.utils.normalizeUrl(url)
             const object = TSP.state.get('Canvas3D.satellites')[url]
             if (object) {
                 this.chasedObject = object

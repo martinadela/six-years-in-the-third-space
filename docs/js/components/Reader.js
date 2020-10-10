@@ -21,7 +21,6 @@
         }
 
         currentUrlChanged(url) {
-            url = TSP.utils.normalizeUrl(url)
             if (url === '') {
                 this.innerHTML = ''
             } else if (this.contents[url]) {

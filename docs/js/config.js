@@ -1,8 +1,9 @@
 ;(function() {
 
     const CONFIG = {
-        debug: false,
+        debug: true,
         app: {
+            // Must not have trailing slash
             rootUrl: '',
         },
         styles: {

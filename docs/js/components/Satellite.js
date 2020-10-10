@@ -93,6 +93,10 @@ class Satellite  {
         this.selfRotationStep()
         this.planetaryRotationStep()
     }
+
+    toString() {
+        return `Satellite("${this.url}")`
+    }
 }
 
 TSP.components.Satellite = Satellite

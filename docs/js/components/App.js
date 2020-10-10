@@ -15,7 +15,7 @@ class App extends HTMLDivElement {
         TSP.state.listen('Canvas3D.loaded', this.show.bind(this))
         TSP.state.listen('Reader.loaded', this.show.bind(this))
         window.addEventListener('popstate', function(e) {
-            TSP.state.set('App.currentUrl', document.location.pathname)
+            TSP.state.set('App.currentUrl', TSP.utils.relativeUrl(document.location.pathname))
         })
         TSP.state.listen('Canvas3D.hoveredObject', this.hoveredObjectChanged.bind(this))
     }
