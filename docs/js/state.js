@@ -143,7 +143,8 @@ const STATE = {
     },
     Canvas3D: {
         loaded: false,
-        hoveredObject: null
+        hoveredObject: null,
+        satellites: {}
     },
     Reader: {
         loaded: false

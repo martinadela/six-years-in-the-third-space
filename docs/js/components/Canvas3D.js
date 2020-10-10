@@ -76,13 +76,17 @@ class Canvas3D extends HTMLCanvasElement {
                 return new TSP.components.RotationAxis(spherical)
             })
     
+        const satellitesState = {}
         this.satellites = satelliteDefinitions.map(function(satelliteDefinition, i) {
-            return new TSP.components.Satellite(
+            const satellite = new TSP.components.Satellite(
                 satelliteDefinition.url, 
                 satelliteDefinition.modelUrl,
                 planetaryRotationAxes[i],
             )
+            satellitesState[satelliteDefinition.url] = satellite
+            return satellite
         })
+        TSP.state.set('Canvas3D.satellites', satellitesState)
     }
 
     load() {

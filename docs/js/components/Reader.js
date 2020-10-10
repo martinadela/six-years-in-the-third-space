@@ -13,15 +13,18 @@
             super()
             this.classList.add(sheet.classes.main)
             this.contents = {}
-            TSP.state.listen('App.currentUrl', this.updateContent.bind(this))
+            TSP.state.listen('App.currentUrl', this.currentUrlChanged.bind(this))
         }
     
         connectedCallback() {
-            this.updateContent(TSP.state.get('App.currentUrl'))
+            this.currentUrlChanged(TSP.state.get('App.currentUrl'))
         }
 
-        updateContent(url) {
-            if (this.contents[url]) {
+        currentUrlChanged(url) {
+            url = TSP.utils.normalizeUrl(url)
+            if (url === TSP.utils.normalizeUrl(TSP.state.get('App.rootUrl'))) {
+                this.innerHTML = ''
+            } else if (this.contents[url]) {
                 this.innerHTML = this.contents[url]
             }
         }

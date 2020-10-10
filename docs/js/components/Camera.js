@@ -8,27 +8,43 @@
                 TSP.state.get('camera.near'),
                 TSP.state.get('camera.far'),
             )
-            this.camera.position.z = TSP.state.get('camera.z')
-            TSP.state.listen('Camera.chase', this.onChase.bind(this))
+            TSP.state.listen('App.currentUrl', this.currentUrlChanged.bind(this))
+            this.resetPosition()
             this.animate = this._animateNoop
         }
 
-        onChase(object) {
+        resetPosition() {
+            this.camera.position.x = 0
+            this.camera.position.y = 0
+            this.camera.position.z = TSP.state.get('camera.z')
+            this.camera.lookAt(new THREE.Vector3(0, 0, 0))
+        }
+
+        currentUrlChanged(url) {
+            url = TSP.utils.normalizeUrl(url)
+            const object = TSP.state.get('Canvas3D.satellites')[url]
             if (object) {
                 this.chasedObject = object
                 this.animate = this._animateChase
             } else {
                 this.chasedObject = null
                 this.animate = this._animateNoop
+                this.resetPosition()
             }
         }
 
         _animateNoop() {}
         _animateChase() {
-            const newPosition = this.chasedObject.getPosition()
+            const objectPosition = this.chasedObject.getPosition().clone()
+            const newPosition = this.chasedObject.getPosition().clone()
+            const objectDirection = this.chasedObject.getPosition().clone()
+            newPosition.add(objectPosition.addScaledVector(objectDirection, -1.3))
+
             this.camera.position.x = newPosition.x
             this.camera.position.y = newPosition.y
             this.camera.position.z = newPosition.z
+
+            this.camera.lookAt(this.chasedObject.getPosition())
         }
     }
     

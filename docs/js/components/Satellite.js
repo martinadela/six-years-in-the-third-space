@@ -56,6 +56,12 @@ class Satellite  {
         return this.model.scene.position
     }
 
+    getDirection() {
+        const nextPosition = this.model.scene.position.clone()
+        nextPosition.applyQuaternion(this.planetaryRotationQuaternion)
+        return nextPosition.sub(this.model.scene.position)
+    }
+
     getObject3D() {
         return this.model.scene
     }

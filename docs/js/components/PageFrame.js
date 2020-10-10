@@ -40,28 +40,10 @@ class PageFrame extends HTMLDivElement {
         super()
         this.classList.add(sheet.classes.main)
         this.appendChild(TSP.utils.template(template))
-        TSP.state.listen('Canvas3D.hoveredObject', this.hoveredObjectChanged.bind(this))
-        this.addEventListener('click', this.onClick.bind(this), false)
     }
 
     connectedCallback() {
         this.reader = this.querySelector('div[is="tsp-reader"]')
-    }
-
-    onClick() {
-        const hoveredObject = TSP.state.get('Canvas3D.hoveredObject')
-        if (hoveredObject !== null) {
-            TSP.utils.navigateTo(hoveredObject.url)
-            TSP.state.set('Camera.chase', hoveredObject)
-        }
-    }
-
-    hoveredObjectChanged(hoveredObject) {
-        if (hoveredObject !== null) {
-            this.style.cursor = 'pointer'
-        } else {
-            this.style.cursor = 'initial'
-        }
     }
 
     load() {

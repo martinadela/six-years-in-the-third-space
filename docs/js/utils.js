@@ -64,4 +64,12 @@ TSP.utils.navigateTo = function(relativeUrl) {
     TSP.state.set('App.currentUrl', relativeUrl)
 }
 
+TSP.utils.normalizeUrl = function(url) {
+    if (url.endsWith('/')) { 
+        return url.slice(0, -1) 
+    } else { 
+        return url
+    }
+}
+
 })()
