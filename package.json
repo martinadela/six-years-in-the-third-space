@@ -1,0 +1,25 @@
+{
+    "name": "six-years-in-the-third-space",
+    "version": "1.0.0",
+    "description": "TODO =====",
+    "main": "index.js",
+    "directories": {
+        "doc": "docs"
+    },
+    "devDependencies": {
+        "prettier": "^2.1.2"
+    },
+    "scripts": {
+        "prettier": "npx prettier --config .prettierrc.json --write --ignore-unknown '**/*'"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/sebpiq/six-years-in-the-third-space.git"
+    },
+    "author": "Sébastien Piquemal + Martina Miño",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/sebpiq/six-years-in-the-third-space/issues"
+    },
+    "homepage": "https://github.com/sebpiq/six-years-in-the-third-space#readme"
+}

@@ -1,30 +1,32 @@
-;(function() {
+;(function () {
+    const sheet = jss.default
+        .createStyleSheet({
+            main: {
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                padding: '2.5rem 2.5rem',
+                width: '100%',
+                height: '100%',
+            },
 
-const sheet = jss.default
-    .createStyleSheet({
-        main: {
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            padding: '2.5rem 2.5rem',
-            width: '100%',
-            height: '100%',
-        },
+            innerContainer: {
+                display: 'flex',
+                flexDirection: 'row',
+                border: `solid ${TSP.config.get(
+                    'styles.colors.Green'
+                )} ${TSP.config.get('styles.dimensions.borderThickness')}`,
+                width: '100%',
+                height: '100%',
+            },
 
-        innerContainer: {
-            display: 'flex',
-            flexDirection: 'row',
-            border: `solid ${TSP.config.get('styles.colors.Green')} ${TSP.config.get('styles.dimensions.borderThickness')}`,
-            width: '100%',
-            height: '100%',
-        },
+            readerContainer: {
+                flex: 1,
+            },
+        })
+        .attach()
 
-        readerContainer: {
-            flex: 1
-        }
-    }).attach()
-
-const template = `
+    const template = `
     <template id="PageFrame">
         <div class="${sheet.classes.innerContainer}">
             <div class="${sheet.classes.readerContainer}">
@@ -35,22 +37,21 @@ const template = `
     </template>
 `
 
-class PageFrame extends HTMLDivElement {
-    constructor() {
-        super()
-        this.classList.add(sheet.classes.main)
-        this.appendChild(TSP.utils.template(template))
+    class PageFrame extends HTMLDivElement {
+        constructor() {
+            super()
+            this.classList.add(sheet.classes.main)
+            this.appendChild(TSP.utils.template(template))
+        }
+
+        connectedCallback() {
+            this.reader = this.querySelector('div[is="tsp-reader"]')
+        }
+
+        load() {
+            this.reader.load()
+        }
     }
 
-    connectedCallback() {
-        this.reader = this.querySelector('div[is="tsp-reader"]')
-    }
-
-    load() {
-        this.reader.load()
-    }
-}
-
-customElements.define('tsp-page-frame', PageFrame, {extends: 'div'})
-
+    customElements.define('tsp-page-frame', PageFrame, { extends: 'div' })
 })()

@@ -1,14 +1,16 @@
-;(function() {
-
+;(function () {
     class Camera {
-        constructor () {
-            this.camera = new THREE.PerspectiveCamera( 
+        constructor() {
+            this.camera = new THREE.PerspectiveCamera(
                 TSP.config.get('camera.fieldOfViewDegrees'),
-                TSP.state.get('window.width') / TSP.state.get('window.height'), 
+                TSP.state.get('window.width') / TSP.state.get('window.height'),
                 TSP.config.get('camera.near'),
-                TSP.config.get('camera.far'),
+                TSP.config.get('camera.far')
             )
-            TSP.state.listen('App.currentUrl', this.currentUrlChanged.bind(this))
+            TSP.state.listen(
+                'App.currentUrl',
+                this.currentUrlChanged.bind(this)
+            )
             this.resetPosition()
             this.animate = this._animateNoop
         }
@@ -37,7 +39,9 @@
             const objectPosition = this.chasedObject.getPosition().clone()
             const newPosition = this.chasedObject.getPosition().clone()
             const objectDirection = this.chasedObject.getPosition().clone()
-            newPosition.add(objectPosition.addScaledVector(objectDirection, -1.3))
+            newPosition.add(
+                objectPosition.addScaledVector(objectDirection, -1.3)
+            )
 
             this.camera.position.x = newPosition.x
             this.camera.position.y = newPosition.y
@@ -46,7 +50,6 @@
             this.camera.lookAt(this.chasedObject.getPosition())
         }
     }
-    
+
     TSP.components.Camera = Camera
-    
 })()

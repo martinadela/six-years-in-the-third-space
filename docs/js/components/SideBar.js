@@ -1,6 +1,7 @@
-;(function() {
-
-    const borderStyle = `solid ${TSP.config.get('styles.colors.Green')} ${TSP.config.get('styles.dimensions.borderThickness')}`
+;(function () {
+    const borderStyle = `solid ${TSP.config.get(
+        'styles.colors.Green'
+    )} ${TSP.config.get('styles.dimensions.borderThickness')}`
 
     const sheet = jss.default
         .createStyleSheet({
@@ -25,7 +26,7 @@
                     marginBottom: '4rem',
                     '&:last-child': {
                         marginBottom: '0',
-                    }
+                    },
                 },
             },
             ul: {
@@ -43,10 +44,11 @@
                 borderTop: borderStyle,
                 textTransform: 'uppercase',
                 fontStyle: 'italic',
-                padding: TSP.config.get('styles.spacings.size1')
-            }
-        }).attach()
-    
+                padding: TSP.config.get('styles.spacings.size1'),
+            },
+        })
+        .attach()
+
     const template = `
         <template id="SideBar">
             <div class="${sheet.classes.innerContainer}">
@@ -80,7 +82,7 @@
             </div>
         </template>
     `
-    
+
     class SideBar extends HTMLDivElement {
         constructor() {
             super()
@@ -88,7 +90,6 @@
             this.appendChild(TSP.utils.template(template))
         }
     }
-    
-    customElements.define('tsp-sidebar', SideBar, {extends: 'div'})
-    
+
+    customElements.define('tsp-sidebar', SideBar, { extends: 'div' })
 })()

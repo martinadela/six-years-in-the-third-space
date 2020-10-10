@@ -1,21 +1,24 @@
-;(function() {
-
+;(function () {
     const sheet = jss.default
         .createStyleSheet({
             main: {
                 height: '100%',
                 overflow: 'auto',
-            }
-        }).attach()
-    
+            },
+        })
+        .attach()
+
     class Reader extends HTMLDivElement {
         constructor() {
             super()
             this.classList.add(sheet.classes.main)
             this.contents = {}
-            TSP.state.listen('App.currentUrl', this.currentUrlChanged.bind(this))
+            TSP.state.listen(
+                'App.currentUrl',
+                this.currentUrlChanged.bind(this)
+            )
         }
-    
+
         connectedCallback() {
             this.currentUrlChanged(TSP.state.get('App.currentUrl'))
         }
@@ -32,17 +35,18 @@
             const self = this
             this.contents = {}
             const satelliteDefinitions = TSP.config.get('satellites.satellites')
-            Promise.all(satelliteDefinitions.map(function(satelliteDefinition) {
-                return TSP.utils.fetch(satelliteDefinition.contributionUrl)
-            })).then(function(contents) {
-                contents.forEach(function(html, i) {
+            Promise.all(
+                satelliteDefinitions.map((satelliteDefinition) => {
+                    return TSP.utils.fetch(satelliteDefinition.contributionUrl)
+                })
+            ).then((contents) => {
+                contents.forEach((html, i) => {
                     self.contents[satelliteDefinitions[i].url] = html
                 })
                 TSP.state.set('Reader.loaded', true)
             })
         }
     }
-    
-    customElements.define('tsp-reader', Reader, {extends: 'div'})
-    
-    })()
+
+    customElements.define('tsp-reader', Reader, { extends: 'div' })
+})()

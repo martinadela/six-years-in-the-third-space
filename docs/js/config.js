@@ -1,5 +1,4 @@
-;(function() {
-
+;(function () {
     const CONFIG = {
         debug: true,
         app: {
@@ -8,32 +7,32 @@
         },
         styles: {
             colors: {
-                Green: '#00FF2E'
+                Green: '#00FF2E',
             },
             spacings: {
                 size2: '2rem',
                 size1: '1rem',
             },
             dimensions: {
-                borderThickness: '4px'
+                borderThickness: '4px',
             },
             fontSizes: {
-                menu: '15%'
+                menu: '15%',
             },
             fontFamilies: {
                 title: "'Cormorant Infant', serif",
                 normal: "'Archivo', sans-serif",
-            }
-        },    
+            },
+        },
         lights: {
-            ambientColor: 0xFFFFFF,
+            ambientColor: 0xffffff,
             ambientIntensity: 2,
-            directColor: 0xFFFFFF,
+            directColor: 0xffffff,
             directIntensity: 2 * Math.PI,
         },
         background: {
             // color: 0xcccccc,
-            imageUrl: '/images/background.jpg'
+            imageUrl: '/images/background.jpg',
         },
         camera: {
             fieldOfViewDegrees: 75,
@@ -48,7 +47,7 @@
         satellites: {
             planetaryRotationAxisRandomness: Math.PI * 0,
             planetaryRotationRadius: [25, 0.5],
-            planetaryRotationAngleStep: Math.PI / 2 * 0.002,
+            planetaryRotationAngleStep: (Math.PI / 2) * 0.002,
             selfRotationIncrement: [0.002, 0.002],
             satellites: [
                 {
@@ -72,9 +71,6 @@
                     contributionUrl: '/pages/contributions/blu.html',
                 },
 
-
-
-
                 {
                     url: '/contributions/bla',
                     modelUrl: 'satellites/satellite2.glb',
@@ -135,19 +131,18 @@
                     modelUrl: 'satellites/satellite4.glb',
                     contributionUrl: '/pages/contributions/blu.html',
                 },
-            ]
+            ],
         },
     }
 
     TSP.config = {}
 
-    TSP.config.get = function(path) {
+    TSP.config.get = (path) => {
         return TSP.utils.getOrThrow(CONFIG, path)
     }
-    
-    TSP.config.getRandomized = function(path) {
+
+    TSP.config.getRandomized = (path) => {
         const randomizationParams = TSP.config.get(path)
         return TSP.utils.randomizeValue(randomizationParams)
     }
-
 })()
