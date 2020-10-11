@@ -13,7 +13,6 @@
     class Canvas3D extends HTMLCanvasElement {
         constructor() {
             super()
-            const self = this
             this.classList.add(sheet.classes.main)
 
             // ------------ Camera
@@ -28,12 +27,13 @@
             this.scene.add(this.tspCamera.camera)
 
             // ------------ Renderer
+            this.pixelRatio = window.devicePixelRatio
             this.renderer = new THREE.WebGLRenderer({
                 antialias: true,
                 canvas: this,
             })
             this.renderer.physicallyCorrectLights = true
-            this.renderer.setPixelRatio(window.devicePixelRatio)
+            this.renderer.setPixelRatio(this.pixelRatio)
             this.renderer.outputEncoding = THREE.sRGBEncoding
             this.renderer.setSize(
                 TSP.state.get('window.width'),
@@ -70,12 +70,11 @@
         }
 
         updateSize() {
-            this.width = TSP.state.get('window.width')
-            this.height = TSP.state.get('window.height')
+            this.width = TSP.state.get('window.width') * this.pixelRatio
+            this.height = TSP.state.get('window.height') * this.pixelRatio
         }
 
         createObjects() {
-            const self = this
             this.planet = new TSP.components.Planet()
 
             const satelliteDefinitions = TSP.config.get('satellites.satellites')
@@ -104,10 +103,9 @@
         }
 
         load() {
-            const self = this
             Promise.all(
                 Object.values(this.satellites).map((satellite) => {
-                    return satellite.load(self.loader)
+                    return satellite.load(this.loader)
                 })
             ).then(() => {
                 TSP.state.set('Canvas3D.loaded', true)
@@ -115,13 +113,12 @@
         }
 
         start() {
-            const self = this
             this.planet.show(this.scene)
             this.tspCamera.show(this.scene)
             Object.values(this.satellites).forEach((satellite) => {
-                satellite.show(self.scene)
+                satellite.show(this.scene)
                 if (TSP.config.get('debug') === true) {
-                    satellite.planetaryRotationAxis.show(self.scene)
+                    satellite.planetaryRotationAxis.show(this.scene)
                 }
             })
             if (TSP.config.get('debug') === true) {
@@ -137,8 +134,8 @@
                     // calculate mouse position in normalized device coordinates
                     // (-1 to +1) for both components
                     // Ref : https://threejs.org/docs/#api/en/core/Raycaster
-                    self.mouse.x = (event.clientX / window.innerWidth) * 2 - 1
-                    self.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+                    this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1
+                    this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
                 },
                 false
             )
@@ -148,15 +145,14 @@
         }
 
         initializeHoverableObjects() {
-            const self = this
             this.hoveredObjectCache = null
             this.hoverableObjects = [this.planet.getObject3D()]
             this.hoverableObjectsMap = {
                 [this.planet.getObject3D().uuid]: this.planet,
             }
             this.satellites.forEach((satellite) => {
-                self.hoverableObjects.push(satellite.getObject3D())
-                self.hoverableObjectsMap[
+                this.hoverableObjects.push(satellite.getObject3D())
+                this.hoverableObjectsMap[
                     satellite.getObject3D().uuid
                 ] = satellite
             })
