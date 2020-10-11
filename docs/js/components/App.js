@@ -36,10 +36,6 @@
         connectedCallback() {
             this.canvas3D = this.querySelector('canvas[is="tsp-canvas-3d"]')
             this.pageFrame = this.querySelector('div[is="tsp-page-frame"]')
-
-            // TODO : remove urlRoot
-            TSP.utils.navigateTo(location.pathname)
-
             this.canvas3D.load()
             this.pageFrame.load()
         }
@@ -49,6 +45,7 @@
                 TSP.state.get('Canvas3D.loaded') &&
                 TSP.state.get('Reader.loaded')
             ) {
+                TSP.utils.navigateTo(TSP.utils.relativeUrl(location.pathname))
                 this.canvas3D.start()
             }
         }

@@ -90,11 +90,9 @@
 
             const planetaryRotationAxes = TSP.utils
                 .sphericalSpacedOnSphere(satelliteDefinitions.length)
-                .map((spherical) => {
-                    // spherical.phi = (spherical.phi + Math.random() * PLANETARY_ROTATION_AXIS_RANDOMNESS) % (2 * Math.PI)
-                    // spherical.theta = (spherical.theta + Math.random() * PLANETARY_ROTATION_AXIS_RANDOMNESS) % (2 * Math.PI)
-                    return new TSP.components.RotationAxis(spherical)
-                })
+                .map((spherical) => 
+                    new TSP.components.RotationAxis(spherical)
+                )
 
             const satellitesState = {}
             this.satellites = satelliteDefinitions.map(
