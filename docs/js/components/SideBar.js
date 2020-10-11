@@ -1,6 +1,6 @@
 ;(function () {
     const borderStyle = `solid ${TSP.config.get(
-        'styles.colors.Green'
+        'styles.colors.Highlight1'
     )} ${TSP.config.get('styles.dimensions.borderThickness')}`
 
     const sheet = jss.default
@@ -8,7 +8,7 @@
             main: {
                 width: '30%',
                 maxWidth: '20em',
-                color: TSP.config.get('styles.colors.Green'),
+                color: TSP.config.get('styles.colors.Highlight1'),
             },
             innerContainer: {
                 borderLeft: borderStyle,
@@ -36,9 +36,9 @@
             li: {
                 fontFamily: TSP.config.get('styles.fontFamilies.title'),
                 fontSize: '120%',
-                color: TSP.config.get('styles.colors.Green'),
+                color: TSP.config.get('styles.colors.Highlight1'),
                 '& a': {
-                    color: TSP.config.get('styles.colors.Green'),
+                    color: TSP.config.get('styles.colors.Highlight1'),
                 },
                 borderTop: borderStyle,
                 borderTop: borderStyle,

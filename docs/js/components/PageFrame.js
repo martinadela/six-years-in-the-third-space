@@ -14,7 +14,7 @@
                 display: 'flex',
                 flexDirection: 'row',
                 border: `solid ${TSP.config.get(
-                    'styles.colors.Green'
+                    'styles.colors.Highlight1'
                 )} ${TSP.config.get('styles.dimensions.borderThickness')}`,
                 width: '100%',
                 height: '100%',
@@ -22,6 +22,8 @@
 
             readerContainer: {
                 flex: 1,
+                // Counter-intuitively, with the flex it forces the component to shrink / expand to the right size
+                width: '0%'
             },
         })
         .attach()

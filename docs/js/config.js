@@ -2,7 +2,7 @@
     const CONFIG = {
         debug: {
             state: false,
-            satellites: true,
+            satellites: false,
             camera: false,
         },
         app: {
@@ -11,7 +11,11 @@
         },
         styles: {
             colors: {
-                Green: '#00FF2E',
+                Highlight1: '#00FF2E',
+                ContentBackground: 'rgba(255, 255, 255, 0.9)',
+                ScrollbarBackground: 'transparent',
+                ScrollbarBorder: 'white',
+                Scrollbar: '#00FF2E',
             },
             spacings: {
                 size2: '2rem',
@@ -56,82 +60,98 @@
             satellites: [
                 {
                     url: '/contributions/bla',
+                    title: 'bla some title',
                     modelUrl: '/satellites/satellite2.glb',
                     contributionUrl: '/pages/contributions/bla.html',
                 },
                 {
                     url: '/contributions/blo',
+                    title: 'blo some title',
                     modelUrl: '/satellites/satellite3.glb',
                     contributionUrl: '/pages/contributions/blo.html',
                 },
                 {
                     url: '/contributions/bli',
+                    title: 'bli some title',
                     modelUrl: '/satellites/satellite4.glb',
                     contributionUrl: '/pages/contributions/bli.html',
                 },
                 {
                     url: '/contributions/blu',
+                    title: 'blu some title',
                     modelUrl: '/satellites/satellite5.glb',
                     contributionUrl: '/pages/contributions/blu.html',
                 },
 
                 {
                     url: '/contributions/bla',
+                    title: 'bla some title',
                     modelUrl: '/satellites/satellite2.glb',
                     contributionUrl: '/pages/contributions/bla.html',
                 },
                 {
                     url: '/contributions/bli',
+                    title: 'bli some title',
                     modelUrl: '/satellites/satellite4.glb',
                     contributionUrl: '/pages/contributions/bli.html',
                 },
                 {
                     url: '/contributions/blu',
+                    title: 'blu some title',
                     modelUrl: '/satellites/satellite5.glb',
                     contributionUrl: '/pages/contributions/blu.html',
                 },
                 {
                     url: '/contributions/blo',
+                    title: 'blo some title',
                     modelUrl: '/satellites/satellite3.glb',
                     contributionUrl: '/pages/contributions/blo.html',
                 },
                 {
                     url: '/contributions/bla',
+                    title: 'bla some title',
                     modelUrl: '/satellites/satellite2.glb',
                     contributionUrl: '/pages/contributions/bla.html',
                 },
                 {
                     url: '/contributions/blo',
+                    title: 'blo some title',
                     modelUrl: '/satellites/satellite3.glb',
                     contributionUrl: '/pages/contributions/blo.html',
                 },
                 {
                     url: '/contributions/bli',
+                    title: 'bli some title',
                     modelUrl: '/satellites/satellite4.glb',
                     contributionUrl: '/pages/contributions/bli.html',
                 },
                 {
                     url: '/contributions/bla',
+                    title: 'bla some title',
                     modelUrl: '/satellites/satellite2.glb',
                     contributionUrl: '/pages/contributions/bla.html',
                 },
                 {
                     url: '/contributions/blu',
+                    title: 'blu some title',
                     modelUrl: '/satellites/satellite5.glb',
                     contributionUrl: '/pages/contributions/blu.html',
                 },
                 {
                     url: '/contributions/blo',
+                    title: 'blo some title',
                     modelUrl: '/satellites/satellite3.glb',
                     contributionUrl: '/pages/contributions/blo.html',
                 },
                 {
                     url: '/contributions/bli',
+                    title: 'bli some title',
                     modelUrl: '/satellites/satellite5.glb',
                     contributionUrl: '/pages/contributions/bli.html',
                 },
                 {
                     url: '/contributions/blu',
+                    title: 'blu some title',
                     modelUrl: '/satellites/satellite4.glb',
                     contributionUrl: '/pages/contributions/blu.html',
                 },

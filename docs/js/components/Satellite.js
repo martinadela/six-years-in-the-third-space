@@ -11,7 +11,7 @@
                 4,
                 4
             ), new THREE.MeshBasicMaterial({
-                color: 'red', opacity: 0.4, transparent: true,
+                color: 'red', opacity: TSP.config.get('debug.satellites') ? 0.4 : 0, transparent: true,
             }))
             this.group.add(this.clickSphere)
 

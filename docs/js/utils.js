@@ -84,16 +84,18 @@
         TSP.state.set('App.currentUrl', relativeUrl)
     }
 
-    const normalizeUrl = (TSP.utils.normalizeUrl = (url) => {
+    const normalizeUrl = (TSP.utils.normalizeUrl = (url, forceAbsolute) => {
         if (url.endsWith('/')) {
-            return url.slice(0, -1)
-        } else {
-            return url
+            url = url.slice(0, -1)
         }
+        if (forceAbsolute && !url.startsWith('/')) {
+            url = '/' + url
+        }
+        return url
     })
 
     TSP.utils.absoluteUrl = (relativeUrl) =>
-        normalizeUrl(TSP.config.get('app.rootUrl') + relativeUrl)
+        normalizeUrl(TSP.config.get('app.rootUrl') + relativeUrl, true)
 
     TSP.utils.relativeUrl = (absoluteUrl) =>
         normalizeUrl(absoluteUrl.replace(TSP.config.get('app.rootUrl'), ''))

@@ -61,6 +61,10 @@
                 'window.height',
                 this.updateSize.bind(this)
             )
+            TSP.state.listen(
+                'App.currentUrl',
+                this.currentUrlChanged.bind(this)
+            )
 
             // ------------
             this.loader = new THREE.GLTFLoader()
@@ -81,6 +85,14 @@
                 TSP.state.get('window.width'),
                 TSP.state.get('window.height')
             )
+        }
+
+        currentUrlChanged(url) {
+            if (url === '') {
+                this.animateHovered = this._animateHovered
+            } else {
+                this.animateHovered = this._animateNoop
+            }
         }
 
         createObjects() {
@@ -151,13 +163,18 @@
 
         animate() {
             requestAnimationFrame(this.animate.bind(this))
-            this.hoverableObjectsManager.detect(this.mouse, this.tspCamera.camera, (_, hoveredObject) => {
-                TSP.state.set('Canvas3D.hoveredObject', hoveredObject)
-            })
+            this.animateHovered()
 
             Object.values(this.satellites).forEach((satellite) => satellite.animate())
             this.tspCamera.animate()
             this.renderer.render(this.scene, this.tspCamera.camera)
+        }
+
+        _animateNoop() {}
+        _animateHovered() {
+            this.hoverableObjectsManager.detect(this.mouse, this.tspCamera.camera, (_, hoveredObject) => {
+                TSP.state.set('Canvas3D.hoveredObject', hoveredObject)
+            })
         }
     }
 
