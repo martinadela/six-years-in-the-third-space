@@ -74,9 +74,10 @@
         }
 
         getDirection() {
-            const nextPosition = this.model.scene.position.clone()
-            nextPosition.applyQuaternion(this.planetaryRotationQuaternion)
-            return nextPosition.sub(this.model.scene.position)
+            const currentPosition = this.getPosition().clone()
+            const nextPosition = this.getPosition().clone()
+                .applyQuaternion(this.planetaryRotationQuaternion)
+            return nextPosition.sub(currentPosition).normalize()
         }
 
         getObject3D() {

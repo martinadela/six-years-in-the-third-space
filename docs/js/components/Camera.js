@@ -13,6 +13,7 @@
             )
             this.resetPosition()
             this.animate = this._animateNoop
+            this.debugCamera = null
         }
 
         resetPosition() {
@@ -25,10 +26,22 @@
         currentUrlChanged(url) {
             const object = TSP.state.get('Canvas3D.satellites')[url]
             if (object) {
-                this.chasedObject = object
-                this.animate = this._animateChase
+                const quaternion = new THREE.Quaternion()
+                quaternion.setFromAxisAngle(
+                    object.planetaryRotationAxis.getV3(),
+                    (Math.PI / 6)
+                )
+                this.chaseData = { 
+                    object: object,
+                    quaternion: quaternion,
+                }
+                if (TSP.config.get('debugCamera') === true) {
+                    this.animate = this._animateChaseDebug
+                } else {
+                    this.animate = this._animateChase
+                }
             } else {
-                this.chasedObject = null
+                this.chaseData = null
                 this.animate = this._animateNoop
                 this.resetPosition()
             }
@@ -36,19 +49,67 @@
 
         _animateNoop() {}
         _animateChase() {
-            const objectPosition = this.chasedObject.getPosition().clone()
-            const newPosition = this.chasedObject.getPosition().clone()
-            const objectDirection = this.chasedObject.getPosition().clone()
-            newPosition.add(
-                objectPosition.addScaledVector(objectDirection, -1.3)
-            )
-
-            this.camera.position.x = newPosition.x
-            this.camera.position.y = newPosition.y
-            this.camera.position.z = newPosition.z
-
-            this.camera.lookAt(this.chasedObject.getPosition())
+            const objectPosition = this.chaseData.object.getPosition().clone()
+            this.camera.position.copy(objectPosition)
+            this.camera.position.applyQuaternion(this.chaseData.quaternion)
+            this.camera.lookAt(objectPosition)
         }
+        _animateChaseDebug() {
+            const realCamera = this.camera
+            this.camera = this.debugCamera
+            this._animateChase()
+            this.camera = realCamera
+
+        }
+
+        show(scene) {
+            if (TSP.config.get('debugCamera') === true) {
+                this.debugCamera = DebugCamera(scene)
+            }
+        }
+
+    }
+
+    const DebugCamera = (scene) => {
+        const group = new THREE.Group()
+        scene.add(group)
+
+        const sphereMesh = new THREE.Mesh(new THREE.SphereBufferGeometry(
+            TSP.config.get('planet.radius') / 20,
+            32,
+            32
+        ), new THREE.MeshBasicMaterial({
+            color: 'red',
+        }))
+        group.add( sphereMesh )
+
+        const zLineMesh = new THREE.Line(new THREE.BufferGeometry().setFromPoints([
+            new THREE.Vector3(0, 0, 0),
+            new THREE.Vector3(0, 0, 8),
+        ]), new THREE.MeshBasicMaterial({
+            color: 'blue',
+        }))
+        group.add( zLineMesh )
+    
+        const xLineMesh = new THREE.Line(new THREE.BufferGeometry().setFromPoints([
+            new THREE.Vector3(0, 0, 0),
+            new THREE.Vector3(8, 0, 0),
+        ]), new THREE.MeshBasicMaterial({
+            color: 'red',
+        }))
+        group.add( xLineMesh )
+
+        const yLineMesh = new THREE.Line(new THREE.BufferGeometry().setFromPoints([
+            new THREE.Vector3(0, 0, 0),
+            new THREE.Vector3(0, 8, 0),
+        ]), new THREE.MeshBasicMaterial({
+            color: 'green',
+        }))
+        group.add( yLineMesh )
+
+        const proxy = new Proxy(group, {})
+        window.debugCamera = proxy
+        return proxy
     }
 
     TSP.components.Camera = Camera

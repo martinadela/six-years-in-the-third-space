@@ -33,6 +33,12 @@
         spherical.theta = (spherical.theta + (delta.theta || 0)) % (2 * Math.PI)
     }
 
+    // REF : https://stackoverflow.com/questions/25224153/how-can-i-get-the-normalized-vector-of-the-direction-an-object3d-is-facing
+    TSP.utils.getObjectDirection = (object3D) => {
+        const vector = new THREE.Vector3( 0, 0, 1 )
+        return vector.applyQuaternion( object3D.quaternion )
+    }
+
     TSP.utils.randomizeValue = (params) => {
         const mean = params[0]
         const uncertainty = params[1]

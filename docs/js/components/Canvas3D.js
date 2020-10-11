@@ -117,6 +117,7 @@
         start() {
             const self = this
             this.planet.show(this.scene)
+            this.tspCamera.show(this.scene)
             Object.values(this.satellites).forEach((satellite) => {
                 satellite.show(self.scene)
                 if (TSP.config.get('debug') === true) {

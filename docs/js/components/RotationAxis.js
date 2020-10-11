@@ -19,7 +19,7 @@
         }
 
         getV3() {
-            return TSP.utils.sphericalToV3(this.spherical)
+            return TSP.utils.sphericalToV3(this.spherical).normalize()
         }
 
         getPerpendicularSpherical() {
