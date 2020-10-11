@@ -80,7 +80,7 @@
             return nextPosition.sub(currentPosition).normalize()
         }
 
-        getObject3D() {
+        getHoverableObject3D() {
             return this.model.scene
         }
 

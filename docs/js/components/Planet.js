@@ -16,7 +16,7 @@
             scene.add(this.mesh)
         }
 
-        getObject3D() {
+        getHoverableObject3D() {
             return this.mesh
         }
     }

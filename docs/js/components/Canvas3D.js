@@ -64,8 +64,8 @@
 
             // ------------
             this.loader = new THREE.GLTFLoader()
-            this.raycaster = new THREE.Raycaster()
             this.mouse = new THREE.Vector2()
+            this.hoverableObjectsManager = new Canvas3DHoverableObjectsManager()
             this.createObjects()
         }
 
@@ -87,7 +87,6 @@
             this.planet = new TSP.components.Planet()
 
             const satelliteDefinitions = TSP.config.get('satellites.satellites')
-
             const planetaryRotationAxes = TSP.utils
                 .sphericalSpacedOnSphere(satelliteDefinitions.length)
                 .map((spherical) => 
@@ -124,6 +123,7 @@
             this.tspCamera.show(this.scene)
             Object.values(this.satellites).forEach((satellite) => {
                 satellite.show(this.scene)
+                this.hoverableObjectsManager.addHoverable(satellite.getHoverableObject3D(), satellite)
                 if (TSP.config.get('debug') === true) {
                     satellite.planetaryRotationAxis.show(this.scene)
                 }
@@ -146,23 +146,34 @@
                 },
                 false
             )
-
-            this.initializeHoverableObjects()
             this.animate()
         }
 
-        initializeHoverableObjects() {
-            this.hoveredObjectCache = null
-            this.hoverableObjects = [this.planet.getObject3D()]
-            this.hoverableObjectsMap = {
-                [this.planet.getObject3D().uuid]: this.planet,
-            }
-            this.satellites.forEach((satellite) => {
-                this.hoverableObjects.push(satellite.getObject3D())
-                this.hoverableObjectsMap[
-                    satellite.getObject3D().uuid
-                ] = satellite
+        animate() {
+            requestAnimationFrame(this.animate.bind(this))
+            this.hoverableObjectsManager.detect(this.mouse, this.tspCamera.camera, (hoveredObject) => {
+                TSP.state.set('Canvas3D.hoveredObject', hoveredObject)
             })
+
+            Object.values(this.satellites).forEach((satellite) => satellite.animate())
+            this.tspCamera.animate()
+            this.renderer.render(this.scene, this.tspCamera.camera)
+        }
+    }
+
+    customElements.define('tsp-canvas-3d', Canvas3D, { extends: 'canvas' })
+
+    class Canvas3DHoverableObjectsManager {
+        constructor() {
+            this.raycaster = new THREE.Raycaster()
+            this.hoveredObjectCache = null
+            this.hoverableObjects = []
+            this.hoverableObjectsMap = {}
+        }
+
+        addHoverable(object3D, data) {
+            this.hoverableObjects.push(object3D)
+            this.hoverableObjectsMap[object3D.uuid] = data
         }
 
         findHoverableObject(object3D) {
@@ -178,8 +189,8 @@
             return this.hoverableObjectsMap[object3D.uuid]
         }
 
-        detectHoveredObjects() {
-            this.raycaster.setFromCamera(this.mouse, this.tspCamera.camera)
+        detect(mouse, camera, onHoveredObjectChanged) {
+            this.raycaster.setFromCamera(mouse, camera)
             const intersects = this.raycaster.intersectObjects(
                 this.hoverableObjects,
                 true
@@ -190,22 +201,10 @@
             }
             if (hoveredObject !== this.hoveredObjectCache) {
                 this.hoveredObjectCache = hoveredObject
-                TSP.state.set('Canvas3D.hoveredObject', hoveredObject)
+                onHoveredObjectChanged(hoveredObject)
             }
         }
-
-        animate() {
-            requestAnimationFrame(this.animate.bind(this))
-            this.detectHoveredObjects()
-            Object.values(this.satellites).forEach((satellite) => {
-                satellite.animate()
-            })
-            this.tspCamera.animate()
-            this.renderer.render(this.scene, this.tspCamera.camera)
-        }
     }
-
-    customElements.define('tsp-canvas-3d', Canvas3D, { extends: 'canvas' })
 
     TSP.components.Canvas3D = Canvas3D
 })()
