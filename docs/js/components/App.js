@@ -10,15 +10,23 @@
         constructor() {
             super()
             this.appendChild(TSP.utils.template(template))
+
+            // ------------ event handlers
             this.addEventListener('click', this.onClick.bind(this), false)
-            TSP.state.listen('Canvas3D.loaded', this.show.bind(this))
-            TSP.state.listen('Reader.loaded', this.show.bind(this))
             window.addEventListener('popstate', (e) => {
                 TSP.state.set(
                     'App.currentUrl',
                     TSP.utils.relativeUrl(document.location.pathname)
                 )
             })
+            window.addEventListener('resize', () => {
+                TSP.state.set('window.width', window.innerWidth) 
+                TSP.state.set('window.height', window.innerHeight)
+            })
+
+            // ------------ state change handlers
+            TSP.state.listen('Canvas3D.loaded', this.show.bind(this))
+            TSP.state.listen('Reader.loaded', this.show.bind(this))
             TSP.state.listen(
                 'Canvas3D.hoveredObject',
                 this.hoveredObjectChanged.bind(this)

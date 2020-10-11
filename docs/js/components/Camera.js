@@ -3,17 +3,37 @@
         constructor() {
             this.camera = new THREE.PerspectiveCamera(
                 TSP.config.get('camera.fieldOfViewDegrees'),
-                TSP.state.get('window.width') / TSP.state.get('window.height'),
+                1,
                 TSP.config.get('camera.near'),
                 TSP.config.get('camera.far')
             )
+
+            // ------------ state change handlers
             TSP.state.listen(
                 'App.currentUrl',
                 this.currentUrlChanged.bind(this)
             )
+            TSP.state.listen(
+                'window.width',
+                this.windowDimensionsChanged.bind(this)
+            )
+            TSP.state.listen(
+                'window.height',
+                this.windowDimensionsChanged.bind(this)
+            )
+
+            // ------------ initialize
+            this.updateSize()
             this.resetPosition()
             this.animate = this._animateNoop
             this.debugCamera = null
+        }
+
+        windowDimensionsChanged() {
+            this.updateSize()
+            if (this.chasing === null) {
+                this.resetPosition()
+            }
         }
 
         resetPosition() {
@@ -24,6 +44,11 @@
             this.camera.lookAt(new THREE.Vector3(0, 0, 0))
         }
 
+        updateSize() {
+            this.camera.aspect = TSP.state.get('window.width') / TSP.state.get('window.height')
+            this.camera.updateProjectionMatrix()
+        }
+
         currentUrlChanged(url) {
             const object = TSP.state.get('Canvas3D.satellites')[url]
             if (object) {
@@ -32,7 +57,7 @@
                     object.planetaryRotationAxis.getV3(),
                     (Math.PI / 6)
                 )
-                this.chaseData = { 
+                this.chasing = { 
                     object: object,
                     quaternion: quaternion,
                 }
@@ -42,7 +67,7 @@
                     this.animate = this._animateChase
                 }
             } else {
-                this.chaseData = null
+                this.chasing = null
                 this.animate = this._animateNoop
                 this.resetPosition()
             }
@@ -50,9 +75,9 @@
 
         _animateNoop() {}
         _animateChase() {
-            const objectPosition = this.chaseData.object.getPosition().clone()
+            const objectPosition = this.chasing.object.getPosition().clone()
             this.camera.position.copy(objectPosition)
-            this.camera.position.applyQuaternion(this.chaseData.quaternion)
+            this.camera.position.applyQuaternion(this.chasing.quaternion)
             this.camera.lookAt(objectPosition)
         }
         _animateChaseDebug() {

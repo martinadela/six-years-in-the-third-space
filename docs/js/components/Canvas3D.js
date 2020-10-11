@@ -27,18 +27,12 @@
             this.scene.add(this.tspCamera.camera)
 
             // ------------ Renderer
-            this.pixelRatio = window.devicePixelRatio
             this.renderer = new THREE.WebGLRenderer({
                 antialias: true,
                 canvas: this,
             })
             this.renderer.physicallyCorrectLights = true
-            this.renderer.setPixelRatio(this.pixelRatio)
             this.renderer.outputEncoding = THREE.sRGBEncoding
-            this.renderer.setSize(
-                TSP.state.get('window.width'),
-                TSP.state.get('window.height')
-            )
 
             // ------------ Lights
             const ambientLight = new THREE.AmbientLight(
@@ -58,6 +52,16 @@
 
             this.lights = [ambientLight, directionalLight]
 
+            // ------------ state change handlers
+            TSP.state.listen(
+                'window.width',
+                this.updateSize.bind(this)
+            )
+            TSP.state.listen(
+                'window.height',
+                this.updateSize.bind(this)
+            )
+
             // ------------
             this.loader = new THREE.GLTFLoader()
             this.raycaster = new THREE.Raycaster()
@@ -72,6 +76,11 @@
         updateSize() {
             this.width = TSP.state.get('window.width') * this.pixelRatio
             this.height = TSP.state.get('window.height') * this.pixelRatio
+            this.renderer.setPixelRatio(window.devicePixelRatio)
+            this.renderer.setSize(
+                TSP.state.get('window.width'),
+                TSP.state.get('window.height')
+            )
         }
 
         createObjects() {
