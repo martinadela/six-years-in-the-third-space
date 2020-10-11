@@ -109,29 +109,19 @@
         }))
         group.add( sphereMesh )
 
-        const zLineMesh = new THREE.Line(new THREE.BufferGeometry().setFromPoints([
-            new THREE.Vector3(0, 0, 0),
-            new THREE.Vector3(0, 0, 8),
-        ]), new THREE.MeshBasicMaterial({
-            color: 'blue',
-        }))
-        group.add( zLineMesh )
-    
-        const xLineMesh = new THREE.Line(new THREE.BufferGeometry().setFromPoints([
-            new THREE.Vector3(0, 0, 0),
-            new THREE.Vector3(8, 0, 0),
-        ]), new THREE.MeshBasicMaterial({
-            color: 'red',
-        }))
-        group.add( xLineMesh )
-
-        const yLineMesh = new THREE.Line(new THREE.BufferGeometry().setFromPoints([
-            new THREE.Vector3(0, 0, 0),
-            new THREE.Vector3(0, 8, 0),
-        ]), new THREE.MeshBasicMaterial({
-            color: 'green',
-        }))
-        group.add( yLineMesh )
+        ;([
+            [new THREE.Vector3(8, 0, 0), 'red'],
+            [new THREE.Vector3(0, 8, 0), 'green'],
+            [new THREE.Vector3(0, 0, 8), 'blue'],
+        ]).forEach((axis) => {
+            const lineMesh = new THREE.Line(new THREE.BufferGeometry().setFromPoints([
+                new THREE.Vector3(0, 0, 0),
+                axis[0],
+            ]), new THREE.MeshBasicMaterial({
+                color: axis[1],
+            }))
+            group.add( lineMesh )
+        })
 
         const proxy = new Proxy(group, {})
         window.debugCamera = proxy
