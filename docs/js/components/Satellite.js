@@ -48,6 +48,7 @@
             sphericalPosition.radius = TSP.config.getRandomized(
                 'satellites.planetaryRotationRadius'
             )
+            console.log(sphericalPosition.radius)
             this.moveToSpherical(sphericalPosition)
             scene.add(this.model.scene)
         }

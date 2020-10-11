@@ -17,9 +17,10 @@
         }
 
         resetPosition() {
-            this.camera.position.x = 0
-            this.camera.position.y = 0
-            this.camera.position.z = TSP.config.get('camera.z')
+            const orbitDiameter = (TSP.config.get('satellites.planetaryRotationRadius')[0] + TSP.config.get('satellites.planetaryRotationRadius')[1]) * 2
+            // We need to adjust the camera to the biggest side of the window
+            let cameraZ = TSP.utils.computeCameraDistance(this.camera.aspect, this.camera.fov, orbitDiameter, orbitDiameter)
+            this.camera.position.set(0, 0, cameraZ)
             this.camera.lookAt(new THREE.Vector3(0, 0, 0))
         }
 

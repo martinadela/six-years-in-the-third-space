@@ -39,6 +39,19 @@
         return vector.applyQuaternion( object3D.quaternion )
     }
 
+    // Compute the minimum distance to place a perspective camera (with `aspectRatio`, `fovDegrees`) from a rectangle 
+    // of dimensions `[rectWidth, rectHeight]`, so that the rectangle is entirely visible.
+    // REF : https://stackoverflow.com/questions/13350875/three-js-width-of-view
+    TSP.utils.computeCameraDistance = (aspectRatio, fovDegrees, rectWidth, rectHeight) => {
+        const fovRadians = THREE.MathUtils.degToRad(fovDegrees)
+        // We need to adjust the camera to the biggeest side of the window
+        let cameraDistance = rectWidth / (2 * aspectRatio * Math.tan( fovRadians / 2 ))
+        if (aspectRatio > 1) {
+            cameraDistance = rectHeight / (2 * Math.tan( fovRadians / 2 ))
+        }
+        return cameraDistance
+    }
+
     TSP.utils.randomizeValue = (params) => {
         const mean = params[0]
         const uncertainty = params[1]

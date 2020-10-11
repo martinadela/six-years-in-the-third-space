@@ -39,7 +39,6 @@
             fieldOfViewDegrees: 75,
             near: 0.1,
             far: 100,
-            z: 50,
         },
         planet: {
             radius: 14,
@@ -56,11 +55,11 @@
                     modelUrl: 'satellites/satellite2.glb',
                     contributionUrl: '/pages/contributions/bla.html',
                 },
-                {
-                    url: '/contributions/blo',
-                    modelUrl: 'satellites/satellite3.glb',
-                    contributionUrl: '/pages/contributions/blo.html',
-                },
+                // {
+                //     url: '/contributions/blo',
+                //     modelUrl: 'satellites/satellite3.glb',
+                //     contributionUrl: '/pages/contributions/blo.html',
+                // },
                 // {
                 //     url: '/contributions/bli',
                 //     modelUrl: 'satellites/satellite4.glb',
