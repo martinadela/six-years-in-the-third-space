@@ -5,6 +5,16 @@
             this.modelUrl = modelUrl
             this.model = null
 
+            this.group = new THREE.Group()
+            this.clickSphere = new THREE.Mesh(new THREE.SphereBufferGeometry(
+                TSP.config.get('satellites.clickRadius'),
+                4,
+                4
+            ), new THREE.MeshBasicMaterial({
+                color: 'red', opacity: 0.4, transparent: true,
+            }))
+            this.group.add(this.clickSphere)
+
             this.planetaryRotationAxis = planetaryRotationAxis
             this.planetaryRotationAngleStep = TSP.config.get(
                 'satellites.planetaryRotationAngleStep'
@@ -24,14 +34,14 @@
         }
 
         load(loader) {
-            const self = this
             return new Promise((resolve, reject) => {
                 loader.load(
-                    TSP.utils.absoluteUrl(self.modelUrl),
+                    TSP.utils.absoluteUrl(this.modelUrl),
                     (gltf) => {
                         console.log('model loaded')
-                        self.model = gltf
-                        resolve(self)
+                        this.model = gltf
+                        this.group.add(this.model.scene)
+                        resolve(this)
                     },
                     undefined,
                     (error) => {
@@ -49,7 +59,7 @@
                 'satellites.planetaryRotationRadius'
             )
             this.moveToSpherical(sphericalPosition)
-            scene.add(this.model.scene)
+            scene.add(this.group)
         }
 
         hoveredObjectChanged(hoveredObject) {
@@ -70,7 +80,7 @@
         }
 
         getPosition() {
-            return this.model.scene.position
+            return this.group.position
         }
 
         getDirection() {
@@ -81,7 +91,7 @@
         }
 
         getHoverableObject3D() {
-            return this.model.scene
+            return this.clickSphere
         }
 
         moveToSpherical(sphericalPosition) {
@@ -89,14 +99,14 @@
         }
 
         rotateIncrement(delta) {
-            this.model.scene.rotation.x += delta.x || 0
-            this.model.scene.rotation.y += delta.y || 0
-            this.model.scene.rotation.z += delta.z || 0
+            this.group.rotation.x += delta.x || 0
+            this.group.rotation.y += delta.y || 0
+            this.group.rotation.z += delta.z || 0
         }
 
         _planetaryRotationStepNoop() {}
         _planetaryRotationStep() {
-            this.model.scene.position.applyQuaternion(
+            this.group.position.applyQuaternion(
                 this.planetaryRotationQuaternion
             )
         }

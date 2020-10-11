@@ -32,7 +32,7 @@
             throw new Error('Invalid types : ' + value + ' and ' + newValue)
         }
         _.set(STATE, path, newValue)
-        if (TSP.config.get('debug') === true) {
+        if (TSP.config.get('debug.state') === true) {
             console.log(
                 `STATE CHANGE : ${path} -> ${
                     value && value.toString ? value.toString() : value

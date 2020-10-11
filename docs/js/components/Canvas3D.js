@@ -124,11 +124,11 @@
             Object.values(this.satellites).forEach((satellite) => {
                 satellite.show(this.scene)
                 this.hoverableObjectsManager.addHoverable(satellite.getHoverableObject3D(), satellite)
-                if (TSP.config.get('debug') === true) {
+                if (TSP.config.get('debug.satellites') === true) {
                     satellite.planetaryRotationAxis.show(this.scene)
                 }
             })
-            if (TSP.config.get('debug') === true) {
+            if (TSP.config.get('debug.satellites') === true) {
                 this.axesHelper = new THREE.AxesHelper(
                     TSP.config.get('planet.radius') + 5
                 )
@@ -151,7 +151,7 @@
 
         animate() {
             requestAnimationFrame(this.animate.bind(this))
-            this.hoverableObjectsManager.detect(this.mouse, this.tspCamera.camera, (hoveredObject) => {
+            this.hoverableObjectsManager.detect(this.mouse, this.tspCamera.camera, (_, hoveredObject) => {
                 TSP.state.set('Canvas3D.hoveredObject', hoveredObject)
             })
 
@@ -166,43 +166,52 @@
     class Canvas3DHoverableObjectsManager {
         constructor() {
             this.raycaster = new THREE.Raycaster()
-            this.hoveredObjectCache = null
-            this.hoverableObjects = []
-            this.hoverableObjectsMap = {}
+            this.hoveredObject = null
+            this.hoverableObjects3D = []
+            this.hoverableObjectsUuid = {}
         }
 
-        addHoverable(object3D, data) {
-            this.hoverableObjects.push(object3D)
-            this.hoverableObjectsMap[object3D.uuid] = data
+        addHoverable(object3D, datum) {
+            this.hoverableObjects3D.push(object3D)
+            this.hoverableObjectsUuid[object3D.uuid] = datum
         }
 
-        findHoverableObject(object3D) {
+        detect(mouse, camera, onHoveredChanged) {
+            this.raycaster.setFromCamera(mouse, camera)
+            const intersects = this.raycaster.intersectObjects(
+                this.hoverableObjects3D,
+                true
+            )
+            let newHoveredObject = null
+            if (intersects.length) {
+                const hoveredObjects = intersects.map((intersected) => this._findHoverableObject(intersected.object))
+                // If the currently hovered object is still intersected, we don't change the state
+                if (hoveredObjects.indexOf(this.hoveredObject) !== -1) {
+                    return
+                }
+                newHoveredObject = hoveredObjects[0]
+            }
+            if (newHoveredObject !== this.hoveredObject) {
+                this.hoveredObject = newHoveredObject
+                onHoveredChanged(newHoveredObject, newHoveredObject ? this._getDatum(newHoveredObject): null)
+            }
+        }
+
+        _findHoverableObject(object3D) {
             while (
-                !(object3D.uuid in this.hoverableObjectsMap) &&
+                !(object3D.uuid in this.hoverableObjectsUuid) &&
                 object3D.parent
             ) {
                 object3D = object3D.parent
             }
-            if (!this.hoverableObjectsMap[object3D.uuid]) {
+            if (!this.hoverableObjectsUuid[object3D.uuid]) {
                 console.error(`object cannot be found`)
             }
-            return this.hoverableObjectsMap[object3D.uuid]
+            return object3D
         }
 
-        detect(mouse, camera, onHoveredObjectChanged) {
-            this.raycaster.setFromCamera(mouse, camera)
-            const intersects = this.raycaster.intersectObjects(
-                this.hoverableObjects,
-                true
-            )
-            let hoveredObject = null
-            if (intersects.length) {
-                hoveredObject = this.findHoverableObject(intersects[0].object)
-            }
-            if (hoveredObject !== this.hoveredObjectCache) {
-                this.hoveredObjectCache = hoveredObject
-                onHoveredObjectChanged(hoveredObject)
-            }
+        _getDatum(object3D) {
+            return this.hoverableObjectsUuid[object3D.uuid]
         }
     }
 

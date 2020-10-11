@@ -61,7 +61,7 @@
                     object: object,
                     quaternion: quaternion,
                 }
-                if (TSP.config.get('debugCamera') === true) {
+                if (TSP.config.get('debug.camera') === true) {
                     this.animate = this._animateChaseDebug
                 } else {
                     this.animate = this._animateChase
@@ -89,7 +89,7 @@
         }
 
         show(scene) {
-            if (TSP.config.get('debugCamera') === true) {
+            if (TSP.config.get('debug.camera') === true) {
                 this.debugCamera = DebugCamera(scene)
             }
         }
