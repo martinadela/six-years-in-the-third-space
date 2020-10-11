@@ -1,4 +1,6 @@
 ;(function () {
+    const HOVER_DETECT_DEBOUNCE = TSP.config.get('satellites.hoverDetectDebounce')
+
     const sheet = jss.default
         .createStyleSheet({
             main: {
@@ -14,6 +16,7 @@
         constructor() {
             super()
             this.classList.add(sheet.classes.main)
+            this.frameCount = 0
 
             // ------------ Camera
             this.tspCamera = new TSP.components.Camera()
@@ -162,8 +165,11 @@
         }
 
         animate() {
+            this.frameCount++
             requestAnimationFrame(this.animate.bind(this))
-            this.animateHovered()
+            if (this.frameCount % HOVER_DETECT_DEBOUNCE === 0) {
+                this.animateHovered()
+            }
 
             Object.values(this.satellites).forEach((satellite) => satellite.animate())
             this.tspCamera.animate()

@@ -56,7 +56,10 @@
             planetaryRotationRadius: [25, 0.5],
             planetaryRotationAngleStep: (Math.PI / 2) * 0.002,
             selfRotationIncrement: [0.002, 0.002],
+            // Size of the click / hover area for a satellite
             clickRadius: 4,
+            // Hover detection is executed only every N frames :
+            hoverDetectDebounce: 10,
         },
         contributions: [
             {

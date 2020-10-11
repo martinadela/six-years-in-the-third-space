@@ -1,6 +1,6 @@
 ;(function () {
-    const Highlight1 = TSP.config.get('styles.colors.Highlight1')
-    const ContentBackground = TSP.config.get('styles.colors.ContentBackground')
+    const HIGHLIGHT_COLOR1 = TSP.config.get('styles.colors.Highlight1')
+    const BACKGROUND_COLOR = TSP.config.get('styles.colors.ContentBackground')
     const sheet = jss.default
         .createStyleSheet({
             main: {
@@ -15,7 +15,7 @@
                 position: 'relative'
             },
             contributionContainer: {
-                backgroundColor: ContentBackground,
+                backgroundColor: BACKGROUND_COLOR,
                 padding: '1em',
                 height: '100%',
                 overflow: 'auto',
@@ -28,9 +28,9 @@
                 height: '4rem',
                 width: '4rem',
                 transform: 'translate(-50%, -50%)',
-                backgroundColor: ContentBackground,
-                border: `solid ${TSP.config.get('styles.dimensions.borderThickness')} ${Highlight1}`,
-                color: Highlight1,
+                backgroundColor: BACKGROUND_COLOR,
+                border: `solid ${TSP.config.get('styles.dimensions.borderThickness')} ${HIGHLIGHT_COLOR1}`,
+                color: HIGHLIGHT_COLOR1,
                 borderRadius: '2rem',
                 fontSize: '200%',
             },
