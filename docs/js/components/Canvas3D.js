@@ -98,22 +98,22 @@
         createObjects() {
             this.planet = new TSP.components.Planet()
 
-            const satelliteDefinitions = TSP.config.get('satellites.satellites')
+            const contributions = TSP.config.get('contributions')
             const planetaryRotationAxes = TSP.utils
-                .sphericalSpacedOnSphere(satelliteDefinitions.length)
+                .sphericalSpacedOnSphere(contributions.length)
                 .map((spherical) => 
                     new TSP.components.RotationAxis(spherical)
                 )
 
             const satellitesState = {}
-            this.satellites = satelliteDefinitions.map(
-                (satelliteDefinition, i) => {
+            this.satellites = contributions.map(
+                (contribution, i) => {
                     const satellite = new TSP.components.Satellite(
-                        satelliteDefinition.url,
-                        satelliteDefinition.modelUrl,
+                        contribution.url,
+                        contribution.satelliteModelUrl,
                         planetaryRotationAxes[i]
                     )
-                    satellitesState[satelliteDefinition.url] = satellite
+                    satellitesState[contribution.url] = satellite
                     return satellite
                 }
             )

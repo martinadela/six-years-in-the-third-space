@@ -86,16 +86,16 @@
         load() {
             const self = this
             this.contents = {}
-            const satelliteDefinitions = TSP.config.get('satellites.satellites')
+            const contributions = TSP.config.get('contributions')
             Promise.all(
-                satelliteDefinitions.map((satelliteDefinition) => {
-                    return TSP.utils.fetch(satelliteDefinition.contributionUrl)
+                contributions.map((contribution) => {
+                    return TSP.utils.fetch(contribution.contentUrl)
                 })
             ).then((contents) => {
                 contents.forEach((html, i) => {
-                    self.contents[satelliteDefinitions[i].url] = { 
+                    self.contents[contributions[i].url] = { 
                         html: html,
-                        title: satelliteDefinitions[i].title
+                        title: contributions[i].title
                     }
                 })
                 TSP.state.set('Reader.loaded', true)

@@ -57,106 +57,107 @@
             planetaryRotationAngleStep: (Math.PI / 2) * 0.002,
             selfRotationIncrement: [0.002, 0.002],
             clickRadius: 4,
-            satellites: [
-                {
-                    url: '/contributions/bla',
-                    title: 'bla some title',
-                    modelUrl: '/satellites/satellite2.glb',
-                    contributionUrl: '/pages/contributions/bla.html',
-                },
-                {
-                    url: '/contributions/blo',
-                    title: 'blo some title',
-                    modelUrl: '/satellites/satellite3.glb',
-                    contributionUrl: '/pages/contributions/blo.html',
-                },
-                {
-                    url: '/contributions/bli',
-                    title: 'bli some title',
-                    modelUrl: '/satellites/satellite4.glb',
-                    contributionUrl: '/pages/contributions/bli.html',
-                },
-                {
-                    url: '/contributions/blu',
-                    title: 'blu some title',
-                    modelUrl: '/satellites/satellite5.glb',
-                    contributionUrl: '/pages/contributions/blu.html',
-                },
-
-                {
-                    url: '/contributions/bla',
-                    title: 'bla some title',
-                    modelUrl: '/satellites/satellite2.glb',
-                    contributionUrl: '/pages/contributions/bla.html',
-                },
-                {
-                    url: '/contributions/bli',
-                    title: 'bli some title',
-                    modelUrl: '/satellites/satellite4.glb',
-                    contributionUrl: '/pages/contributions/bli.html',
-                },
-                {
-                    url: '/contributions/blu',
-                    title: 'blu some title',
-                    modelUrl: '/satellites/satellite5.glb',
-                    contributionUrl: '/pages/contributions/blu.html',
-                },
-                {
-                    url: '/contributions/blo',
-                    title: 'blo some title',
-                    modelUrl: '/satellites/satellite3.glb',
-                    contributionUrl: '/pages/contributions/blo.html',
-                },
-                {
-                    url: '/contributions/bla',
-                    title: 'bla some title',
-                    modelUrl: '/satellites/satellite2.glb',
-                    contributionUrl: '/pages/contributions/bla.html',
-                },
-                {
-                    url: '/contributions/blo',
-                    title: 'blo some title',
-                    modelUrl: '/satellites/satellite3.glb',
-                    contributionUrl: '/pages/contributions/blo.html',
-                },
-                {
-                    url: '/contributions/bli',
-                    title: 'bli some title',
-                    modelUrl: '/satellites/satellite4.glb',
-                    contributionUrl: '/pages/contributions/bli.html',
-                },
-                {
-                    url: '/contributions/bla',
-                    title: 'bla some title',
-                    modelUrl: '/satellites/satellite2.glb',
-                    contributionUrl: '/pages/contributions/bla.html',
-                },
-                {
-                    url: '/contributions/blu',
-                    title: 'blu some title',
-                    modelUrl: '/satellites/satellite5.glb',
-                    contributionUrl: '/pages/contributions/blu.html',
-                },
-                {
-                    url: '/contributions/blo',
-                    title: 'blo some title',
-                    modelUrl: '/satellites/satellite3.glb',
-                    contributionUrl: '/pages/contributions/blo.html',
-                },
-                {
-                    url: '/contributions/bli',
-                    title: 'bli some title',
-                    modelUrl: '/satellites/satellite5.glb',
-                    contributionUrl: '/pages/contributions/bli.html',
-                },
-                {
-                    url: '/contributions/blu',
-                    title: 'blu some title',
-                    modelUrl: '/satellites/satellite4.glb',
-                    contributionUrl: '/pages/contributions/blu.html',
-                },
-            ],
         },
+        contributions: [
+            {
+                url: '/contributions/bla',
+                title: 'bla some title',
+                satelliteModelUrl: '/satellites/satellite2.glb',
+                contentUrl: '/pages/contributions/bla.html',
+            },
+            {
+                url: '/contributions/blo',
+                title: 'blo some title',
+                satelliteModelUrl: '/satellites/satellite3.glb',
+                contentUrl: '/pages/contributions/blo.html',
+            },
+            {
+                url: '/contributions/bli',
+                title: 'bli some title',
+                satelliteModelUrl: '/satellites/satellite4.glb',
+                contentUrl: '/pages/contributions/bli.html',
+            },
+            {
+                url: '/contributions/blu',
+                title: 'blu some title',
+                satelliteModelUrl: '/satellites/satellite5.glb',
+                contentUrl: '/pages/contributions/blu.html',
+            },
+
+            {
+                url: '/contributions/bla',
+                title: 'bla some title',
+                satelliteModelUrl: '/satellites/satellite2.glb',
+                contentUrl: '/pages/contributions/bla.html',
+            },
+            {
+                url: '/contributions/bli',
+                title: 'bli some title',
+                satelliteModelUrl: '/satellites/satellite4.glb',
+                contentUrl: '/pages/contributions/bli.html',
+            },
+            {
+                url: '/contributions/blu',
+                title: 'blu some title',
+                satelliteModelUrl: '/satellites/satellite5.glb',
+                contentUrl: '/pages/contributions/blu.html',
+            },
+            {
+                url: '/contributions/blo',
+                title: 'blo some title',
+                satelliteModelUrl: '/satellites/satellite3.glb',
+                contentUrl: '/pages/contributions/blo.html',
+            },
+            {
+                url: '/contributions/bla',
+                title: 'bla some title',
+                satelliteModelUrl: '/satellites/satellite2.glb',
+                contentUrl: '/pages/contributions/bla.html',
+            },
+            {
+                url: '/contributions/blo',
+                title: 'blo some title',
+                satelliteModelUrl: '/satellites/satellite3.glb',
+                contentUrl: '/pages/contributions/blo.html',
+            },
+            {
+                url: '/contributions/bli',
+                title: 'bli some title',
+                satelliteModelUrl: '/satellites/satellite4.glb',
+                contentUrl: '/pages/contributions/bli.html',
+            },
+            {
+                url: '/contributions/bla',
+                title: 'bla some title',
+                satelliteModelUrl: '/satellites/satellite2.glb',
+                contentUrl: '/pages/contributions/bla.html',
+            },
+            {
+                url: '/contributions/blu',
+                title: 'blu some title',
+                satelliteModelUrl: '/satellites/satellite5.glb',
+                contentUrl: '/pages/contributions/blu.html',
+            },
+            {
+                url: '/contributions/blo',
+                title: 'blo some title',
+                satelliteModelUrl: '/satellites/satellite3.glb',
+                contentUrl: '/pages/contributions/blo.html',
+            },
+            {
+                url: '/contributions/bli',
+                title: 'bli some title',
+                satelliteModelUrl: '/satellites/satellite5.glb',
+                contentUrl: '/pages/contributions/bli.html',
+            },
+            {
+                url: '/contributions/blu',
+                title: 'blu some title',
+                satelliteModelUrl: '/satellites/satellite4.glb',
+                contentUrl: '/pages/contributions/blu.html',
+            },
+        ],
+
     }
 
     TSP.config = {}
