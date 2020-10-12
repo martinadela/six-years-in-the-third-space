@@ -15,7 +15,10 @@
         Reader: {
             loaded: false,
         },
-        Camera: {},
+        Sidebar: {
+            element: null
+        },
+
     }
 
     TSP.state = {}

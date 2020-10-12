@@ -8,8 +8,8 @@
             this.group = new THREE.Group()
             this.clickSphere = new THREE.Mesh(new THREE.SphereBufferGeometry(
                 TSP.config.get('satellites.clickRadius'),
-                4,
-                4
+                6,
+                6
             ), new THREE.MeshBasicMaterial({
                 color: 'red', opacity: TSP.config.get('debug.satellites') ? 0.4 : 0, transparent: true,
             }))
@@ -30,6 +30,10 @@
             TSP.state.listen(
                 'Canvas3D.hoveredObject',
                 this.hoveredObjectChanged.bind(this)
+            )
+            TSP.state.listen(
+                'App.currentUrl',
+                this.currentUrlChanged.bind(this)
             )
         }
 
@@ -64,6 +68,16 @@
 
         hoveredObjectChanged(hoveredObject) {
             if (hoveredObject === this) {
+                this.planetaryRotationStep = this._planetaryRotationStepNoop
+            } else {
+                this.planetaryRotationStep = this._planetaryRotationStep.bind(
+                    this
+                )
+            }
+        }
+
+        currentUrlChanged(url) {
+            if (url === this.url) {
                 this.planetaryRotationStep = this._planetaryRotationStepNoop
             } else {
                 this.planetaryRotationStep = this._planetaryRotationStep.bind(

@@ -28,6 +28,15 @@
         return v3
     }
 
+    TSP.utils.v3ToSpherical = (v3) => {
+        const spherical = new THREE.Spherical()
+        spherical.setFromVector3(v3)
+        return spherical
+    }
+
+    TSP.utils.v3ToTranslationMatrix = (v3) =>
+        new THREE.Matrix4().makeTranslation(v3.x, v3.y, v3.z)
+
     TSP.utils.incrementSpherical = (spherical, delta) => {
         spherical.phi = (spherical.phi + (delta.phi || 0)) % Math.PI
         spherical.theta = (spherical.theta + (delta.theta || 0)) % (2 * Math.PI)
@@ -50,6 +59,34 @@
             cameraDistance = rectHeight / (2 * Math.tan( fovRadians / 2 ))
         }
         return cameraDistance
+    }
+
+    // Compute a transform :
+    //      - corresponding with the spherical angles (theta, phi) of `targetPosition`,
+    //      - on orbit (radius) that is higher of `distance`
+    //      - looking towards `targetPosition`, but with an optional offset 
+    // All the parameters are given in the coordinate system of the canvas
+    // - offsetX : X offset of the center of the object
+    // - offsetY : Y offset of the center of the object
+    TSP.utils.sphericalFocus = (targetPosition, distance, offsetX, offsetY) => {
+        const rotationOrigin = new THREE.Vector3(0, 0, 1)
+        const rotationTarget = targetPosition.clone().normalize()
+        const rotation = new THREE.Quaternion().setFromUnitVectors(rotationOrigin, rotationTarget)
+
+        const translation = new THREE.Vector3()
+        // 1. move back from `radius of targetPosition` + `distance`
+        const targetPositionSpherical = TSP.utils.v3ToSpherical(targetPosition)
+        translation.z = targetPositionSpherical.radius + distance
+        // 2. apply the offsets
+        translation.applyMatrix4(
+            TSP.utils.v3ToTranslationMatrix(new THREE.Vector3(offsetX, offsetY, 0)))
+        // 3. apply the rotation to bring `translation` to `targetPosition`
+        translation.applyQuaternion(rotation)
+
+        return {
+            translation: translation, 
+            rotation: rotation
+        }
     }
 
     TSP.utils.randomizeValue = (params) => {

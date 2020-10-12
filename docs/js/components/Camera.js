@@ -37,9 +37,14 @@
         }
 
         resetPosition() {
-            const orbitDiameter = (TSP.config.get('satellites.planetaryRotationRadius')[0] + TSP.config.get('satellites.planetaryRotationRadius')[1]) * 2
+            const orbitDiameter = (
+                TSP.config.get('satellites.planetaryRotationRadius')[0] 
+                + TSP.config.get('satellites.planetaryRotationRadius')[1]) * 2
+                + TSP.config.get('satellites.clickRadius')
+            const paddingRatio = TSP.config.get('camera.paddingRatio')
             // We need to adjust the camera to the biggest side of the window
-            let cameraZ = TSP.utils.computeCameraDistance(this.camera.aspect, this.camera.fov, orbitDiameter, orbitDiameter)
+            let cameraZ = TSP.utils.computeCameraDistance(
+                this.camera.aspect, this.camera.fov, orbitDiameter * (1 + paddingRatio), orbitDiameter * (1 + paddingRatio))
             this.camera.position.set(0, 0, cameraZ)
             this.camera.lookAt(new THREE.Vector3(0, 0, 0))
         }
@@ -57,7 +62,7 @@
                     object.planetaryRotationAxis.getV3(),
                     (Math.PI / 6)
                 )
-                this.chasing = { 
+                this.chasing = {
                     object: object,
                     quaternion: quaternion,
                 }
@@ -75,28 +80,53 @@
 
         _animateNoop() {}
         _animateChase() {
-            const objectPosition = this.chasing.object.getPosition().clone()
-            this.camera.position.copy(objectPosition)
-            this.camera.position.applyQuaternion(this.chasing.quaternion)
-            this.camera.lookAt(objectPosition)
+            const planeScreenWidth = TSP.state.get('window.width')
+            const planeScreenHeight = TSP.state.get('window.height')
+            const objectCanvasWidth = TSP.config.get('satellites.clickRadius') * 2
+            const objectPositionV3 = this.chasing.object.getPosition().clone()
+
+            // Get dimensions / offsets of the object to focus, in screen coordinates 
+            const sidebarBoundingRect = TSP.state.get('Sidebar.element').getBoundingClientRect()
+            const objectScreenWidth = sidebarBoundingRect.width
+            const objectScreenHeight = objectScreenWidth
+            // Calculate the [X, Y] of the object in screen (pixel) coordinates, and centered on 0.
+            const objectScreenX = (sidebarBoundingRect.left + objectScreenWidth / 2) - planeScreenWidth / 2
+            const objectScreenY = (sidebarBoundingRect.bottom - objectScreenHeight / 2) - planeScreenHeight / 2
+
+            // Get the equivalent dimensions / offset [X, Y] of the object in canvas coordinates.
+            const canvasScreenRatio = (objectCanvasWidth / objectScreenWidth)
+            const planeCanvasWidth = planeScreenWidth * canvasScreenRatio
+            const planeCanvasHeight = planeScreenHeight * canvasScreenRatio
+            const objectCanvasX = -objectScreenX * canvasScreenRatio
+            const objectCanvasY = objectScreenY * canvasScreenRatio
+
+            // Compute transforms to place the camera in the right position / angle
+            const cameraDistance = TSP.utils.computeCameraDistance(this.camera.aspect, this.camera.fov, planeCanvasWidth, planeCanvasHeight)
+            const transforms = TSP.utils.sphericalFocus(objectPositionV3, cameraDistance, objectCanvasX, objectCanvasY)
+            this.camera.position.copy(transforms.translation)
+            this.camera.quaternion.copy(transforms.rotation)
+
+            // As the object is not changing position, we switch back to no animation
+            this.animate = this._animateNoop
         }
         _animateChaseDebug() {
             const realCamera = this.camera
+            this.debugCamera.position.copy(this.camera.position)
+            this.debugCamera.quaternion.copy(this.camera.quaternion)
             this.camera = this.debugCamera
             this._animateChase()
             this.camera = realCamera
-
         }
 
         show(scene) {
             if (TSP.config.get('debug.camera') === true) {
-                this.debugCamera = DebugCamera(scene)
+                this.debugCamera = DebugCamera(scene, this.camera)
             }
         }
 
     }
 
-    const DebugCamera = (scene) => {
+    const DebugCamera = (scene, camera) => {
         const group = new THREE.Group()
         scene.add(group)
 
@@ -123,7 +153,14 @@
             group.add( lineMesh )
         })
 
-        const proxy = new Proxy(group, {})
+        const proxy = new Proxy(group, {
+            get: function(target, prop, receiver) {
+                if (!(prop in group) && (prop in camera)) {
+                    return camera[prop]
+                }
+                return group[prop]
+            }
+        })
         window.debugCamera = proxy
         return proxy
     }
