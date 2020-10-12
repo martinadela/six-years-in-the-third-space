@@ -23,20 +23,45 @@
             )
 
             // ------------ initialize
-            this.updateSize()
-            this.resetPosition()
-            this.animate = this._animateNoop
+            this.tweens = new TWEEN.Group()
             this.debugCamera = null
+            this.focusedObject = null
+            this.updateSize()
+            this.applyTransform(this.transformDefault())
         }
 
         windowDimensionsChanged() {
             this.updateSize()
-            if (this.chasing === null) {
-                this.resetPosition()
+            if (this.focusedObject === null) {
+                this.applyTransform(this.transformDefault())
+            }
+        }
+        
+        updateSize() {
+            this.camera.aspect = TSP.state.get('window.width') / TSP.state.get('window.height')
+            this.camera.updateProjectionMatrix()
+        }
+
+        currentUrlChanged(url) {
+            const satellite = TSP.state.get('Canvas3D.satellites')[url]
+            if (satellite) {
+                this.focusedObject = satellite
+                this.withDebugging(() => this.animateTransform(this.transformFocused()))
+            } else if (url === '') {
+                this.focusedObject = null
+                this.withDebugging(() => this.animateTransform(this.transformDefault()))
+            } else {
+                throw new Error(`Unknown url for camera ${url}`)
             }
         }
 
-        resetPosition() {
+        show(scene) {
+            if (TSP.config.get('debug.camera') === true) {
+                this.debugCamera = DebugCamera(scene, this.camera)
+            }
+        }
+
+        transformDefault() {
             const orbitDiameter = (
                 TSP.config.get('satellites.planetaryRotationRadius')[0] 
                 + TSP.config.get('satellites.planetaryRotationRadius')[1]) * 2
@@ -44,38 +69,13 @@
             // We need to adjust the camera to the biggest side of the window
             let cameraZ = TSP.utils.computeCameraDistance(
                 this.camera, new THREE.Vector2(1, 1).multiplyScalar(orbitDiameter * (1 + paddingRatio)))
-            this.camera.position.set(0, 0, cameraZ)
-            this.camera.lookAt(new THREE.Vector3(0, 0, 0))
-        }
-
-        updateSize() {
-            this.camera.aspect = TSP.state.get('window.width') / TSP.state.get('window.height')
-            this.camera.updateProjectionMatrix()
-        }
-
-        currentUrlChanged(url) {
-            const object = TSP.state.get('Canvas3D.satellites')[url]
-            if (object) {
-                this.chasing = {
-                    object: object,
-                }
-                if (TSP.config.get('debug.camera') === true) {
-                    this.animate = this._animateChaseDebug
-                } else {
-                    this.animate = this._animateChase
-                }
-            } else {
-                this.chasing = null
-                this.animate = this._animateNoop
-                this.resetPosition()
+            return {
+                translation: new THREE.Vector3(0, 0, cameraZ),
+                rotation: new THREE.Quaternion()
             }
         }
 
-        _animateNoop() {}
-        _animateChase() {
-            const camera = this.camera
-
-            // Get dimensions / offsets of the object to focus, in screen coordinates 
+        transformFocused() {
             const sidebarBoundingRect = TSP.state.get('Sidebar.element').getBoundingClientRect()
 
             const canvasBoundingBoxOnScreen = new THREE.Box2(
@@ -97,60 +97,42 @@
             )
 
             // Compute transforms to place the camera in the right position / angle
-            const transforms = TSP.utils.computeCameraOrbitalTransform(
+            return TSP.utils.computeCameraOrbitalTransform(
                 this.camera, 
-                this.chasing.object.getObject3D(), 
+                this.focusedObject.getObject3D(), 
                 canvasBoundingBoxOnScreen, 
                 objectBoundingBoxOnScreen
             )
-
-            const tweenTranslate = new TWEEN.Tween({
-                x: camera.position.x,
-                y: camera.position.y,
-                z: camera.position.z,
-            }).to({
-                x: transforms.translation.x,
-                y: transforms.translation.y,
-                z: transforms.translation.z,
-            }, 2000).onUpdate((values) => {
-                camera.position.copy(values)
-            }).start()
-
-            const tweenRotate = new TWEEN.Tween({
-                x: camera.quaternion.x,
-                y: camera.quaternion.y,
-                z: camera.quaternion.z,
-                w: camera.quaternion.w,
-            }).to({
-                x: transforms.rotation.x,
-                y: transforms.rotation.y,
-                z: transforms.rotation.z,
-                w: transforms.rotation.w,
-            }, 2000).onUpdate((values) => {
-                camera.quaternion.copy(values)
-            }).start()
-            
-            tweenTranslate.start()
-            tweenRotate.start()
-
-            tweenTranslate.onComplete(() => {
-                // TODO
-            })
-
-            this.animate = this._animateNoop
         }
-        _animateChaseDebug() {
+
+        animateTransform(transform) {
+            this.tweens.removeAll()
+            TSP.utils.tweenTranslate(
+                this.camera, transform.translation, { duration: TSP.config.get('app.transitionDuration'), group: this.tweens })
+            TSP.utils.tweenRotate(
+                this.camera, transform.rotation, { duration: TSP.config.get('app.transitionDuration'), group: this.tweens })
+        }
+
+        applyTransform(transform) {
+            this.tweens.removeAll()
+            this.camera.position.copy(transform.translation)
+            this.camera.quaternion.copy(transform.rotation)
+        }
+
+        animate() {
+            this.tweens.update()
+        }
+
+        withDebugging(initializeAnimation) {
             const realCamera = this.camera
-            this.debugCamera.position.copy(this.camera.position)
-            this.debugCamera.quaternion.copy(this.camera.quaternion)
-            this.camera = this.debugCamera
-            this._animateChase()
-            this.camera = realCamera
-        }
-
-        show(scene) {
             if (TSP.config.get('debug.camera') === true) {
-                this.debugCamera = DebugCamera(scene, this.camera)
+                this.debugCamera.position.copy(this.camera.position)
+                this.debugCamera.quaternion.copy(this.camera.quaternion)
+                this.camera = this.debugCamera
+            }
+            initializeAnimation()
+            if (TSP.config.get('debug.camera') === true) {
+                this.camera = realCamera
             }
         }
 

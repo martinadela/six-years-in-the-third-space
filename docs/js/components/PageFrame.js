@@ -29,15 +29,15 @@
         .attach()
 
     const template = `
-    <template id="PageFrame">
-        <div class="${sheet.classes.innerContainer}">
-            <div class="${sheet.classes.readerContainer}">
-                <div is="tsp-reader"></div>
+        <template id="PageFrame">
+            <div class="${sheet.classes.innerContainer}">
+                <div class="${sheet.classes.readerContainer}">
+                    <div is="tsp-reader"></div>
+                </div>
+                <div is="tsp-sidebar"></div>
             </div>
-            <div is="tsp-sidebar"></div>
-        </div>
-    </template>
-`
+        </template>
+    `
 
     class PageFrame extends HTMLDivElement {
         constructor() {

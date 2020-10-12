@@ -1,8 +1,6 @@
 ;(function () {
     TSP.utils = {}
-
-    TSP.utils.degreesToRadians = (angle) => (angle * math.pi) / 180
-
+    
     TSP.utils.sphericalSpacedOnSphere = (numPoints, radius) => {
         const sphericals = []
         const rowOrColumnCount = Math.pow(numPoints, 0.5)
@@ -104,6 +102,38 @@
             translation: translation, 
             rotation: rotation
         }
+    }
+
+    TSP.utils.tweenTranslate = (object3D, translation, opts) => {
+        const duration = opts.duration || 2000
+        return new TWEEN.Tween({
+            x: object3D.position.x,
+            y: object3D.position.y,
+            z: object3D.position.z,
+        }, opts.group).to({
+            x: translation.x,
+            y: translation.y,
+            z: translation.z,
+        }, duration).onUpdate((values) => {
+            object3D.position.copy(values)
+        }).start()
+    }
+
+    TSP.utils.tweenRotate = (object3D, rotation, opts) => {
+        const duration = opts.duration || 2000
+        return new TWEEN.Tween({
+            x: object3D.quaternion.x,
+            y: object3D.quaternion.y,
+            z: object3D.quaternion.z,
+            w: object3D.quaternion.w,
+        }, opts.group).to({
+            x: rotation.x,
+            y: rotation.y,
+            z: rotation.z,
+            w: rotation.w,
+        }, duration).onUpdate((values) => {
+            object3D.quaternion.copy(values)
+        }).start()
     }
 
     TSP.utils.randomizeValue = (params) => {

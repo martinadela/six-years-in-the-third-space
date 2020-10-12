@@ -88,8 +88,10 @@
                 TSP.state.get('Canvas3D.loaded') &&
                 TSP.state.get('Reader.loaded')
             ) {
-                TSP.utils.navigateTo(TSP.utils.relativeUrl(location.pathname))
                 this.canvas3D.start()
+                // We trigger the route change only after the canvas has started,
+                // otherwise we will miss some state (satellites, positions, etc ...)
+                TSP.utils.navigateTo(TSP.utils.relativeUrl(location.pathname))
             }
         }
 
