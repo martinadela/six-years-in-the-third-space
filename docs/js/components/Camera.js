@@ -44,7 +44,7 @@
             const paddingRatio = TSP.config.get('camera.paddingRatio')
             // We need to adjust the camera to the biggest side of the window
             let cameraZ = TSP.utils.computeCameraDistance(
-                this.camera.aspect, this.camera.fov, orbitDiameter * (1 + paddingRatio), orbitDiameter * (1 + paddingRatio))
+                this.camera, new THREE.Vector2(1, 1).multiplyScalar(orbitDiameter * (1 + paddingRatio)))
             this.camera.position.set(0, 0, cameraZ)
             this.camera.lookAt(new THREE.Vector3(0, 0, 0))
         }
@@ -57,14 +57,8 @@
         currentUrlChanged(url) {
             const object = TSP.state.get('Canvas3D.satellites')[url]
             if (object) {
-                const quaternion = new THREE.Quaternion()
-                quaternion.setFromAxisAngle(
-                    object.planetaryRotationAxis.getV3(),
-                    (Math.PI / 6)
-                )
                 this.chasing = {
                     object: object,
-                    quaternion: quaternion,
                 }
                 if (TSP.config.get('debug.camera') === true) {
                     this.animate = this._animateChaseDebug
@@ -80,33 +74,70 @@
 
         _animateNoop() {}
         _animateChase() {
-            const planeScreenWidth = TSP.state.get('window.width')
-            const planeScreenHeight = TSP.state.get('window.height')
-            const objectCanvasWidth = TSP.config.get('satellites.clickRadius') * 2
-            const objectPositionV3 = this.chasing.object.getPosition().clone()
+            const camera = this.camera
 
             // Get dimensions / offsets of the object to focus, in screen coordinates 
             const sidebarBoundingRect = TSP.state.get('Sidebar.element').getBoundingClientRect()
-            const objectScreenWidth = sidebarBoundingRect.width
-            const objectScreenHeight = objectScreenWidth
-            // Calculate the [X, Y] of the object in screen (pixel) coordinates, and centered on 0.
-            const objectScreenX = (sidebarBoundingRect.left + objectScreenWidth / 2) - planeScreenWidth / 2
-            const objectScreenY = (sidebarBoundingRect.bottom - objectScreenHeight / 2) - planeScreenHeight / 2
 
-            // Get the equivalent dimensions / offset [X, Y] of the object in canvas coordinates.
-            const canvasScreenRatio = (objectCanvasWidth / objectScreenWidth)
-            const planeCanvasWidth = planeScreenWidth * canvasScreenRatio
-            const planeCanvasHeight = planeScreenHeight * canvasScreenRatio
-            const objectCanvasX = -objectScreenX * canvasScreenRatio
-            const objectCanvasY = objectScreenY * canvasScreenRatio
+            const canvasBoundingBoxOnScreen = new THREE.Box2(
+                new THREE.Vector2(0, 0),
+                new THREE.Vector2(
+                    TSP.state.get('window.width'),
+                    TSP.state.get('window.height'),
+                ),
+            )
+            const objectBoundingBoxOnScreen = new THREE.Box2(
+                new THREE.Vector2(
+                    sidebarBoundingRect.left,
+                    sidebarBoundingRect.bottom - sidebarBoundingRect.width,
+                ),
+                new THREE.Vector2(
+                    sidebarBoundingRect.left + sidebarBoundingRect.width,
+                    sidebarBoundingRect.bottom,
+                ),
+            )
 
             // Compute transforms to place the camera in the right position / angle
-            const cameraDistance = TSP.utils.computeCameraDistance(this.camera.aspect, this.camera.fov, planeCanvasWidth, planeCanvasHeight)
-            const transforms = TSP.utils.sphericalFocus(objectPositionV3, cameraDistance, objectCanvasX, objectCanvasY)
-            this.camera.position.copy(transforms.translation)
-            this.camera.quaternion.copy(transforms.rotation)
+            const transforms = TSP.utils.computeCameraOrbitalTransform(
+                this.camera, 
+                this.chasing.object.getObject3D(), 
+                canvasBoundingBoxOnScreen, 
+                objectBoundingBoxOnScreen
+            )
 
-            // As the object is not changing position, we switch back to no animation
+            const tweenTranslate = new TWEEN.Tween({
+                x: camera.position.x,
+                y: camera.position.y,
+                z: camera.position.z,
+            }).to({
+                x: transforms.translation.x,
+                y: transforms.translation.y,
+                z: transforms.translation.z,
+            }, 2000).onUpdate((values) => {
+                camera.position.copy(values)
+            }).start()
+
+            const tweenRotate = new TWEEN.Tween({
+                x: camera.quaternion.x,
+                y: camera.quaternion.y,
+                z: camera.quaternion.z,
+                w: camera.quaternion.w,
+            }).to({
+                x: transforms.rotation.x,
+                y: transforms.rotation.y,
+                z: transforms.rotation.z,
+                w: transforms.rotation.w,
+            }, 2000).onUpdate((values) => {
+                camera.quaternion.copy(values)
+            }).start()
+            
+            tweenTranslate.start()
+            tweenRotate.start()
+
+            tweenTranslate.onComplete(() => {
+                // TODO
+            })
+
             this.animate = this._animateNoop
         }
         _animateChaseDebug() {

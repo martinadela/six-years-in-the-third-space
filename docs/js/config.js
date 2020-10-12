@@ -2,7 +2,7 @@
     const CONFIG = {
         debug: {
             state: false,
-            satellites: false,
+            satellites: true,
             camera: false,
         },
         app: {
@@ -48,7 +48,7 @@
             far: 100,
             // Padding around the main scene on the index.
             // Given as a ratio of the size of the scene
-            paddingRatio: 1,
+            paddingRatio: 0.1,
         },
         planet: {
             radius: 14,

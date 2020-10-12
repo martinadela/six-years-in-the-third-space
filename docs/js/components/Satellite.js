@@ -108,6 +108,10 @@
             return this.clickSphere
         }
 
+        getObject3D() {
+            return this.group
+        }
+
         moveToSpherical(sphericalPosition) {
             this.getPosition().setFromSpherical(sphericalPosition)
         }

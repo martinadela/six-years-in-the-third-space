@@ -9,7 +9,7 @@
                 overflow: 'visible',
                 display: 'none',
                 '&.visible': {
-                    display: 'block'
+                    display: 'none'
                 },
                 // To allow positioning of button
                 position: 'relative'

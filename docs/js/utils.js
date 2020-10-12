@@ -48,39 +48,56 @@
         return vector.applyQuaternion( object3D.quaternion )
     }
 
-    // Compute the minimum distance to place a perspective camera (with `aspectRatio`, `fovDegrees`) from a rectangle 
-    // of dimensions `[rectWidth, rectHeight]`, so that the rectangle is entirely visible.
+    // Compute the minimum distance to place a perspective camera from a rectangle 
+    // of dimensions `Vector2(x, y)`, so that the rectangle is entirely visible.
     // REF : https://stackoverflow.com/questions/13350875/three-js-width-of-view
-    TSP.utils.computeCameraDistance = (aspectRatio, fovDegrees, rectWidth, rectHeight) => {
-        const fovRadians = THREE.MathUtils.degToRad(fovDegrees)
+    TSP.utils.computeCameraDistance = (camera, rectDimensions) => {
+        const fovRadians = THREE.MathUtils.degToRad(camera.fov)
         // We need to adjust the camera to the biggeest side of the window
-        let cameraDistance = rectWidth / (2 * aspectRatio * Math.tan( fovRadians / 2 ))
-        if (aspectRatio > 1) {
-            cameraDistance = rectHeight / (2 * Math.tan( fovRadians / 2 ))
+        let cameraDistance = rectDimensions.x / (2 * camera.aspect * Math.tan( fovRadians / 2 ))
+        if (camera.aspect > 1) {
+            cameraDistance = rectDimensions.y / (2 * Math.tan( fovRadians / 2 ))
         }
         return cameraDistance
     }
 
-    // Compute a transform :
-    //      - corresponding with the spherical angles (theta, phi) of `targetPosition`,
-    //      - on orbit (radius) that is higher of `distance`
-    //      - looking towards `targetPosition`, but with an optional offset 
-    // All the parameters are given in the coordinate system of the canvas
-    // - offsetX : X offset of the center of the object
-    // - offsetY : Y offset of the center of the object
-    TSP.utils.sphericalFocus = (targetPosition, distance, offsetX, offsetY) => {
-        const rotationOrigin = new THREE.Vector3(0, 0, 1)
-        const rotationTarget = targetPosition.clone().normalize()
-        const rotation = new THREE.Quaternion().setFromUnitVectors(rotationOrigin, rotationTarget)
+    // Compute an orbital transform for `camera`, so that `object3D` is placed inside `objectBoundingBoxOnScreen`.
+    TSP.utils.computeCameraOrbitalTransform = (camera, object3D, canvasBoundingBoxOnScreen, objectBoundingBoxOnScreen) => {
+        const object3DPosition = object3D.position.clone()
+        
+        // -------- 1. Process on-screen dimensions / positions for the canvas and the object
+        const pixelCanvasDimensions = canvasBoundingBoxOnScreen.getSize()
+        const pixelObjectDimensions = objectBoundingBoxOnScreen.getSize()
+        const pixelObjectMaxSize = Math.max(pixelObjectDimensions.x, pixelObjectDimensions.y)
+        // Calculate the coordinates of the center of the object, taking for origin the center of the canvas
+        const pixelObjectPosition = new THREE.Vector2().copy(objectBoundingBoxOnScreen.min)
+            // Translate to the center of the object instead of top-left corner
+            .addScaledVector(pixelObjectDimensions, 0.5)
+            // Translate to the center of the canvas instead of top-left corner
+            .addScaledVector(pixelCanvasDimensions, -0.5)
+
+        // -------- 2. Project on-screen dimensions / positions to the units in Three.js coordinate system (meters)
+        const meterObjectDimensions = new THREE.Box3().setFromObject(object3D).getSize()
+        const meterObjectMaxSize = Math.max(meterObjectDimensions.x, meterObjectDimensions.y, meterObjectDimensions.z)
+
+        const projectionRatio = meterObjectMaxSize / pixelObjectMaxSize
+        const meterVisibleRectangle = pixelCanvasDimensions.multiplyScalar(projectionRatio)
+        const meterObjectPosition = pixelObjectPosition.multiply(new THREE.Vector2(-projectionRatio, projectionRatio))
+
+        // -------- 3. Compute `rotation` and `translation` to bring the camera in position
+        const rotation = new THREE.Quaternion().setFromUnitVectors(
+            new THREE.Vector3(0, 0, 1), 
+            object3DPosition.clone().normalize()
+        )
 
         const translation = new THREE.Vector3()
-        // 1. move back from `radius of targetPosition` + `distance`
-        const targetPositionSpherical = TSP.utils.v3ToSpherical(targetPosition)
-        translation.z = targetPositionSpherical.radius + distance
-        // 2. apply the offsets
+        // i. move back from `radius of object3DPosition` + `distance`
+        const object3DPositionSpherical = TSP.utils.v3ToSpherical(object3DPosition)
+        translation.z = object3DPositionSpherical.radius + TSP.utils.computeCameraDistance(camera, meterVisibleRectangle)
+        // ii. apply the offsets
         translation.applyMatrix4(
-            TSP.utils.v3ToTranslationMatrix(new THREE.Vector3(offsetX, offsetY, 0)))
-        // 3. apply the rotation to bring `translation` to `targetPosition`
+            TSP.utils.v3ToTranslationMatrix(new THREE.Vector3(meterObjectPosition.x, meterObjectPosition.y, 0)))
+        // iii. apply the rotation to bring `translation` to `object3DPosition`
         translation.applyQuaternion(rotation)
 
         return {
