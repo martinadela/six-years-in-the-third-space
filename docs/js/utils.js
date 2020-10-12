@@ -66,8 +66,8 @@
         const object3DPosition = object3D.position.clone()
         
         // -------- 1. Process on-screen dimensions / positions for the canvas and the object
-        const pixelCanvasDimensions = canvasBoundingBoxOnScreen.getSize()
-        const pixelObjectDimensions = objectBoundingBoxOnScreen.getSize()
+        const pixelCanvasDimensions = canvasBoundingBoxOnScreen.getSize(new THREE.Vector2())
+        const pixelObjectDimensions = objectBoundingBoxOnScreen.getSize(new THREE.Vector2())
         const pixelObjectMaxSize = Math.max(pixelObjectDimensions.x, pixelObjectDimensions.y)
         // Calculate the coordinates of the center of the object, taking for origin the center of the canvas
         const pixelObjectPosition = new THREE.Vector2().copy(objectBoundingBoxOnScreen.min)
@@ -77,7 +77,7 @@
             .addScaledVector(pixelCanvasDimensions, -0.5)
 
         // -------- 2. Project on-screen dimensions / positions to the units in Three.js coordinate system (meters)
-        const meterObjectDimensions = new THREE.Box3().setFromObject(object3D).getSize()
+        const meterObjectDimensions = new THREE.Box3().setFromObject(object3D).getSize(new THREE.Vector3())
         const meterObjectMaxSize = Math.max(meterObjectDimensions.x, meterObjectDimensions.y, meterObjectDimensions.z)
 
         const projectionRatio = meterObjectMaxSize / pixelObjectMaxSize

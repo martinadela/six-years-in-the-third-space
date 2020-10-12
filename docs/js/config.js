@@ -48,7 +48,7 @@
             far: 100,
             // Padding around the main scene on the index.
             // Given as a ratio of the size of the scene
-            paddingRatio: 0.1,
+            paddingRatio: 0.2,
         },
         planet: {
             radius: 14,
@@ -59,8 +59,6 @@
             planetaryRotationRadius: [25, 0.5],
             planetaryRotationAngleStep: (Math.PI / 2) * 0.002,
             selfRotationIncrement: [0.002, 0.002],
-            // Size of the click / hover area for a satellite
-            clickRadius: 4,
             // Hover detection is executed only every N frames :
             hoverDetectDebounce: 10,
         },

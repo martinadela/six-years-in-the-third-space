@@ -40,7 +40,6 @@
             const orbitDiameter = (
                 TSP.config.get('satellites.planetaryRotationRadius')[0] 
                 + TSP.config.get('satellites.planetaryRotationRadius')[1]) * 2
-                + TSP.config.get('satellites.clickRadius')
             const paddingRatio = TSP.config.get('camera.paddingRatio')
             // We need to adjust the camera to the biggest side of the window
             let cameraZ = TSP.utils.computeCameraDistance(

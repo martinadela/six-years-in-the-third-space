@@ -6,14 +6,7 @@
             this.model = null
 
             this.group = new THREE.Group()
-            this.clickSphere = new THREE.Mesh(new THREE.SphereBufferGeometry(
-                TSP.config.get('satellites.clickRadius'),
-                6,
-                6
-            ), new THREE.MeshBasicMaterial({
-                color: 'red', opacity: TSP.config.get('debug.satellites') ? 0.4 : 0, transparent: true,
-            }))
-            this.group.add(this.clickSphere)
+            this.clickSphere = null
 
             this.planetaryRotationAxis = planetaryRotationAxis
             this.planetaryRotationAngleStep = TSP.config.get(
@@ -22,7 +15,7 @@
             this.planetaryRotationQuaternion = new THREE.Quaternion()
             this.planetaryRotationStep = this._planetaryRotationStep.bind(this)
 
-            this._updatePlanetaryRotation()
+            this.updatePlanetaryRotation()
 
             this.selfRotationAngleStep = TSP.config.get(
                 'satellites.selfRotationIncrement'
@@ -44,6 +37,7 @@
                     (gltf) => {
                         console.log('model loaded')
                         this.model = gltf
+                        this.updateClickSphere()
                         this.group.add(this.model.scene)
                         resolve(this)
                     },
@@ -62,8 +56,24 @@
             sphericalPosition.radius = TSP.config.getRandomized(
                 'satellites.planetaryRotationRadius'
             )
-            this.moveToSpherical(sphericalPosition)
+            this.getPosition().setFromSpherical(sphericalPosition)
             scene.add(this.group)
+        }
+
+        updateClickSphere() {
+            const boundingSphere = new THREE.Box3()
+                .setFromObject(this.model.scene)
+                .getBoundingSphere(new THREE.Sphere())
+
+            this.clickSphere = new THREE.Mesh(new THREE.SphereBufferGeometry(
+                boundingSphere.radius,
+                6,
+                6
+            ), new THREE.MeshBasicMaterial({
+                color: 'red', opacity: TSP.config.get('debug.satellites') ? 0.4 : 0, transparent: true,
+            }))
+            this.clickSphere.position.copy(boundingSphere.center)
+            this.group.add(this.clickSphere)
         }
 
         hoveredObjectChanged(hoveredObject) {
@@ -86,7 +96,7 @@
             }
         }
 
-        _updatePlanetaryRotation() {
+        updatePlanetaryRotation() {
             this.planetaryRotationQuaternion.setFromAxisAngle(
                 this.planetaryRotationAxis.getV3(),
                 this.planetaryRotationAngleStep
@@ -97,11 +107,8 @@
             return this.group.position
         }
 
-        getDirection() {
-            const currentPosition = this.getPosition().clone()
-            const nextPosition = this.getPosition().clone()
-                .applyQuaternion(this.planetaryRotationQuaternion)
-            return nextPosition.sub(currentPosition).normalize()
+        getRotation() {
+            return this.group.rotation
         }
 
         getHoverableObject3D() {
@@ -110,16 +117,6 @@
 
         getObject3D() {
             return this.group
-        }
-
-        moveToSpherical(sphericalPosition) {
-            this.getPosition().setFromSpherical(sphericalPosition)
-        }
-
-        rotateIncrement(delta) {
-            this.group.rotation.x += delta.x || 0
-            this.group.rotation.y += delta.y || 0
-            this.group.rotation.z += delta.z || 0
         }
 
         _planetaryRotationStepNoop() {}
@@ -133,10 +130,9 @@
             const rotateIncrement = TSP.config.getRandomized(
                 'satellites.selfRotationIncrement'
             )
-            this.rotateIncrement({
-                x: rotateIncrement,
-                y: rotateIncrement,
-            })
+            const rotation = this.getRotation()
+            rotation.x += rotateIncrement
+            rotation.y += rotateIncrement
         }
 
         animate() {
