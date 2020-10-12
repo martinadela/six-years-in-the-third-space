@@ -116,7 +116,9 @@
             z: translation.z,
         }, duration).onUpdate((values) => {
             object3D.position.copy(values)
-        }).start()
+        })
+        .easing(TWEEN.Easing.Quadratic.InOut)
+        .start()
     }
 
     TSP.utils.tweenRotate = (object3D, rotation, opts) => {
@@ -133,7 +135,9 @@
             w: rotation.w,
         }, duration).onUpdate((values) => {
             object3D.quaternion.copy(values)
-        }).start()
+        })
+        .easing(TWEEN.Easing.Quadratic.InOut)
+        .start()
     }
 
     TSP.utils.randomizeValue = (params) => {
