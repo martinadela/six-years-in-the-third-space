@@ -1,18 +1,25 @@
 ;(function () {
     const HIGHLIGHT_COLOR1 = TSP.config.get('styles.colors.Highlight1')
     const BACKGROUND_COLOR = TSP.config.get('styles.colors.ContentBackground')
+    const TRANSITION_DELAY = TSP.config.get('transitions.duration') * TSP.config.get('transitions.reader')[0]
+    const TRANSITION_DURATION = TSP.config.get('transitions.duration') * TSP.config.get('transitions.reader')[1]
     const sheet = jss.default
         .createStyleSheet({
             main: {
                 height: '100%',
                 // necessary to show the button
                 overflow: 'visible',
-                display: 'none',
-                '&.visible': {
-                    display: 'none'
-                },
                 // To allow positioning of button
-                position: 'relative'
+                position: 'relative',
+                // Transitions
+                transition: `opacity ${TRANSITION_DURATION}ms ease-in-out ${TRANSITION_DELAY}ms`,
+                '&.exit': {
+                    transition: `opacity ${TRANSITION_DURATION}ms ease-in-out 0ms`,
+                },
+                opacity: 0,
+                '&.enter': {
+                    opacity: 1
+                },
             },
             contributionContainer: {
                 backgroundColor: BACKGROUND_COLOR,
@@ -71,11 +78,13 @@
 
         currentUrlChanged(url) {
             if (url === '') {
-                this.classList.remove('visible')
+                this.classList.remove('enter')
+                this.classList.add('exit')
             } else if (this.contents[url]) {
                 this.contributionTitle.innerHTML = this.contents[url].title
                 this.contributionBody.innerHTML = this.contents[url].html
-                this.classList.add('visible')
+                this.classList.add('enter')
+                this.classList.remove('exit')
             }
         }
 

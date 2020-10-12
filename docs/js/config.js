@@ -2,13 +2,16 @@
     const CONFIG = {
         debug: {
             state: false,
-            satellites: true,
+            satellites: false,
             camera: false,
+        },
+        transitions: {
+            duration: 2000,
+            reader: [0.9, 0.1]
         },
         app: {
             // Must not have trailing slash
-            rootUrl: '',
-            transitionDuration: 2000,
+            rootUrl: ''
         },
         styles: {
             colors: {

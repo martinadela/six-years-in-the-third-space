@@ -108,9 +108,9 @@
         animateTransform(transform) {
             this.tweens.removeAll()
             TSP.utils.tweenTranslate(
-                this.camera, transform.translation, { duration: TSP.config.get('app.transitionDuration'), group: this.tweens })
+                this.camera, transform.translation, { duration: TSP.config.get('transitions.duration'), group: this.tweens })
             TSP.utils.tweenRotate(
-                this.camera, transform.rotation, { duration: TSP.config.get('app.transitionDuration'), group: this.tweens })
+                this.camera, transform.rotation, { duration: TSP.config.get('transitions.duration'), group: this.tweens })
         }
 
         applyTransform(transform) {
