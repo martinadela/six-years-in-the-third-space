@@ -13,12 +13,12 @@
                 position: 'relative',
                 // Transitions
                 transition: `opacity ${TRANSITION_DURATION}ms ease-in-out ${TRANSITION_DELAY}ms`,
-                '&.exit': {
-                    transition: `opacity ${TRANSITION_DURATION}ms ease-in-out 0ms`,
-                },
                 opacity: 0,
                 '&.enter': {
                     opacity: 1
+                },
+                '&.exit': {
+                    transition: `opacity ${TRANSITION_DURATION}ms ease-in-out 0ms`,
                 },
             },
             contributionContainer: {

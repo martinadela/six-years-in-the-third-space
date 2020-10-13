@@ -1,7 +1,7 @@
 ;(function () {
-    const ScrollbarBackground = TSP.config.get('styles.colors.ScrollbarBackground')
-    const Scrollbar = TSP.config.get('styles.colors.Scrollbar')
-    const ScrollbarBorder = TSP.config.get('styles.colors.ScrollbarBorder')
+    const COLOR_SCROLLBAR_BACKGROUND = TSP.config.get('styles.colors.ScrollbarBackground')
+    const COLOR_SCROLLBAR = TSP.config.get('styles.colors.Scrollbar')
+    const COLOR_SCROLLBAR_BORDER = TSP.config.get('styles.colors.ScrollbarBorder')
 
     jss.default
         .createStyleSheet({
@@ -11,11 +11,12 @@
                     padding: '0',
                     width: '100%',
                     height: '100%',
+                    overflow: 'hidden'
                 },
                 // REF scrollbars : https://www.digitalocean.com/community/tutorials/css-scrollbars
                 '*': {
                     scrollbarWidth: 'thin',
-                    scrollbarColor: `${Scrollbar} ${ScrollbarBackground}`,
+                    scrollbarColor: `${COLOR_SCROLLBAR} ${COLOR_SCROLLBAR_BACKGROUND}`,
                     boxSizing: 'border-box',
                     margin: 0,
                     padding: 0,
@@ -24,12 +25,12 @@
                     width: '12px'
                 },
                 '*::-webkit-scrollbar-track': {
-                    background: ScrollbarBackground
+                    background: COLOR_SCROLLBAR_BACKGROUND
                 },
                 '*::-webkit-scrollbar-thumb': {
-                    backgroundColor: Scrollbar,
+                    backgroundColor: COLOR_SCROLLBAR,
                     borderRadius: '20px',
-                    border: `3px solid ${ScrollbarBorder}`,
+                    border: `3px solid ${COLOR_SCROLLBAR_BORDER}`,
                 },
                 ul: {
                     listStyle: 'none',
@@ -46,6 +47,7 @@
         <template id="App">
             <canvas is="tsp-canvas-3d"></canvas>
             <div is="tsp-page-frame"></div>
+            <div is="tsp-hud"></div>
         </template>
     `
 
@@ -79,6 +81,7 @@
         connectedCallback() {
             this.canvas3D = this.querySelector('canvas[is="tsp-canvas-3d"]')
             this.pageFrame = this.querySelector('div[is="tsp-page-frame"]')
+            TSP.state.set('Canvas3D.component', this.canvas3D)
             this.canvas3D.load()
             this.pageFrame.load()
         }

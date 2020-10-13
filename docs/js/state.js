@@ -11,12 +11,13 @@
             loaded: false,
             hoveredObject: null,
             satellites: {},
+            component: null,
         },
         Reader: {
             loaded: false,
         },
-        Sidebar: {
-            element: null
+        SideBar: {
+            component: null
         },
 
     }

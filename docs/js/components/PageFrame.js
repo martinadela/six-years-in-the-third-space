@@ -49,7 +49,7 @@
         connectedCallback() {
             this.reader = this.querySelector('div[is="tsp-reader"]')
             this.sideBar = this.querySelector('div[is="tsp-sidebar"]')
-            TSP.state.set('Sidebar.element', this.sideBar)
+            TSP.state.set('SideBar.component', this.sideBar)
         }
 
         load() {

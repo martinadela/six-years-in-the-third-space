@@ -46,17 +46,105 @@
         return vector.applyQuaternion( object3D.quaternion )
     }
 
+    class ScreenWorldConverter {
+        // `projectionRatio` is world / screen
+        constructor(projectionRatio) {
+            this.projectionRatio = projectionRatio
+        }
+
+        toWorldSize(size_Screen) {
+            return this.projectionRatio * size_Screen
+        }
+
+        toScreenSize(size_World) {
+            return size_World / this.projectionRatio
+        }
+    }
+
+    ScreenWorldConverter.fromVectors2 = (vector_World, vector_Screen) => {
+        const projectionRatio = vector_World.divide(vector_Screen).x
+        return new ScreenWorldConverter(projectionRatio)
+    }
+
+    TSP.utils.worldScreenTransform = (targetCoordinateSystem, ratio, value) => {
+        if (targetCoordinateSystem === 'Screen') {
+            return 
+        }
+    }
+
+    // Returns the Plane perpendicular to the camera view that contains `position`
+    TSP.utils.getPerspectivePlane = (camera, position) => {
+        const planeNormal = TSP.utils.getObjectDirection(camera).normalize()
+        return new THREE.Plane().setFromNormalAndCoplanarPoint(planeNormal, position)
+    }
+
+    TSP.utils.getCanvasBoundingBoxOnScreen = () => {
+        return new THREE.Box2(
+            new THREE.Vector2(0, 0),
+            new THREE.Vector2(
+                TSP.state.get('window.width'),
+                TSP.state.get('window.height'),
+            ),
+        )
+    }
+
+    TSP.utils.getObjectBoundingSphereInWorld = (object3D) => {
+        return new THREE.Box3()
+            .setFromObject(object3D)
+            .getBoundingSphere(new THREE.Sphere())
+    }
+
+    // REF : https://stackoverflow.com/questions/27409074/converting-3d-position-to-2d-screen-position-r69
+    TSP.utils.worldPositionToScreenPosition = (camera, worldPosition, canvasBoundingBoxOnScreen) => {
+        const pixelCanvasDimensions = canvasBoundingBoxOnScreen.getSize(new THREE.Vector2())
+
+        const screenPosition = new THREE.Vector3()
+            .copy(worldPosition)
+            .project(camera)
+
+        // Transform from centered position (in World), to a position relative to top / left in Screen.
+        const pixelHalfCanvasDimensions = pixelCanvasDimensions.multiplyScalar(0.5)
+        return pixelHalfCanvasDimensions.add(
+                new THREE.Vector2(screenPosition.x, -screenPosition.y)
+                    .multiply(pixelHalfCanvasDimensions)
+            )
+    }
+
+    TSP.utils.getObjectBoundingCircleInScreen = (camera, object3D, canvasBoundingBox_Screen) => {
+        const boundingSphere_World = TSP.utils.getObjectBoundingSphereInWorld(object3D)
+
+        const canvasDimensions_World = TSP.utils.computeVisibleRectangle(camera, boundingSphere_World.center)
+        const canvasDimensions_Screen = canvasBoundingBox_Screen.getSize(new THREE.Vector2())
+        const converter = ScreenWorldConverter.fromVectors2(canvasDimensions_World, canvasDimensions_Screen)
+
+        const circleCenter_Screen = TSP.utils.worldPositionToScreenPosition(
+            camera, boundingSphere_World.center, canvasBoundingBox_Screen)
+        const circleRadius_Screen = converter.toScreenSize(boundingSphere_World.radius)
+        return {center: circleCenter_Screen, radius: circleRadius_Screen}
+    }
+
     // Compute the minimum distance to place a perspective camera from a rectangle 
     // of dimensions `Vector2(x, y)`, so that the rectangle is entirely visible.
     // REF : https://stackoverflow.com/questions/13350875/three-js-width-of-view
     TSP.utils.computeCameraDistance = (camera, rectDimensions) => {
         const fovRadians = THREE.MathUtils.degToRad(camera.fov)
         // We need to adjust the camera to the biggeest side of the window
-        let cameraDistance = rectDimensions.x / (2 * camera.aspect * Math.tan( fovRadians / 2 ))
+        let distance = rectDimensions.x / (2 * camera.aspect * Math.tan( fovRadians / 2 ))
         if (camera.aspect > 1) {
-            cameraDistance = rectDimensions.y / (2 * Math.tan( fovRadians / 2 ))
+            distance = rectDimensions.y / (2 * Math.tan( fovRadians / 2 ))
         }
-        return cameraDistance
+        return distance
+    }
+
+    // Computes the visible dimensions (in World coordinates) of the rectangle that contains `position`.
+    TSP.utils.computeVisibleRectangle = (camera, position) => {
+        const fovRadians = THREE.MathUtils.degToRad(camera.fov)
+        const perspectivePlane = TSP.utils.getPerspectivePlane(camera, position)
+        const distance = Math.abs(perspectivePlane.distanceToPoint(camera.position))
+        return new THREE.Vector2(
+            camera.aspect,
+            1
+        ).multiplyScalar(distance * 2 * Math.tan( fovRadians / 2 ))
     }
 
     // Compute an orbital transform for `camera`, so that `object3D` is placed inside `objectBoundingBoxOnScreen`.

@@ -7,7 +7,8 @@
         },
         transitions: {
             duration: 2000,
-            reader: [0.9, 0.1]
+            reader: [0.9, 0.1],
+            hudDuration: 200
         },
         app: {
             // Must not have trailing slash

@@ -61,10 +61,7 @@
         }
 
         updateClickSphere() {
-            const boundingSphere = new THREE.Box3()
-                .setFromObject(this.model.scene)
-                .getBoundingSphere(new THREE.Sphere())
-
+            const boundingSphere = TSP.utils.getObjectBoundingSphereInWorld(this.model.scene)
             this.clickSphere = new THREE.Mesh(new THREE.SphereBufferGeometry(
                 boundingSphere.radius,
                 6,

@@ -123,6 +123,14 @@
             TSP.state.set('Canvas3D.satellites', satellitesState)
         }
 
+        getCamera() {
+            return this.tspCamera.camera
+        }
+
+        getScene() {
+            return this.scene
+        }
+
         load() {
             Promise.all(
                 Object.values(this.satellites).map((satellite) => {

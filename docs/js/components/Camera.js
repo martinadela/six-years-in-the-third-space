@@ -76,15 +76,8 @@
         }
 
         transformFocused() {
-            const sidebarBoundingRect = TSP.state.get('Sidebar.element').getBoundingClientRect()
+            const sidebarBoundingRect = TSP.state.get('SideBar.component').getBoundingClientRect()
 
-            const canvasBoundingBoxOnScreen = new THREE.Box2(
-                new THREE.Vector2(0, 0),
-                new THREE.Vector2(
-                    TSP.state.get('window.width'),
-                    TSP.state.get('window.height'),
-                ),
-            )
             const objectBoundingBoxOnScreen = new THREE.Box2(
                 new THREE.Vector2(
                     sidebarBoundingRect.left,
@@ -100,7 +93,7 @@
             return TSP.utils.computeCameraOrbitalTransform(
                 this.camera, 
                 this.focusedObject.getObject3D(), 
-                canvasBoundingBoxOnScreen, 
+                TSP.utils.getCanvasBoundingBoxOnScreen(), 
                 objectBoundingBoxOnScreen
             )
         }
