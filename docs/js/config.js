@@ -69,48 +69,50 @@
         },
         contributions: [
             {
-                url: '/contributions/bla',
+                url: '/contributions/2',
                 title: 'bla some title',
                 satelliteModelUrl: '/satellites/satellite2.glb',
                 contentUrl: '/pages/contributions/bla.html',
             },
             {
-                url: '/contributions/blo',
+                url: '/contributions/3',
                 title: 'blo some title',
                 satelliteModelUrl: '/satellites/satellite3.glb',
                 contentUrl: '/pages/contributions/blo.html',
             },
             {
-                url: '/contributions/bli',
+                url: '/contributions/4',
                 title: 'bli some title',
                 satelliteModelUrl: '/satellites/satellite4.glb',
                 contentUrl: '/pages/contributions/bli.html',
             },
             {
-                url: '/contributions/blu',
+                url: '/contributions/5',
                 title: 'blu some title',
                 satelliteModelUrl: '/satellites/satellite5.glb',
                 contentUrl: '/pages/contributions/blu.html',
             },
-
             // {
-            //     url: '/contributions/bla',
+            //     url: '/contributions/6',
             //     title: 'bla some title',
-            //     satelliteModelUrl: '/satellites/satellite2.glb',
+            //     satelliteModelUrl: '/satellites/satellite6.glb',
             //     contentUrl: '/pages/contributions/bla.html',
             // },
             // {
-            //     url: '/contributions/bli',
+            //     url: '/contributions/7',
             //     title: 'bli some title',
-            //     satelliteModelUrl: '/satellites/satellite4.glb',
+            //     satelliteModelUrl: '/satellites/satellite7.glb',
             //     contentUrl: '/pages/contributions/bli.html',
             // },
             // {
-            //     url: '/contributions/blu',
+            //     url: '/contributions/9',
             //     title: 'blu some title',
-            //     satelliteModelUrl: '/satellites/satellite5.glb',
+            //     satelliteModelUrl: '/satellites/satellite9.glb',
             //     contentUrl: '/pages/contributions/blu.html',
             // },
+
+
+
             // {
             //     url: '/contributions/blo',
             //     title: 'blo some title',

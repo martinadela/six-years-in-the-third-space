@@ -7,6 +7,7 @@
 
             this.group = new THREE.Group()
             this.clickSphere = null
+            this.boundingSphere = null
 
             this.planetaryRotationAxis = planetaryRotationAxis
             this.planetaryRotationAngleStep = TSP.config.get(
@@ -61,15 +62,15 @@
         }
 
         updateClickSphere() {
-            const boundingSphere = TSP.utils.getObjectBoundingSphereInWorld(this.model.scene)
+            this.boundingSphere = TSP.utils.getObjectBoundingSphereInWorld(this.model.scene)
             this.clickSphere = new THREE.Mesh(new THREE.SphereBufferGeometry(
-                boundingSphere.radius,
+                this.boundingSphere.radius,
                 6,
                 6
             ), new THREE.MeshBasicMaterial({
                 color: 'red', opacity: TSP.config.get('debug.satellites') ? 0.4 : 0, transparent: true,
             }))
-            this.clickSphere.position.copy(boundingSphere.center)
+            this.clickSphere.position.copy(this.boundingSphere.center)
             this.group.add(this.clickSphere)
         }
 
@@ -110,6 +111,10 @@
 
         getHoverableObject3D() {
             return this.clickSphere
+        }
+
+        getBoundingSphere() {
+            return new THREE.Sphere(new THREE.Vector3().setFromMatrixPosition(this.clickSphere.matrixWorld), this.boundingSphere.radius)
         }
 
         getObject3D() {

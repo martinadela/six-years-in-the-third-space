@@ -66,12 +66,6 @@
         return new ScreenWorldConverter(projectionRatio)
     }
 
-    TSP.utils.worldScreenTransform = (targetCoordinateSystem, ratio, value) => {
-        if (targetCoordinateSystem === 'Screen') {
-            return 
-        }
-    }
-
     // Returns the Plane perpendicular to the camera view that contains `position`
     TSP.utils.getPerspectivePlane = (camera, position) => {
         const planeNormal = TSP.utils.getObjectDirection(camera).normalize()
@@ -110,9 +104,7 @@
             )
     }
 
-    TSP.utils.getObjectBoundingCircleInScreen = (camera, object3D, canvasBoundingBox_Screen) => {
-        const boundingSphere_World = TSP.utils.getObjectBoundingSphereInWorld(object3D)
-
+    TSP.utils.getBoundingCircleInScreen = (camera, boundingSphere_World, canvasBoundingBox_Screen) => {
         const canvasDimensions_World = TSP.utils.computeVisibleRectangle(camera, boundingSphere_World.center)
         const canvasDimensions_Screen = canvasBoundingBox_Screen.getSize(new THREE.Vector2())
         const converter = ScreenWorldConverter.fromVectors2(canvasDimensions_World, canvasDimensions_Screen)
@@ -144,7 +136,7 @@
         return new THREE.Vector2(
             camera.aspect,
             1
-        ).multiplyScalar(distance * 2 * Math.tan( fovRadians / 2 ))
+        ).multiplyScalar(2 * distance * Math.tan( fovRadians / 2 ))
     }
 
     // Compute an orbital transform for `camera`, so that `object3D` is placed inside `objectBoundingBoxOnScreen`.
