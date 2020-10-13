@@ -8,6 +8,8 @@
                 padding: '2.5rem 2.5rem',
                 width: '100%',
                 height: '100%',
+                // To allow orbital controls
+                pointerEvents: 'none'
             },
 
             innerContainer: {

@@ -23,10 +23,6 @@
 
             // ------------ Scene
             this.scene = new THREE.Scene()
-            const texture = new THREE.TextureLoader().load(
-                TSP.utils.absoluteUrl(TSP.config.get('background.imageUrl'))
-            )
-            this.scene.background = texture
             this.scene.add(this.tspCamera.camera)
 
             // ------------ Renderer
@@ -49,7 +45,9 @@
                 TSP.config.get('lights.directColor'),
                 TSP.config.get('lights.directIntensity')
             )
-            directionalLight.position.set(0.5, 0, 0.866) // ~60º
+            const directionalLightSphericalPosition = TSP.config.get('lights.directPosition')
+            directionalLightSphericalPosition.radius *= TSP.config.get('universe.radius')
+            directionalLight.position.setFromSpherical(directionalLightSphericalPosition)
             directionalLight.name = 'main_light'
             this.tspCamera.camera.add(directionalLight)
 
@@ -100,6 +98,8 @@
 
         createObjects() {
             this.planet = new TSP.components.Planet()
+            this.universe = new TSP.components.Universe()
+            this.orbitControls = new Canvas3DOrbitControls(this.getCamera(), this)
 
             const contributions = TSP.config.get('contributions')
             const planetaryRotationAxes = TSP.utils
@@ -143,6 +143,7 @@
 
         start() {
             this.planet.show(this.scene)
+            this.universe.show(this.scene)
             this.tspCamera.show(this.scene)
             Object.values(this.satellites).forEach((satellite) => {
                 satellite.show(this.scene)
@@ -182,6 +183,7 @@
             Object.values(this.satellites).forEach((satellite) => satellite.animate())
             this.renderer.render(this.scene, this.tspCamera.camera)
             this.tspCamera.animate()
+            // this.orbitControls.animate()
         }
 
         _animateNoop() {}
@@ -243,6 +245,18 @@
 
         _getDatum(object3D) {
             return this.hoverableObjectsUuid[object3D.uuid]
+        }
+    }
+
+    class Canvas3DOrbitControls {
+        constructor(camera, canvas) {
+            this.orbitControls = new THREE.OrbitControls(camera, canvas)
+            this.animate = this._animateNoop
+        }
+
+        _animateNoop() {}
+        _animateInteractiveControls() {
+            this.orbitControls.update()
         }
     }
 
