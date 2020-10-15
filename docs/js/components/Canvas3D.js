@@ -185,7 +185,7 @@
             Object.values(this.satellites).forEach((satellite) => satellite.animate())
             this.renderer.render(this.scene, this.tspCamera.camera)
             this.tspCamera.animate()
-            // this.orbitControls.animate()
+            this.universe.animate()
         }
 
         _animateNoop() {}

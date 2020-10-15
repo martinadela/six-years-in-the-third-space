@@ -18,7 +18,7 @@
 
             this.updatePlanetaryRotation()
 
-            this.selfRotationAngleStep = TSP.config.get(
+            this.selfRotationIncrement = TSP.config.getRandomized(
                 'satellites.selfRotationIncrement'
             )
             TSP.state.listen(
@@ -129,12 +129,9 @@
         }
 
         selfRotationStep() {
-            const rotateIncrement = TSP.config.getRandomized(
-                'satellites.selfRotationIncrement'
-            )
             const rotation = this.getRotation()
-            rotation.x += rotateIncrement
-            rotation.y += rotateIncrement
+            rotation.x += this.selfRotationIncrement
+            rotation.y += this.selfRotationIncrement
         }
 
         animate() {

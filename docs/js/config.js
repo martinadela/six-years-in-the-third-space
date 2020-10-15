@@ -5,6 +5,7 @@
             satellites: false,
             camera: false,
             universe: false,
+            performance: false,
         },
         transitions: {
             duration: 2000,
@@ -17,7 +18,7 @@
         },
         styles: {
             colors: {
-                Highlight1: '#00FF2E',
+                Highlight1: '#00FF2E', // '#FF8575',
                 ContentBackground: 'rgba(255, 255, 255, 0.9)',
                 ScrollbarBackground: 'transparent',
                 ScrollbarBorder: 'white',
@@ -40,9 +41,9 @@
         },
         lights: {
             ambientColor: 0xffffff,
-            ambientIntensity: 1,
+            ambientIntensity: 0.5,
             directColor: 0xffffff,
-            directIntensity: 0.5 * Math.PI,
+            directIntensity: 4 * Math.PI,
             directPosition: new THREE.Spherical(0, 0, 0)
         },
         universe: {
@@ -55,7 +56,8 @@
             filterOpacity: 0.7,
             nebulaOpacity: 0.7,
             whiteCloudsIntensity: 0.1,
-            radius: 50000,
+            rotationAngleStep: (Math.PI / 2) * 0.00015,
+            radius: 1000,
         },
         camera: {
             fieldOfViewDegrees: 75,
@@ -63,7 +65,7 @@
             far: 100000,
             // Padding around the main scene on the index.
             // Given as a ratio of the size of the scene
-            paddingRatio: 0.2,
+            paddingRatio: 0.0,
         },
         planet: {
             radius: 8,
@@ -71,9 +73,9 @@
         },
         satellites: {
             planetaryRotationAxisRandomness: Math.PI * 0,
-            planetaryRotationRadius: [60, 10],
+            planetaryRotationRadius: [100, 10],
             planetaryRotationAngleStep: (Math.PI / 2) * 0.0005,
-            selfRotationIncrement: [0.002, 0.002],
+            selfRotationIncrement: [0.003, 0.0015],
             // Hover detection is executed only every N frames :
             hoverDetectDebounce: 10,
         },
@@ -108,75 +110,75 @@
             //     satelliteModelUrl: '/satellites/satellite6.glb',
             //     contentUrl: '/pages/contributions/bla.html',
             // },
+            // {
+            //     url: '/contributions/7',
+            //     title: 'bli some title',
+            //     satelliteModelUrl: '/satellites/satellite7.glb',
+            //     contentUrl: '/pages/contributions/bli.html',
+            // },
+            // {
+            //     url: '/contributions/9',
+            //     title: 'blu some title',
+            //     satelliteModelUrl: '/satellites/satellite9.glb',
+            //     contentUrl: '/pages/contributions/blu.html',
+            // },
+
+
+
             {
-                url: '/contributions/7',
+                url: '/contributions/blo',
+                title: 'blo some title',
+                satelliteModelUrl: '/satellites/satellite3.glb',
+                contentUrl: '/pages/contributions/blo.html',
+            },
+            {
+                url: '/contributions/bla',
+                title: 'bla some title',
+                satelliteModelUrl: '/satellites/satellite2.glb',
+                contentUrl: '/pages/contributions/bla.html',
+            },
+            {
+                url: '/contributions/blo',
+                title: 'blo some title',
+                satelliteModelUrl: '/satellites/satellite3.glb',
+                contentUrl: '/pages/contributions/blo.html',
+            },
+            {
+                url: '/contributions/bli',
                 title: 'bli some title',
-                satelliteModelUrl: '/satellites/satellite7.glb',
+                satelliteModelUrl: '/satellites/satellite4.glb',
                 contentUrl: '/pages/contributions/bli.html',
             },
             {
-                url: '/contributions/9',
+                url: '/contributions/bla',
+                title: 'bla some title',
+                satelliteModelUrl: '/satellites/satellite2.glb',
+                contentUrl: '/pages/contributions/bla.html',
+            },
+            {
+                url: '/contributions/blu',
                 title: 'blu some title',
-                satelliteModelUrl: '/satellites/satellite9.glb',
+                satelliteModelUrl: '/satellites/satellite5.glb',
                 contentUrl: '/pages/contributions/blu.html',
             },
-
-
-
-            // {
-            //     url: '/contributions/blo',
-            //     title: 'blo some title',
-            //     satelliteModelUrl: '/satellites/satellite3.glb',
-            //     contentUrl: '/pages/contributions/blo.html',
-            // },
-            // {
-            //     url: '/contributions/bla',
-            //     title: 'bla some title',
-            //     satelliteModelUrl: '/satellites/satellite2.glb',
-            //     contentUrl: '/pages/contributions/bla.html',
-            // },
-            // {
-            //     url: '/contributions/blo',
-            //     title: 'blo some title',
-            //     satelliteModelUrl: '/satellites/satellite3.glb',
-            //     contentUrl: '/pages/contributions/blo.html',
-            // },
-            // {
-            //     url: '/contributions/bli',
-            //     title: 'bli some title',
-            //     satelliteModelUrl: '/satellites/satellite4.glb',
-            //     contentUrl: '/pages/contributions/bli.html',
-            // },
-            // {
-            //     url: '/contributions/bla',
-            //     title: 'bla some title',
-            //     satelliteModelUrl: '/satellites/satellite2.glb',
-            //     contentUrl: '/pages/contributions/bla.html',
-            // },
-            // {
-            //     url: '/contributions/blu',
-            //     title: 'blu some title',
-            //     satelliteModelUrl: '/satellites/satellite5.glb',
-            //     contentUrl: '/pages/contributions/blu.html',
-            // },
-            // {
-            //     url: '/contributions/blo',
-            //     title: 'blo some title',
-            //     satelliteModelUrl: '/satellites/satellite3.glb',
-            //     contentUrl: '/pages/contributions/blo.html',
-            // },
-            // {
-            //     url: '/contributions/bli',
-            //     title: 'bli some title',
-            //     satelliteModelUrl: '/satellites/satellite5.glb',
-            //     contentUrl: '/pages/contributions/bli.html',
-            // },
-            // {
-            //     url: '/contributions/blu',
-            //     title: 'blu some title',
-            //     satelliteModelUrl: '/satellites/satellite4.glb',
-            //     contentUrl: '/pages/contributions/blu.html',
-            // },
+            {
+                url: '/contributions/blo',
+                title: 'blo some title',
+                satelliteModelUrl: '/satellites/satellite3.glb',
+                contentUrl: '/pages/contributions/blo.html',
+            },
+            {
+                url: '/contributions/bli',
+                title: 'bli some title',
+                satelliteModelUrl: '/satellites/satellite5.glb',
+                contentUrl: '/pages/contributions/bli.html',
+            },
+            {
+                url: '/contributions/blu',
+                title: 'blu some title',
+                satelliteModelUrl: '/satellites/satellite4.glb',
+                contentUrl: '/pages/contributions/blu.html',
+            },
         ],
 
     }

@@ -1,16 +1,22 @@
 ;(function () {
-    const TEXTURE_RESOLUTION = 1024
+    const TEXTURE_RESOLUTION = Math.round(Math.pow(window.innerWidth / 1.7 * window.innerHeight / 1.7, 0.5)) // 1024 / 3
+    console.log('RESOLUTION', TEXTURE_RESOLUTION)
 
     // REF : https://stackoverflow.com/questions/32233805/im-new-to-threejs-how-to-create-a-sky-dome
     class Universe {
-        constructor() {}
+        constructor() {
+            this.rotationQuaternion = new THREE.Quaternion().setFromAxisAngle(
+                new THREE.Vector3(0.3, 0.3, 0.65).normalize(),
+                TSP.config.get('universe.rotationAngleStep')
+            )
+        }
 
         load() {
             return Promise.all([
-                fetch('/shaders/texture.vert').then((response) =>
+                fetch(TSP.utils.absoluteUrl('shaders/texture.vert')).then((response) =>
                     response.text()
                 ),
-                fetch('/shaders/nebula.frag').then((response) =>
+                fetch(TSP.utils.absoluteUrl('shaders/nebula.frag')).then((response) =>
                     response.text()
                 ),
             ]).then((shaders) => {
@@ -79,6 +85,12 @@
                 material.map = TSP.utils.prerenderTexture(TSP.state.get('Canvas3D.component').getRenderer(), shaderMaterial, TEXTURE_RESOLUTION, TEXTURE_RESOLUTION)
                 return material
             })
+        }
+
+        animate() {
+            this.sphere.applyQuaternion(
+                this.rotationQuaternion
+            )
         }
     }
 

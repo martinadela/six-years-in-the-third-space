@@ -6,6 +6,7 @@
         .createStyleSheet({
             'main': {
                 pointerEvents: 'none',
+                userSelect: 'none',
                 position: 'absolute',
                 transition: `top ${TRANSITION_DURATION}ms ease-in-out, opacity ${TRANSITION_DURATION}ms ease-in-out`,
             },
