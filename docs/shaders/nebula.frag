@@ -10,10 +10,9 @@ uniform float res2;
 uniform float resMix;
 uniform sampler2D nebulaeMap;
 uniform float starsQuantity;
-uniform vec3 starsFilterRgb;
-uniform float starsFilterOpacity;
+uniform vec3 filterColor;
+uniform float filterOpacity;
 uniform float nebulaOpacity;
-uniform float nebulaThresh; // Max is sqrt(3) = 1.73
 uniform float whiteCloudsIntensity;
 
 const int octaves = 16;
@@ -423,7 +422,7 @@ void main() {
 	float x = vUv.x;
 	float y = 1.0 - vUv.y;
 	vec3 sphericalCoord = getSphericalCoord(index, x*resolution, y*resolution, resolution);
-    vec3 starsFilter = starsFilterRgb / 255.0;
+    vec3 starsFilter = filterColor / 255.0;
 
     // create nebula + white clouds
 	float c1 = cloudNoise(sphericalCoord, res1, seed);
@@ -443,16 +442,12 @@ void main() {
 	n2 = pow(n2, 9.0);
     n2 *= c2;
     n2 *= sub1;
-    vec3 starsColor = vec3(clamp(n2, 0.0, 1.0)) * (1.0 - starsFilterOpacity) + starsFilterOpacity * starsFilter;
+    vec3 starsColor = vec3(clamp(n2, 0.0, 1.0)) * (1.0 - filterOpacity) + filterOpacity * starsFilter;
 
     // Blend stars and nebula
     float nebulaIntensity = length(nebulaColor) / sqrt(3.0);
     vec3 totalColor = nebulaColor * nebulaOpacity;
-    // if (nebulaIntensity > nebulaThresh) {
     totalColor += starsColor * (1.0 - nebulaIntensity);
-    // } else {
-    //     totalColor += starsColor;
-    // }
     // vec3 totalColor = starsColor + nebulaColor * nebulaOpacity;
     // vec3 totalColor = starsColor;
     // vec3 totalColor = nebulaColor;

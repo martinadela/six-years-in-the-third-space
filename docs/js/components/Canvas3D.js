@@ -32,7 +32,6 @@
                 canvas: this,
             })
             this.renderer.physicallyCorrectLights = true
-            this.renderer.outputEncoding = THREE.sRGBEncoding
 
             // ------------ Lights
             const ambientLight = new THREE.AmbientLight(

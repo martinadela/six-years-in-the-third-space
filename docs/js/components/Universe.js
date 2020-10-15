@@ -41,16 +41,15 @@
                     mixScale: { type: 'f', value: params.mixScale },
                     nebulaeMap: { type: 't', value: params.nebulaeMap },
                     starsQuantity: { type: 'f', value: params.starsQuantity },
-                    starsFilterRgb: {
+                    filterColor: {
                         type: 'vec3',
-                        value: params.starsFilterRgb,
+                        value: new THREE.Vector3(params.filterColor[0], params.filterColor[1], params.filterColor[2]),
                     },
-                    starsFilterOpacity: {
+                    filterOpacity: {
                         type: 'f',
-                        value: params.starsFilterOpacity,
+                        value: params.filterOpacity,
                     },
                     nebulaOpacity: { type: 'f', value: params.nebulaOpacity },
-                    nebulaThresh: { type: 'f', value: params.nebulaThresh }, // Max is sqrt(3) = 1.73
                     whiteCloudsIntensity: {
                         type: 'f',
                         value: params.whiteCloudsIntensity,
@@ -67,12 +66,11 @@
                 res2: TSP.utils.randRange(0.5, 2.0),
                 resMix: TSP.utils.randRange(0.5, 2.0),
                 nebulaeMap: TEXTURE_GENERATOR.buildTexture(),
-                starsQuantity: 1.4,
-                starsFilterRgb: new THREE.Vector3(255.0, 218.0, 194.0),
-                starsFilterOpacity: 0.6,
-                nebulaOpacity: 0.8,
-                nebulaThresh: 1.2, // Max is sqrt(3) = 1.73
-                whiteCloudsIntensity: 0.2,
+                starsQuantity: TSP.config.get('universe.starsQuantity'),
+                filterColor: TSP.config.get('universe.filterColor'),
+                filterOpacity: TSP.config.get('universe.filterOpacity'),
+                nebulaOpacity: TSP.config.get('universe.nebulaOpacity'),
+                whiteCloudsIntensity: TSP.config.get('universe.whiteCloudsIntensity'),
             }
 
             this.sphere = TSP.utils.getTexturedSphereMesh(TSP.config.get('universe.radius'), (i) => {
@@ -105,20 +103,20 @@
 
         buildTexture() {
             const baseColor = 'rgba(0, 0, 0, 1)'
-            const rgb1 = { r: 255, g: 237, b: 0 }
-            const rgb2 = { r: 255, g: 119, b: 0 }
+            const rgb1 = TSP.config.get('universe.nebulaColors')[0]
+            const rgb2 = TSP.config.get('universe.nebulaColors')[1]
             const opacity = 0.5
 
             this.ctx.fillStyle = baseColor
             this.ctx.fillRect(0, 0, this.width, this.height)
 
             this.gradientCircle(
-                `rgba(${rgb1.r},${rgb1.g},${rgb1.b},${opacity})`,
-                `rgba(${rgb2.r},${rgb2.g},${rgb2.b},0)`
+                `rgba(${rgb1[0]},${rgb1[1]},${rgb1[2]},${opacity})`,
+                `rgba(${rgb2[0]},${rgb2[1]},${rgb2[2]},0)`
             )
             this.gradientCircle(
-                `rgba(${rgb2.r},${rgb2.g},${rgb2.b},${opacity})`,
-                `rgba(${rgb1.r},${rgb1.g},${rgb1.b},0)`
+                `rgba(${rgb2[0]},${rgb2[1]},${rgb2[2]},${opacity})`,
+                `rgba(${rgb1[0]},${rgb1[1]},${rgb1[2]},0)`
             )
 
             return new THREE.CanvasTexture(this)

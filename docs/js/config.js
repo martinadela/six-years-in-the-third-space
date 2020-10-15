@@ -4,7 +4,7 @@
             state: false,
             satellites: false,
             camera: false,
-            universe: true,
+            universe: false,
         },
         transitions: {
             duration: 2000,
@@ -46,6 +46,15 @@
             directPosition: new THREE.Spherical(0, 0, 0)
         },
         universe: {
+            // 2 colors in RGB format.
+            nebulaColors: [[235, 194, 226], [255, 199, 149]],
+            // Between 0 and 2
+            starsQuantity: 1.6,
+            // Color of the general filter of the sky color
+            filterColor: [255, 240, 229],
+            filterOpacity: 0.7,
+            nebulaOpacity: 0.7,
+            whiteCloudsIntensity: 0.1,
             radius: 50000,
         },
         camera: {
