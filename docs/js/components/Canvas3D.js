@@ -27,6 +27,7 @@
 
             // ------------ Renderer
             this.renderer = new THREE.WebGLRenderer({
+                alpha: true,
                 antialias: true,
                 canvas: this,
             })
@@ -50,8 +51,6 @@
             directionalLight.position.setFromSpherical(directionalLightSphericalPosition)
             directionalLight.name = 'main_light'
             this.tspCamera.camera.add(directionalLight)
-
-            this.lights = [ambientLight, directionalLight]
 
             // ------------ state change handlers
             TSP.state.listen(
@@ -131,12 +130,16 @@
             return this.scene
         }
 
+        getRenderer() {
+            return this.renderer
+        }
+
         load() {
-            Promise.all(
-                Object.values(this.satellites).map((satellite) => {
-                    return satellite.load(this.loader)
-                })
-            ).then(() => {
+            const promises = Object.values(this.satellites).map((satellite) => {
+                return satellite.load(this.loader)
+            })
+            promises.push(this.universe.load())
+            Promise.all(promises).then(() => {
                 TSP.state.set('Canvas3D.loaded', true)
             })
         }

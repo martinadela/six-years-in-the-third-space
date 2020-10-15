@@ -184,6 +184,57 @@
         }
     }
 
+    TSP.utils.prerenderTexture = (renderer, material, width, height) => {
+        const renderTarget = new THREE.WebGLRenderTarget(width, height, {
+            minFilter: THREE.LinearFilter,
+            magFilter: THREE.LinearFilter,
+            format: THREE.RGBAFormat,
+        })
+    
+        const camera = new THREE.OrthographicCamera(
+            -width / 2,
+            width / 2,
+            height / 2,
+            -height / 2,
+            -100,
+            100
+        )
+        camera.position.z = 10
+    
+        const scene = new THREE.Scene()
+        const planeGeometry = new THREE.PlaneGeometry(width, height)
+        const planeMesh = new THREE.Mesh(planeGeometry, material)
+        planeMesh.position.z = -10
+        scene.add(planeMesh)
+    
+        renderer.setRenderTarget(renderTarget)
+        renderer.render(scene, camera)
+        renderer.setRenderTarget(null)
+    
+        planeGeometry.dispose()
+    
+        return renderTarget.texture
+    }
+
+    // Create a textured sphere mesh, by morphing a box. This allows for easier mapping of a flat texture to a sphere.
+    // However, when using a ShaderMaterial, this also requires to map the box coordinates into spherical coordinates.
+    // REF : https://blogg.bekk.no/procedural-planet-in-webgl-and-three-js-fc77f14f5505
+    TSP.utils.getTexturedSphereMesh = (radius, createMaterial) => {
+        const materials = []
+        for (let i = 0; i < 6; i++) {
+            materials[i] = createMaterial(i)
+        }
+    
+        const geometry = new THREE.BoxGeometry(1, 1, 1, 32, 32, 32)
+        for (let i in geometry.vertices) {
+            let vertex = geometry.vertices[i]
+            vertex.normalize().multiplyScalar(radius)
+        }
+        return new THREE.Mesh(geometry, materials)
+    }
+
+    TSP.utils.randRange = (lower, upper) => lower + Math.random() * (upper - lower)
+
     TSP.utils.tweenTranslate = (object3D, translation, opts) => {
         const duration = opts.duration || 2000
         return new TWEEN.Tween({

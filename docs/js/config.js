@@ -4,6 +4,7 @@
             state: false,
             satellites: false,
             camera: false,
+            universe: true,
         },
         transitions: {
             duration: 2000,
@@ -45,13 +46,12 @@
             directPosition: new THREE.Spherical(0, 0, 0)
         },
         universe: {
-            radius: 200,
-            imageUrl: '/images/background.jpg',
+            radius: 50000,
         },
         camera: {
             fieldOfViewDegrees: 75,
             near: 0.1,
-            far: 410,
+            far: 100000,
             // Padding around the main scene on the index.
             // Given as a ratio of the size of the scene
             paddingRatio: 0.2,
