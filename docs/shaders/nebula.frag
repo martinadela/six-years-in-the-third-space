@@ -442,7 +442,8 @@ void main() {
 	n2 = pow(n2, 9.0);
     n2 *= c2;
     n2 *= sub1;
-    vec3 starsColor = vec3(clamp(n2, 0.0, 1.0)) * (1.0 - filterOpacity) + filterOpacity * starsFilter;
+	vec3 starsColor = 1.0 - vec3(clamp(n2, 0.0, 1.0));
+    starsColor = starsColor * (1.0 - filterOpacity) + filterOpacity * starsFilter;
 
     // Blend stars and nebula
     float nebulaIntensity = length(nebulaColor) / sqrt(3.0);

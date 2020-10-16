@@ -18,11 +18,12 @@
         },
         styles: {
             colors: {
-                Highlight1: '#00FF2E', // '#FF8575',
+                Highlight1: '#3DA6FC', // dark blue sky
+                // Highlight1: '#FF8575', // orange
                 ContentBackground: 'rgba(255, 255, 255, 0.9)',
                 ScrollbarBackground: 'transparent',
                 ScrollbarBorder: 'white',
-                Scrollbar: '#00FF2E',
+                Scrollbar: '#F7903C',
             },
             spacings: {
                 size2: '2rem',
@@ -52,9 +53,9 @@
             // Between 0 and 2
             starsQuantity: 1.6,
             // Color of the general filter of the sky color
-            filterColor: [255, 240, 229],
+            filterColor: [216, 211, 242],
             filterOpacity: 0.7,
-            nebulaOpacity: 0.7,
+            nebulaOpacity: 0.8,
             whiteCloudsIntensity: 0.1,
             rotationAngleStep: (Math.PI / 2) * 0.00015,
             radius: 1000,
