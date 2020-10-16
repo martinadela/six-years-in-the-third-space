@@ -1,6 +1,7 @@
 ;(function () {
     const HIGHLIGHT_COLOR1 = TSP.config.get('styles.colors.Highlight1')
     const BACKGROUND_COLOR = TSP.config.get('styles.colors.ContentBackground')
+    const COLOR_TEXT_BOLD = TSP.config.get('styles.colors.TextBold')
     const TRANSITION_DELAY = TSP.config.get('transitions.duration') * TSP.config.get('transitions.reader')[0]
     const TRANSITION_DURATION = TSP.config.get('transitions.duration') * TSP.config.get('transitions.reader')[1]
     const sheet = jss.default
@@ -30,8 +31,6 @@
                 height: '100%',
                 overflow: 'auto',
             },
-            contributionBody: {},
-            contributionTitle: {},
             closeButton: {
                 position: 'absolute',
                 cursor: 'pointer',
@@ -44,6 +43,61 @@
                 borderRadius: '2rem',
                 fontSize: '200%',
             },
+            contributionBody: {
+                textAlign: 'justify',
+
+                '& p': {
+                    marginBottom: '1em',
+                    textAlign: 'justify',
+                },
+
+                '& h2': {
+                    marginBottom: '0em',
+                    marginTop: '1em',
+                    '& .subtitle': {
+                        fontSize: "80%",
+                        marginBottom: "2em",
+                    },
+                },
+
+                '& .textcontent': {
+                    textAlign: "left",
+                },
+
+                '& .poemparagraph': {
+                    textAlign: 'left',
+                },
+
+                '& .note': { 
+                    position: 'relative',
+                    top: '-0.5em', 
+                },
+
+                '& .fullwidthimage': {
+                    '& img': {
+                        width: '100%',
+                        marginTop: '1em',
+                        marginBottom: '1em',    
+                    }
+                },
+
+                '& .imagecaption': {
+                    marginBottom: '2em',
+                },
+
+                '& .imagecaption-title': {
+                    fontWeight: 'bold',
+                },
+
+                '& .imagecaption-description': {
+                    fontStyle: 'italic',
+                },
+
+                '& .bold': {
+                    color: COLOR_TEXT_BOLD,
+                    marginTop: '1em',
+                },
+            }
         })
         .attach()
 
@@ -51,7 +105,6 @@
             <template id="Reader">
                 <button class="${sheet.classes.closeButton}">X</button>
                 <div class="${sheet.classes.contributionContainer}">
-                    <h1 class="${sheet.classes.contributionTitle}"></h1>
                     <div class="${sheet.classes.contributionBody}"></div>
                 </div>
             </template>
@@ -65,7 +118,6 @@
             this.appendChild(TSP.utils.template(template))
             
             this.contributionBody = this.querySelector(`.${sheet.classes.contributionBody}`)
-            this.contributionTitle = this.querySelector(`.${sheet.classes.contributionTitle}`)
             this.closeButton = this.querySelector(`.${sheet.classes.closeButton}`)
 
             this.closeButton.addEventListener('click', this.closeClicked.bind(this))
@@ -84,7 +136,6 @@
                 this.classList.remove('enter')
                 this.classList.add('exit')
             } else if (this.contents[url]) {
-                this.contributionTitle.innerHTML = this.contents[url].title
                 this.contributionBody.innerHTML = this.contents[url].html
                 this.classList.add('enter')
                 this.classList.remove('exit')

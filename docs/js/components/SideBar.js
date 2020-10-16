@@ -14,12 +14,12 @@
                 width: `${SIDEBAR_WIDTH_PERCENT}%`,
                 maxWidth: '20em',
                 color: TSP.config.get('styles.colors.Highlight1'),
+                fontFamily: TSP.config.get('styles.fontFamilies.title')
             },
             innerContainer: {},
             title: {
                 textTransform: 'uppercase',
                 fontFamily: TSP.config.get('styles.fontFamilies.title'),
-                fontSize: '120%',
                 fontWeight: 'normal',
                 fontStyle: 'italic',
                 textAlign: 'right',
@@ -42,12 +42,14 @@
                     display: 'inline-block',
                     animation: `$roll ${TEXT_ROLL_DURATION}s linear infinite`,
                 },
+                fontFamily: "'Cormorant Infant', serif",
+                textTransform: 'uppercase',
                 borderLeft: BORDER_STYLE,
                 borderBottom: BORDER_STYLE,
                 padding: TSP.config.get('styles.spacings.size1'),
-                pointerEvents: 'initial',
                 cursor: 'pointer',
                 userSelect: 'none',
+                pointerEvents: 'initial',
                 '&.locked': {
                     pointerEvents: 'none',
                 }
@@ -92,10 +94,10 @@
             },
             li: {
                 fontFamily: TSP.config.get('styles.fontFamilies.title'),
-                fontSize: '120%',
                 color: TSP.config.get('styles.colors.Highlight1'),
                 '& a': {
                     color: TSP.config.get('styles.colors.Highlight1'),
+                    pointerEvents: 'all'
                 },
                 borderBottom: BORDER_STYLE,
                 borderLeft: BORDER_STYLE,
