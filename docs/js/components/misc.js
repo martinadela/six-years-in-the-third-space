@@ -4,7 +4,7 @@
             super()
             this.addEventListener('click', (e) => {
                 e.preventDefault()
-                TSP.utils.navigateTo(this.href)
+                TSP.utils.navigateTo(this.getAttribute('href'))
             })
         }
     }

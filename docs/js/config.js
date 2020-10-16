@@ -38,8 +38,6 @@
             },
             fontSizes: {
                 desktop: 14,
-                mobile: 12,
-                menu: '15%',
             },
             fontFamilies: {
                 title: "'Cormorant Infant', serif",
@@ -89,9 +87,9 @@
         },
         contributions: [
             {
-                url: '/contributions/VidhaSaumya',
+                url: '/contributions/The-Sky-Moved-City-to-City',
                 satelliteModelUrl: '/satellites/satellite2.glb',
-                contentUrl: '/pages/contributions/VidhaSaumya.html',
+                contentUrl: '/pages/contributions/The-Sky-Moved-City-to-City.html',
             },
             // {
             //     url: '/contributions/3',
@@ -171,6 +169,28 @@
             //     satelliteModelUrl: '/satellites/satellite4.glb',
             //     contentUrl: '/pages/contributions/blu.html',
             // },
+        ],
+
+        collaborators: [
+            {
+                url: '/collaborators/Marten-Esko',
+                contentUrl: '/pages/collaborators/Marten-Esko.html',
+            },
+        ],
+
+        otherPages: [
+            {
+                url: '/book-index',
+                contentUrl: '/pages/book-index.html',
+            },
+            {
+                url: '/about',
+                contentUrl: '/pages/about.html',
+            },
+            {
+                url: '/third-space',
+                contentUrl: '/pages/third-space.html',
+            },
         ],
 
         sidebar: {

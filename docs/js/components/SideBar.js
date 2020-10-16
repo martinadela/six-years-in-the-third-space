@@ -25,7 +25,7 @@
                 textAlign: 'right',
                 padding: TSP.config.get('styles.spacings.size1'),
                 '& p': {
-                    marginBottom: '4rem',
+                    marginBottom: '3.5rem',
                     '&:last-child': {
                         marginBottom: '0',
                     },
@@ -96,6 +96,10 @@
                 fontFamily: TSP.config.get('styles.fontFamilies.title'),
                 color: TSP.config.get('styles.colors.Highlight1'),
                 '& a': {
+                    display: 'inline-block',
+                    height: '100%',
+                    width: '100%',
+                    padding: TSP.config.get('styles.spacings.size1'),
                     color: TSP.config.get('styles.colors.Highlight1'),
                     pointerEvents: 'all'
                 },
@@ -103,7 +107,6 @@
                 borderLeft: BORDER_STYLE,
                 textTransform: 'uppercase',
                 fontStyle: 'italic',
-                padding: TSP.config.get('styles.spacings.size1'),
             },
         })
         .attach()
@@ -124,13 +127,8 @@
                 <div class="${sheet.classes.ulContainer}">
                     <ul class="${sheet.classes.ul}">
                         <li class="${sheet.classes.li}">
-                            <a is="tsp-anchor" href="/contributors">
-                                Contributors
-                            </a>
-                        </li>
-                        <li class="${sheet.classes.li}">
-                            <a is="tsp-anchor" href="/works">
-                                Works
+                            <a is="tsp-anchor" href="/book-index">
+                                Index
                             </a>
                         </li>
                         <li class="${sheet.classes.li}">

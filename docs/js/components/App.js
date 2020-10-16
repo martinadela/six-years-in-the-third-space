@@ -3,10 +3,8 @@
     const COLOR_SCROLLBAR = TSP.config.get('styles.colors.Scrollbar')
     const COLOR_SCROLLBAR_BORDER = TSP.config.get('styles.colors.ScrollbarBorder')
     const FONT_SIZE_DESKTOP = TSP.config.get('styles.fontSizes.desktop')
-    const FONT_SIZE_MOBILE = TSP.config.get('styles.fontSizes.mobile')
     const FONT_FAMILY_NORMAL = TSP.config.get('styles.fontFamilies.normal')
     const FONT_FAMILY_TITLE = TSP.config.get('styles.fontFamilies.title')
-    const WIDTH_MOBILE = TSP.config.get('styles.dimensions.mobileWidth')
     const COLOR_TEXT = TSP.config.get('styles.colors.Text')
     const COLOR_H2 = TSP.config.get('styles.colors.H2')
 
@@ -24,9 +22,18 @@
                     fontFamily: FONT_FAMILY_NORMAL,
                     fontSize: FONT_SIZE_DESKTOP,
                     textAlign: 'justify',
-                    [`@media screen and (max-width: ${WIDTH_MOBILE}px)`]: {
-                        fontSize: FONT_SIZE_MOBILE,
-                    }
+                    [`@media screen and (max-height: 750px)`]: {
+                        fontSize: FONT_SIZE_DESKTOP - 1,
+                    },
+                    [`@media screen and (max-height: 700px)`]: {
+                        fontSize: FONT_SIZE_DESKTOP - 2,
+                    },
+                    [`@media screen and (max-height: 650px)`]: {
+                        fontSize: FONT_SIZE_DESKTOP - 3,
+                    },
+                    [`@media screen and (max-height: 600px)`]: {
+                        fontSize: FONT_SIZE_DESKTOP - 4,
+                    },
                 },
                 // REF scrollbars : https://www.digitalocean.com/community/tutorials/css-scrollbars
                 '*': {

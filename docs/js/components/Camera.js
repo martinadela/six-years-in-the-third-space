@@ -52,8 +52,6 @@
             } else if (url === '') {
                 this.focusedObject = null
                 this.withDebugging(() => this.animateTransform(this.transformDefault()))
-            } else {
-                throw new Error(`Unknown url for camera ${url}`)
             }
         }
 
