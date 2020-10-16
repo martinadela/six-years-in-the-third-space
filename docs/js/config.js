@@ -183,6 +183,9 @@
             },
         ],
 
+        sidebar: {
+            'textRollDuration': 20 // in seconds
+        }
     }
 
     TSP.config = {}

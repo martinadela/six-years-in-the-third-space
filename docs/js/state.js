@@ -17,7 +17,8 @@
             loaded: false,
         },
         SideBar: {
-            component: null
+            component: null,
+            expanded: false,
         },
 
     }
