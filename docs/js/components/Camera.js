@@ -3,7 +3,7 @@
         constructor() {
             const far = Math.round(TSP.config.get('universe.radius') * 2 + TSP.config.get('universe.radius') * 0.1)
 
-            this.camera = new THREE.PerspectiveCamera(
+            window.camera = this.camera = new THREE.PerspectiveCamera(
                 TSP.config.get('camera.fieldOfViewDegrees'),
                 1,
                 TSP.config.get('camera.near'),

@@ -33,24 +33,6 @@
             })
             this.renderer.physicallyCorrectLights = true
 
-            // ------------ Lights
-            const ambientLight = new THREE.AmbientLight(
-                TSP.config.get('lights.ambientColor'),
-                TSP.config.get('lights.ambientIntensity')
-            )
-            ambientLight.name = 'ambient_light'
-            this.tspCamera.camera.add(ambientLight)
-
-            const directionalLight = new THREE.DirectionalLight(
-                TSP.config.get('lights.directColor'),
-                TSP.config.get('lights.directIntensity')
-            )
-            const directionalLightSphericalPosition = TSP.config.get('lights.directPosition')
-            directionalLightSphericalPosition.radius *= TSP.config.get('universe.radius')
-            directionalLight.position.setFromSpherical(directionalLightSphericalPosition)
-            directionalLight.name = 'main_light'
-            this.tspCamera.camera.add(directionalLight)
-
             // ------------ state change handlers
             TSP.state.listen(
                 'window.width',
@@ -67,6 +49,7 @@
 
             // ------------
             this.loader = new THREE.GLTFLoader()
+            this.lights = new TSP.components.Lights(this.getCamera(), this.getScene())
             this.mouse = new THREE.Vector2()
             this.hoverableObjectsManager = new Canvas3DHoverableObjectsManager()
             this.createObjects()

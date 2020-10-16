@@ -45,7 +45,8 @@
             ambientIntensity: 0.5,
             directColor: 0xffffff,
             directIntensity: 4 * Math.PI,
-            directPosition: new THREE.Spherical(0, 0, 0)
+            directPosition: new THREE.Spherical(0, 0, 0),
+            spotIntensity: 400,
         },
         universe: {
             // 2 colors in RGB format.
