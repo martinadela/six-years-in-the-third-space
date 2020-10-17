@@ -76,6 +76,7 @@
         planet: {
             radius: 8,
             color: 0xaaaaaa,
+            focusOnUrl: '/third-space'
         },
         satellites: {
             planetaryRotationAxisRandomness: Math.PI * 0,

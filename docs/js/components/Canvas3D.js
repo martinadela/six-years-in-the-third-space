@@ -102,6 +102,7 @@
                 }
             )
             TSP.state.set('Canvas3D.satellites', satellitesState)
+            TSP.state.set('Canvas3D.planet', this.planet)
         }
 
         getCamera() {
@@ -130,6 +131,8 @@
             this.planet.show(this.scene)
             this.universe.show(this.scene)
             this.tspCamera.show(this.scene)
+
+            this.hoverableObjectsManager.addHoverable(this.planet.getHoverableObject3D(), this.planet)
             Object.values(this.satellites).forEach((satellite) => {
                 satellite.show(this.scene)
                 this.hoverableObjectsManager.addHoverable(satellite.getHoverableObject3D(), satellite)
@@ -137,6 +140,7 @@
                     satellite.planetaryRotationAxis.show(this.scene)
                 }
             })
+
             if (TSP.config.get('debug.satellites') === true) {
                 this.axesHelper = new THREE.AxesHelper(
                     TSP.config.get('planet.radius') + 5

@@ -117,6 +117,10 @@
             return new THREE.Sphere(new THREE.Vector3().setFromMatrixPosition(this.clickSphere.matrixWorld), this.boundingSphere.radius)
         }
 
+        getUrl() {
+            return this.url
+        }
+
         getObject3D() {
             return this.group
         }
@@ -144,5 +148,6 @@
         }
     }
 
+    TSP.utils.assertImplements(Satellite, TSP.utils.interfaces.hoverable)
     TSP.components.Satellite = Satellite
 })()

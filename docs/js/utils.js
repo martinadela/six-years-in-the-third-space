@@ -333,4 +333,22 @@
         }
         return value
     }
+
+    TSP.utils.assertImplements = (_class, interface) => {
+        const missing = []
+        interface.forEach((methodName) => {
+            if (typeof _class.prototype[methodName] !== 'function') {
+                missing.push(methodName)
+            }
+        })
+        if (missing.length) {
+            throw new Error(`Class "${_class.name}" misses implementation for methods "${missing.join(', ')}"`)
+        }
+    }
+
+    TSP.utils.interfaces = {
+        hoverable: ['getUrl', 'getHoverableObject3D', 'getBoundingSphere']
+    }
+
+
 })()

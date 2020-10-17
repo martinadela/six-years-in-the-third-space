@@ -1,4 +1,6 @@
 ;(function () {
+    const PLANET_FOCUS_ON_URL = TSP.config.get('planet.focusOnUrl')
+
     class Camera {
         constructor() {
             const far = Math.round(TSP.config.get('universe.radius') * 2 + TSP.config.get('universe.radius') * 0.1)
@@ -47,7 +49,10 @@
         currentUrlChanged(url) {
             this.focusedObject = null
             const satellite = TSP.state.get('Canvas3D.satellites')[url]
-            if (satellite) {
+            if (url === PLANET_FOCUS_ON_URL) {
+                this.focusedObject = TSP.state.get('Canvas3D.planet')
+                this.withDebugging(() => this.animateTransform(this.transformFocused()))
+            } else if (satellite) {
                 this.focusedObject = satellite
                 this.withDebugging(() => this.animateTransform(this.transformFocused()))
             } else if (url === '') {

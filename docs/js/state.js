@@ -11,6 +11,7 @@
             loaded: false,
             hoveredObject: null,
             satellites: {},
+            planet: null,
             component: null,
         },
         Reader: {

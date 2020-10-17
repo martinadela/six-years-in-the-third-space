@@ -128,7 +128,7 @@
             const hoveredObject = TSP.state.get('Canvas3D.hoveredObject')
             if (hoveredObject !== null) {
                 TSP.state.set('Canvas3D.hoveredObject', null)
-                TSP.utils.navigateTo(hoveredObject.url)
+                TSP.utils.navigateTo(hoveredObject.getUrl())
             }
         }
 
