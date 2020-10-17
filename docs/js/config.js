@@ -63,7 +63,7 @@
             nebulaOpacity: 0.8,
             whiteCloudsIntensity: 0.1,
             rotationAngleStep: (Math.PI / 2) * 0.00015,
-            radius: 1000,
+            radius: 10000,
         },
         camera: {
             fieldOfViewDegrees: 75,

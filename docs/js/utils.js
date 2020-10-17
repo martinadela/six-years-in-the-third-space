@@ -40,6 +40,14 @@
         spherical.theta = (spherical.theta + (delta.theta || 0)) % (2 * Math.PI)
     }
 
+    TSP.utils.scaleBox2 = (box, scale) => {
+        const boxSize = box.getSize(new THREE.Vector2())
+        return box.expandByPoint(new THREE.Vector2(
+            box.min.x + scale * boxSize.x,
+            box.min.y + scale * boxSize.y
+        ))
+    }
+
     // REF : https://stackoverflow.com/questions/25224153/how-can-i-get-the-normalized-vector-of-the-direction-an-object3d-is-facing
     TSP.utils.getObjectDirection = (object3D) => {
         const vector = new THREE.Vector3( 0, 0, 1 )
@@ -89,15 +97,15 @@
     }
 
     // REF : https://stackoverflow.com/questions/27409074/converting-3d-position-to-2d-screen-position-r69
-    TSP.utils.worldPositionToScreenPosition = (camera, worldPosition, canvasBoundingBoxOnScreen) => {
-        const pixelCanvasDimensions = canvasBoundingBoxOnScreen.getSize(new THREE.Vector2())
+    TSP.utils.worldPositionToScreenPosition = (camera, worldPosition, canvasBoundingBox_Screen) => {
+        const canvasDimensions_Screen = canvasBoundingBox_Screen.getSize(new THREE.Vector2())
 
         const screenPosition = new THREE.Vector3()
             .copy(worldPosition)
             .project(camera)
 
         // Transform from centered position (in World), to a position relative to top / left in Screen.
-        const pixelHalfCanvasDimensions = pixelCanvasDimensions.multiplyScalar(0.5)
+        const pixelHalfCanvasDimensions = canvasDimensions_Screen.multiplyScalar(0.5)
         return pixelHalfCanvasDimensions.add(
                 new THREE.Vector2(screenPosition.x, -screenPosition.y)
                     .multiply(pixelHalfCanvasDimensions)
@@ -139,43 +147,42 @@
         ).multiplyScalar(2 * distance * Math.tan( fovRadians / 2 ))
     }
 
-    // Compute an orbital transform for `camera`, so that `object3D` is placed inside `objectBoundingBoxOnScreen`.
-    TSP.utils.computeCameraOrbitalTransform = (camera, object3D, canvasBoundingBoxOnScreen, objectBoundingBoxOnScreen) => {
-        const object3DPosition = object3D.position.clone()
+    // Compute an orbital transform for `camera`, so that `boundingBox_World` is placed inside `boundingBox_Screen`.
+    TSP.utils.computeCameraOrbitalTransform = (camera, boundingBox_World, canvasBoundingBox_Screen, boundingBox_Screen) => {
+        const boundingBoxCenter_World = boundingBox_World.getCenter(new THREE.Vector3())
         
-        // -------- 1. Process on-screen dimensions / positions for the canvas and the object
-        const pixelCanvasDimensions = canvasBoundingBoxOnScreen.getSize(new THREE.Vector2())
-        const pixelObjectDimensions = objectBoundingBoxOnScreen.getSize(new THREE.Vector2())
-        const pixelObjectMaxSize = Math.max(pixelObjectDimensions.x, pixelObjectDimensions.y)
-        // Calculate the coordinates of the center of the object, taking for origin the center of the canvas
-        const pixelObjectPosition = new THREE.Vector2().copy(objectBoundingBoxOnScreen.min)
-            // Translate to the center of the object instead of top-left corner
-            .addScaledVector(pixelObjectDimensions, 0.5)
-            // Translate to the center of the canvas instead of top-left corner
-            .addScaledVector(pixelCanvasDimensions, -0.5)
+        // -------- 1. Process on-screen dimensions / positions for the canvas and the bounding box
+        const canvasDimensions_Screen = canvasBoundingBox_Screen.getSize(new THREE.Vector2())
+        const boundingBoxDimensions_Screen = boundingBox_Screen.getSize(new THREE.Vector2())
+        const boundingBoxMaxSize_Screen = Math.max(boundingBoxDimensions_Screen.x, boundingBoxDimensions_Screen.y)
 
         // -------- 2. Project on-screen dimensions / positions to the units in Three.js coordinate system (meters)
-        const meterObjectDimensions = new THREE.Box3().setFromObject(object3D).getSize(new THREE.Vector3())
-        const meterObjectMaxSize = Math.max(meterObjectDimensions.x, meterObjectDimensions.y, meterObjectDimensions.z)
+        const boundingBoxDimensions_World = boundingBox_World.getSize(new THREE.Vector3())
+        const boundingBoxMaxSize_World = Math.max(boundingBoxDimensions_World.x, boundingBoxDimensions_World.y, boundingBoxDimensions_World.z)
 
-        const projectionRatio = meterObjectMaxSize / pixelObjectMaxSize
-        const meterVisibleRectangle = pixelCanvasDimensions.multiplyScalar(projectionRatio)
-        const meterObjectPosition = pixelObjectPosition.multiply(new THREE.Vector2(-projectionRatio, projectionRatio))
+        const projectionRatio = boundingBoxMaxSize_World / boundingBoxMaxSize_Screen
+        const visibleRectangle_World = canvasDimensions_Screen.clone().multiplyScalar(projectionRatio)
+        const cameraOffset_World = boundingBox_Screen.min.clone()
+            // Translate to the center of the bounding box instead of top-left corner
+            .addScaledVector(boundingBoxDimensions_Screen, 0.5)
+            // Translate to the center of the canvas instead of top-left corner
+            .addScaledVector(canvasDimensions_Screen, -0.5)
+            .multiply(new THREE.Vector2(-projectionRatio, projectionRatio))
 
         // -------- 3. Compute `rotation` and `translation` to bring the camera in position
         const rotation = new THREE.Quaternion().setFromUnitVectors(
             new THREE.Vector3(0, 0, 1), 
-            object3DPosition.clone().normalize()
+            boundingBoxCenter_World.clone().normalize()
         )
 
         const translation = new THREE.Vector3()
-        // i. move back from `radius of object3DPosition` + `distance`
-        const object3DPositionSpherical = TSP.utils.v3ToSpherical(object3DPosition)
-        translation.z = object3DPositionSpherical.radius + TSP.utils.computeCameraDistance(camera, meterVisibleRectangle)
+        // i. move back from `radius of boundingBoxCenter_World` + `distance`
+        const boundingBoxCenterSpherical = TSP.utils.v3ToSpherical(boundingBoxCenter_World)
+        translation.z = boundingBoxCenterSpherical.radius + TSP.utils.computeCameraDistance(camera, visibleRectangle_World)
         // ii. apply the offsets
         translation.applyMatrix4(
-            TSP.utils.v3ToTranslationMatrix(new THREE.Vector3(meterObjectPosition.x, meterObjectPosition.y, 0)))
-        // iii. apply the rotation to bring `translation` to `object3DPosition`
+            TSP.utils.v3ToTranslationMatrix(new THREE.Vector3(cameraOffset_World.x, cameraOffset_World.y, 0)))
+        // iii. apply the rotation to bring `translation` to `boundingBoxCenter_World`
         translation.applyQuaternion(rotation)
 
         return {

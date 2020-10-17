@@ -45,13 +45,15 @@
         }
 
         currentUrlChanged(url) {
+            this.focusedObject = null
             const satellite = TSP.state.get('Canvas3D.satellites')[url]
             if (satellite) {
                 this.focusedObject = satellite
                 this.withDebugging(() => this.animateTransform(this.transformFocused()))
             } else if (url === '') {
-                this.focusedObject = null
                 this.withDebugging(() => this.animateTransform(this.transformDefault()))
+            } else {
+                this.withDebugging(() => this.animateTransform(this.transformOverview()))
             }
         }
 
@@ -76,9 +78,35 @@
         }
 
         transformFocused() {
-            const sidebarBoundingRect = TSP.state.get('SideBar.component').getBoundingClientRect()
+            const objectBoundingBoxWorld = new THREE.Box3().setFromObject(this.focusedObject.getObject3D())
+            const objectBoundingBoxOnScreen = this.getObjectBoundingBoxOnScreen()
+            return TSP.utils.computeCameraOrbitalTransform(
+                this.camera, 
+                objectBoundingBoxWorld, 
+                TSP.utils.getCanvasBoundingBoxOnScreen(), 
+                objectBoundingBoxOnScreen
+            )
+        }
 
-            const objectBoundingBoxOnScreen = new THREE.Box2(
+        transformOverview() {
+            const objectBoundingBoxOnScreen = this.getObjectBoundingBoxOnScreen()
+            const satelliteOrbitDiameter = TSP.config.get('satellites.planetaryRotationRadius')[0] * 2
+            const boundingBoxWorld = new THREE.Box3().setFromCenterAndSize(
+                new THREE.Vector3(0, 0, 0),
+                new THREE.Vector3(satelliteOrbitDiameter, satelliteOrbitDiameter, satelliteOrbitDiameter),
+            )
+            const allSatellites = new THREE.Group()
+            return TSP.utils.computeCameraOrbitalTransform(
+                this.camera, 
+                boundingBoxWorld, 
+                TSP.utils.getCanvasBoundingBoxOnScreen(), 
+                objectBoundingBoxOnScreen
+            )
+        }
+
+        getObjectBoundingBoxOnScreen() {
+            const sidebarBoundingRect = TSP.state.get('SideBar.component').getBoundingClientRect()
+            return new THREE.Box2(
                 new THREE.Vector2(
                     sidebarBoundingRect.left,
                     sidebarBoundingRect.bottom - sidebarBoundingRect.width,
@@ -87,14 +115,6 @@
                     sidebarBoundingRect.left + sidebarBoundingRect.width,
                     sidebarBoundingRect.bottom,
                 ),
-            )
-
-            // Compute transforms to place the camera in the right position / angle
-            return TSP.utils.computeCameraOrbitalTransform(
-                this.camera, 
-                this.focusedObject.getObject3D(), 
-                TSP.utils.getCanvasBoundingBoxOnScreen(), 
-                objectBoundingBoxOnScreen
             )
         }
 
