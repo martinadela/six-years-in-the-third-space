@@ -1,13 +1,13 @@
 ;(function () {
+    const HIGHLIGHT_COLOR1 = TSP.config.get('styles.colors.Highlight1')
     const MOBILE_MEDIA_QUERY = TSP.config.get('styles.mobile.mediaQuery')
-    const BORDER_STYLE = `solid ${TSP.config.get(
-        'styles.colors.Highlight1'
-    )} ${TSP.config.get('styles.dimensions.borderThickness')}`
     const TEXT_ROLL_DURATION = TSP.config.get('sidebar.textRollDuration')
     const TEXT_RIBBON = TSP.config.get('sidebar.textRolling')
-    const SIDEBAR_WIDTH_PERCENT = TSP.config.get('styles.dimensions.sidebarDesktopWidth')
+    const SIDEBAR_WIDTH_PERCENT = TSP.config.get(
+        'styles.dimensions.sidebarDesktopWidth'
+    )
 
-    const textRibbonSheet = jss.default
+    const sheet = jss.default
         .createStyleSheet({
             main: {
                 // To be able to position the button
@@ -18,10 +18,9 @@
                     display: 'inline-block',
                     animation: `$roll ${TEXT_ROLL_DURATION}s linear infinite`,
                 },
+                color: HIGHLIGHT_COLOR1,
                 fontFamily: "'Cormorant Infant', serif",
                 textTransform: 'uppercase',
-                borderLeft: BORDER_STYLE,
-                borderBottom: BORDER_STYLE,
                 [MOBILE_MEDIA_QUERY]: {
                     borderLeft: 'none',
                     orderBottom: 'none',
@@ -30,8 +29,11 @@
                 cursor: 'pointer',
                 userSelect: 'none',
                 pointerEvents: 'initial',
-                '&.locked': {
+                '&.locked, &[no-expand-button]': {
                     pointerEvents: 'none',
+                    '& button[is="tsp-expand-menu-button"]': {
+                        display: 'none',
+                    },
                 },
             },
             '@keyframes roll': {
@@ -42,21 +44,30 @@
                     transform: 'translateX(-100%)',
                 },
             },
+            expandMenuButton: {
+                top: '50%',
+                right: 0,
+                position: 'absolute',
+                marginRight: '0.5em',
+                fontSize: '150%',
+            }
         })
         .attach()
 
     const template = `
-<template id="TextRibbon">
-    <div>${TEXT_RIBBON}</div>
-    <button is="tsp-expand-menu-button"></button>
-</template>
-`
+        <template id="TextRibbon">
+            <div>${TEXT_RIBBON}</div>
+            <button is="tsp-expand-menu-button" class="${sheet.classes.expandMenuButton}"></button>
+        </template>
+    `
 
     class TextRibbon extends HTMLDivElement {
         constructor() {
             super()
-            this.classList.add(textRibbonSheet.classes.main)
+            this.classList.add(sheet.classes.main)
             this.appendChild(TSP.utils.template(template))
+            // this.showExpandButton = this.getAttribute()
+
             TSP.state.listen(
                 'App.currentUrl',
                 this.currentUrlChanged.bind(this)

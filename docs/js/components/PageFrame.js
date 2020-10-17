@@ -14,7 +14,8 @@
                 width: '100%',
                 height: '100%',
                 // To allow orbital controls
-                pointerEvents: 'none'
+                pointerEvents: 'none',
+
             },
 
             innerContainer: {
@@ -26,7 +27,7 @@
                 width: '100%',
                 height: '100%',
                 [MOBILE_MEDIA_QUERY]: {
-                    display: 'block',
+                    flexDirection: 'column-reverse',
                 },
             },
 
@@ -35,12 +36,20 @@
                 // Counter-intuitively, with the flex it forces the component to shrink / expand to the right size
                 width: '0%'
             },
+
+            textRibbon: {
+                display: 'none',
+                [MOBILE_MEDIA_QUERY]: {
+                    display: 'block',
+                },
+            }
         })
         .attach()
 
     const template = `
         <template id="PageFrame">
             <div class="${sheet.classes.innerContainer}">
+                <div is="tsp-text-ribbon" no-expand-button class="${sheet.classes.textRibbon}"></div>
                 <div class="${sheet.classes.readerContainer}">
                     <div is="tsp-reader"></div>
                 </div>

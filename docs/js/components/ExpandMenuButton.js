@@ -2,24 +2,28 @@
     const HIGHLIGHT_COLOR1 = TSP.config.get('styles.colors.Highlight1')
     const EXPAND_TRANSITION_DURATION = TSP.config.get('transitions.sidebarDuration')
 
-    const expandMenuButtonSheet = jss.default
+    const sheet = jss.default
         .createStyleSheet({
             main: {
                 display: 'block',
                 background: 'none',
                 color: HIGHLIGHT_COLOR1,
-                top: '50%',
-                right: 0,
-                position: 'absolute',
                 border: 'none',
-                marginRight: '0.5em',
-                fontSize: '150%',
                 cursor: 'pointer',
+                pointerEvents: 'initial',
+                '&:focus': {
+                    outline: 0
+                },
                 transition: `transform ${EXPAND_TRANSITION_DURATION}ms ease-in-out`,
                 transform: 'translateY(-50%) rotate(0deg)',
-                pointerEvents: 'initial',
                 '&.expanded': {
                     transform: 'translateY(-50%) rotate(180deg)',
+                },
+                '&[orientation="horizontal"]': {
+                    transform: 'rotate(90deg)',
+                    '&.expanded': {
+                        transform: 'rotate(270deg)',
+                    },  
                 },
                 '&.locked': {
                     display: 'none',
@@ -31,7 +35,7 @@
     class ExpandMenuButton extends HTMLButtonElement {
         constructor() {
             super()
-            this.classList.add(expandMenuButtonSheet.classes.main)
+            this.classList.add(sheet.classes.main)
             this.innerText = '▾'
             TSP.state.listen(
                 'SideBar.expanded',
