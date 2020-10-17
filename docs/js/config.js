@@ -1,4 +1,9 @@
 ;(function () {
+    const STYLES_MOBILE_THRESHOLD = {
+        width: 800,
+        height: 550,
+    }
+
     const CONFIG = {
         debug: {
             state: false,
@@ -10,7 +15,8 @@
         transitions: {
             duration: 2000,
             reader: [0.9, 0.1],
-            hudDuration: 200
+            hudDuration: 200,
+            sidebarDuration: 200
         },
         app: {
             // Must not have trailing slash
@@ -34,7 +40,7 @@
             },
             dimensions: {
                 borderThickness: '4px',
-                mobileWidth: 800,
+                sidebarDesktopWidth: 30,
             },
             fontSizes: {
                 desktop: 14,
@@ -42,6 +48,11 @@
             fontFamilies: {
                 title: "'Cormorant Infant', serif",
                 normal: "'Archivo', sans-serif",
+            },
+            mobile: {
+                width: STYLES_MOBILE_THRESHOLD.width,
+                height: STYLES_MOBILE_THRESHOLD.height,
+                mediaQuery: `@media screen and (max-width: ${STYLES_MOBILE_THRESHOLD.width}px) , screen and (max-height: ${STYLES_MOBILE_THRESHOLD.height}px)`
             },
         },
         lights: {
@@ -195,7 +206,8 @@
         ],
 
         sidebar: {
-            'textRollDuration': 20 // in seconds
+            'textRollDuration': 20, // in seconds
+            'textRolling': 'What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry.  What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
         }
     }
 

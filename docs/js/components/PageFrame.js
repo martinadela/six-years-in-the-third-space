@@ -1,4 +1,6 @@
 ;(function () {
+    const MOBILE_MEDIA_QUERY = TSP.config.get('styles.mobile.mediaQuery')
+
     const sheet = jss.default
         .createStyleSheet({
             main: {
@@ -6,6 +8,9 @@
                 left: 0,
                 top: 0,
                 padding: '2.5rem 2.5rem',
+                [MOBILE_MEDIA_QUERY]: {
+                    padding: '1rem 1rem',
+                },
                 width: '100%',
                 height: '100%',
                 // To allow orbital controls
@@ -20,6 +25,9 @@
                 )} ${TSP.config.get('styles.dimensions.borderThickness')}`,
                 width: '100%',
                 height: '100%',
+                [MOBILE_MEDIA_QUERY]: {
+                    display: 'block',
+                },
             },
 
             readerContainer: {
