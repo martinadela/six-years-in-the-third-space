@@ -33,15 +33,17 @@
 
     const template = `
         <template id="Hud">
-            <div class=${sheet.classes.arrow}>⇦</div>
+            <div class="${sheet.classes.main}">
+                <div class=${sheet.classes.arrow}>⇦</div>
+            </div>
         </template>
     `
 
-    class Hud extends HTMLDivElement {
+    class Hud extends HTMLElement {
         constructor() {
             super()
-            this.classList.add(sheet.classes.main)
             this.appendChild(TSP.utils.template(template))
+            this.element = this.querySelector(`.${sheet.classes.main}`)
             this.bringOut()
 
             // ------------ state change handlers
@@ -55,14 +57,9 @@
             )
         }
 
-        connectedCallback() {
-            this.canvas3D = this.querySelector('canvas[is="tsp-canvas-3d"]')
-            this.pageFrame = this.querySelector('div[is="tsp-page-frame"]')
-        }
-
         bringOut() {
-            this.style.top = 0
-            this.style.opacity = 0
+            this.element.style.top = 0
+            this.element.style.opacity = 0
         }
 
         bringIn(hoveredObject) {
@@ -72,15 +69,15 @@
                 TSP.utils.getCanvasBoundingBoxOnScreen()
             )
 
-            this.style.opacity = 1
-            this.style.left = `${circle.center.x - circle.radius}px`
-            this.style.top = `${circle.center.y - circle.radius}px`
-            this.style.borderRadius = `${circle.radius}px`
-            this.style.height = `${circle.radius * 2}px`
-            this.style.width = `${circle.radius * 2}px`
+            this.element.style.opacity = 1
+            this.element.style.left = `${circle.center.x - circle.radius}px`
+            this.element.style.top = `${circle.center.y - circle.radius}px`
+            this.element.style.borderRadius = `${circle.radius}px`
+            this.element.style.height = `${circle.radius * 2}px`
+            this.element.style.width = `${circle.radius * 2}px`
 
             if (TSP.config.get('debug.satellites')) {
-                this.style.border = `solid 1px blue`
+                this.element.style.border = `solid 1px blue`
             }
         }
 
@@ -102,5 +99,5 @@
         }
     }
 
-    customElements.define('tsp-hud', Hud, { extends: 'div' })
+    customElements.define('tsp-hud', Hud)
 })()

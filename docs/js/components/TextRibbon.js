@@ -32,9 +32,9 @@
                 cursor: 'pointer',
                 userSelect: 'none',
                 pointerEvents: 'initial',
-                '&.locked, &[no-expand-button]': {
+                '&.locked, &.noExpandButton': {
                     pointerEvents: 'none',
-                    '& button[is="tsp-expand-menu-button"]': {
+                    '& tsp-expand-menu-button': {
                         display: 'none',
                     },
                 },
@@ -64,17 +64,23 @@
 
     const template = `
         <template id="TextRibbon">
-            <div>${TEXT_RIBBON}</div>
-            <button is="tsp-expand-menu-button" class="${sheet.classes.expandMenuButton}">▾</button>
+            <div class="${sheet.classes.main}">
+                <div>${TEXT_RIBBON}</div>
+                <tsp-expand-menu-button class="${sheet.classes.expandMenuButton}">▾</tsp-expand-menu-button>
+            </div>
         </template>
     `
 
-    class TextRibbon extends HTMLDivElement {
+    class TextRibbon extends HTMLElement {
         constructor() {
             super()
-            this.classList.add(sheet.classes.main)
             this.appendChild(TSP.utils.template(template))
-            // this.showExpandButton = this.getAttribute()
+            this.element = this.querySelector(`.${sheet.classes.main}`)
+            this.element.classList.add(this.className)
+            this.className = ""
+            if (this.getAttribute('no-expand-button') !== null) {
+                this.element.classList.add('noExpandButton')
+            }
 
             TSP.state.listen(
                 'App.currentUrl',
@@ -83,7 +89,7 @@
         }
 
         connectedCallback() {
-            this.addEventListener('click', this.onClicked.bind(this))
+            this.element.addEventListener('click', this.onClicked.bind(this))
         }
 
         onClicked() {
@@ -95,12 +101,12 @@
 
         currentUrlChanged(url) {
             if (url === '') {
-                this.classList.remove('locked')
+                this.element.classList.remove('locked')
             } else {
-                this.classList.add('locked')
+                this.element.classList.add('locked')
             }
         }
     }
 
-    customElements.define('tsp-text-ribbon', TextRibbon, { extends: 'div' })
+    customElements.define('tsp-text-ribbon', TextRibbon)
 })()

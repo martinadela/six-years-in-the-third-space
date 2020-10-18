@@ -15,10 +15,16 @@
         })
         .attach()
 
-    class ExpandMenuButton extends HTMLButtonElement {
+    class ExpandMenuButton extends HTMLElement {
         constructor() {
             super()
-            this.classList.add(sheet.classes.main)
+            this.element = document.createElement('button')
+            this.element.innerHTML = this.innerHTML
+            this.innerHTML = ''
+            this.appendChild(this.element)
+            this.element.className = this.className
+            this.element.classList.add(sheet.classes.main)
+            this.className = ''
             TSP.state.listen(
                 'SideBar.expanded',
                 this.expandedChanged.bind(this)
@@ -40,14 +46,12 @@
 
         expandedChanged(expanded) {
             if (expanded) {
-                this.classList.add('expanded')
+                this.element.classList.add('expanded')
             } else {
-                this.classList.remove('expanded')
+                this.element.classList.remove('expanded')
             }
         }
     }
 
-    customElements.define('tsp-expand-menu-button', ExpandMenuButton, {
-        extends: 'button',
-    })
+    customElements.define('tsp-expand-menu-button', ExpandMenuButton)
 })()

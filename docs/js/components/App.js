@@ -76,8 +76,8 @@
         <template id="App">
             <div>
                 <tsp-canvas-3d></tsp-canvas-3d>
-                <div is="tsp-page-frame"></div>
-                <div is="tsp-hud"></div>
+                <tsp-page-frame></tsp-page-frame>
+                <tsp-hud></tsp-hud>
             </div>
         </template>
     `
@@ -116,7 +116,7 @@
 
         connectedCallback() {
             this.canvas3D = this.querySelector('tsp-canvas-3d')
-            this.pageFrame = this.querySelector('div[is="tsp-page-frame"]')
+            this.pageFrame = this.querySelector('tsp-page-frame')
             TSP.state.set('Canvas3D.component', this.canvas3D)
             this.canvas3D.load()
             this.pageFrame.load()

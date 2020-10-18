@@ -4,7 +4,7 @@
     const BUTTON_SIZE = TSP.config.get('styles.dimensions.buttonSize')
     const MOBILE_MEDIA_QUERY = TSP.config.get('styles.mobile.mediaQuery')
 
-    class Anchor extends HTMLAnchorElement {
+    class Anchor extends HTMLElement {
         constructor() {
             super()
             this.addEventListener('click', (e) => {
@@ -14,7 +14,7 @@
         }
     }
 
-    customElements.define('tsp-anchor', Anchor, { extends: 'a' })
+    customElements.define('tsp-anchor', Anchor)
 
     const topPageButtonContainerSheet = jss.default
         .createStyleSheet({
@@ -49,18 +49,17 @@
         })
         .attach()
 
-    class TopPageButtonContainer extends HTMLDivElement {
+    class TopPageButtonContainer extends HTMLElement {
         constructor() {
             super()
             this.classList.add(topPageButtonContainerSheet.classes.main)
             this.addEventListener('click', this.onclick.bind(this), false)
-            this.button = this.querySelector('button')
         }
 
         onclick() {
-            this.button.click()
+            this.querySelector('button').click()
         }
     }
 
-    customElements.define('tsp-top-page-button-container', TopPageButtonContainer, { extends: 'div' })
+    customElements.define('tsp-top-page-button-container', TopPageButtonContainer)
 })()

@@ -55,26 +55,27 @@
 
     const template = `
         <template id="PageFrame">
-            <div class="${sheet.classes.innerContainer}">
-                <div class="${sheet.classes.readerContainer}">
-                    <div is="tsp-reader"></div>
+            <div class="${sheet.classes.main}">
+                <div class="${sheet.classes.innerContainer}">
+                    <div class="${sheet.classes.readerContainer}">
+                        <tsp-reader></tsp-reader>
+                    </div>
+                    <tsp-text-ribbon no-expand-button class="${sheet.classes.textRibbon}"></tsp-text-ribbon>
+                    <tsp-sidebar></tsp-sidebar>
                 </div>
-                <div is="tsp-text-ribbon" no-expand-button class="${sheet.classes.textRibbon}"></div>
-                <div is="tsp-sidebar"></div>
             </div>
         </template>
     `
 
-    class PageFrame extends HTMLDivElement {
+    class PageFrame extends HTMLElement {
         constructor() {
             super()
-            this.classList.add(sheet.classes.main)
             this.appendChild(TSP.utils.template(template))
         }
 
         connectedCallback() {
-            this.reader = this.querySelector('div[is="tsp-reader"]')
-            this.sideBar = this.querySelector('div[is="tsp-sidebar"]')
+            this.reader = this.querySelector('tsp-reader')
+            this.sideBar = this.querySelector('tsp-sidebar')
             TSP.state.set('SideBar.component', this.sideBar)
         }
 
@@ -83,5 +84,5 @@
         }
     }
 
-    customElements.define('tsp-page-frame', PageFrame, { extends: 'div' })
+    customElements.define('tsp-page-frame', PageFrame)
 })()

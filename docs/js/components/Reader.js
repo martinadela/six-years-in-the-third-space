@@ -102,26 +102,28 @@
         .attach()
 
     const template = `
-            <template id="Reader">
-                <div is="tsp-top-page-button-container" class="${sheet.classes.closeButton}">
+        <template id="Reader">
+            <div class="${sheet.classes.main}">
+                <tsp-top-page-button-container class="${sheet.classes.closeButton}">
                     <button>X</button>
-                </div>
+                </tsp-top-page-button-container>
                 <div class="${sheet.classes.innerContainer}">
                     <div class="${sheet.classes.contentContainer}"></div>
                 </div>
-            </template>
-        `
+            </div>
+        </template>
+    `
 
-    class Reader extends HTMLDivElement {
+    class Reader extends HTMLElement {
         constructor() {
             super()
-            this.classList.add(sheet.classes.main)
             this.contents = {
                 contributions: {},
                 collaborators: {},
                 otherPages: {},
             }
             this.appendChild(TSP.utils.template(template))
+            this.element = this.querySelector(`.${sheet.classes.main}`)
 
             this.contentContainer = this.querySelector(
                 `.${sheet.classes.contentContainer}`
@@ -143,10 +145,10 @@
         connectedCallback() {}
 
         currentUrlChanged(url) {
-            this.classList.remove('contributions')
-            this.classList.remove('collaborators')
+            this.element.classList.remove('contributions')
+            this.element.classList.remove('collaborators')
             if (url === '') {
-                this.classList.remove('enter')
+                this.element.classList.remove('enter')
             } else if (this.contents.contributions[url]) {
                 this.setContent(
                     'contributions',
@@ -170,13 +172,13 @@
 
         setContent(className, content) {
             this.contentContainer.innerHTML = content.html
-            this.classList.add('enter')
-            this.classList.add(className)
+            this.element.classList.add('enter')
+            this.element.classList.add(className)
         }
 
         setContent404() {
             this.contentContainer.innerHTML = 'Page not found'
-            this.classList.add('enter')
+            this.element.classList.add('enter')
         }
 
         load() {
@@ -221,5 +223,5 @@
         }
     }
 
-    customElements.define('tsp-reader', Reader, { extends: 'div' })
+    customElements.define('tsp-reader', Reader)
 })()

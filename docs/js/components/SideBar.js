@@ -29,7 +29,7 @@
             color: TSP.config.get('styles.colors.Highlight1'),
             textTransform: 'uppercase',
             fontStyle: 'italic',
-            '& a': {
+            '& tsp-anchor': {
                 display: 'inline-block',
                 height: '100%',
                 width: '100%',
@@ -59,19 +59,19 @@
             <div class="${sheet.classes.ulContainer}">
                 <ul class="${sheet.classes.ul}">
                     <li class="${sheet.classes.li}">
-                        <a is="tsp-anchor" href="/book-index">
+                        <tsp-anchor href="/book-index">
                             Index
-                        </a>
+                        </tsp-anchor>
                     </li>
                     <li class="${sheet.classes.li}">
-                        <a is="tsp-anchor" href="/about">
+                        <tsp-anchor href="/about">
                             About this book
-                        </a>
+                        </tsp-anchor>
                     </li>
                     <li class="${sheet.classes.li}">
-                        <a is="tsp-anchor" href="/third-space">
+                        <tsp-anchor href="/third-space">
                             Third space collective
-                        </a>
+                        </tsp-anchor>
                     </li>
                 </ul>
             </div>
@@ -100,7 +100,7 @@
                     },
                 },
                 '&:not(.mainPage)': {
-                    '& button[is="tsp-expand-menu-button"]': {
+                    '& tsp-expand-menu-button': {
                         display: 'none'
                     }
                 }
@@ -139,9 +139,9 @@
         <template id="SideBarDesktop">
             <div class="${sheetDesktop.classes.innerContainer}">
                 ${sharedHtml.h1(sheetDesktop)}
-                <div is="tsp-text-ribbon" class="${
+                <tsp-text-ribbon class="${
                     sheetDesktop.classes.textRibbon
-                }"></div>
+                }"></tsp-text-ribbon>
                 ${sharedHtml.ulContainer(sheetDesktop)}
             </div>
         </template>
@@ -185,7 +185,7 @@
                     background: 'rgb(255,255,255)',
                     background:
                         `linear-gradient(270deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) calc(100% - ${BUTTON_SIZE} / 2), rgba(255,255,255,0) 100%)`,
-                    '& > button[is="tsp-expand-menu-button"]': {
+                    '& > tsp-expand-menu-button': {
                         display: 'inline-block',
                     },
                     '& $innerContainer': {
@@ -241,21 +241,18 @@
 
     const templateMobile = `
         <template id="SideBarMobile">
-            <div is="tsp-top-page-button-container" class="${sheetMobile.classes.expandMenuButtonContainer}" >
-                <button 
-                    is="tsp-expand-menu-button"
-                >
+            <tsp-top-page-button-container class="${sheetMobile.classes.expandMenuButtonContainer}" >
+                <tsp-expand-menu-button>
                     <span>▾</span>
                     <span>X</span>
-                </button>
-            </div>
+                </tsp-expand-menu-button>
+            </tsp-top-page-button-container>
 
             <div class="${sheetMobile.classes.innerContainer}">
                 ${sharedHtml.h1(sheetMobile, `
-                    <button 
-                        is="tsp-expand-menu-button"
+                    <tsp-expand-menu-button
                         class="${sheetMobile.classes.expandMenuButtonMainPage}"
-                    >◀</button>
+                    >◀</tsp-expand-menu-button>
                 `)}
                 ${sharedHtml.ulContainer(sheetMobile)}
             </div>
@@ -264,7 +261,7 @@
 
     //****************************** Component ******************************/
 
-    class SideBar extends HTMLDivElement {
+    class SideBar extends HTMLElement {
         constructor() {
             super()
             this.mountHtml()
@@ -323,5 +320,5 @@
         }
     }
 
-    customElements.define('tsp-sidebar', SideBar, { extends: 'div' })
+    customElements.define('tsp-sidebar', SideBar)
 })()
