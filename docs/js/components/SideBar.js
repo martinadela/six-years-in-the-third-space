@@ -10,7 +10,7 @@
         .createStyleSheet({
             main: {
                 width: `${SIDEBAR_WIDTH_PERCENT}%`,
-                maxWidth: '20em',
+                maxWidth: '30em',
                 color: TSP.config.get('styles.colors.Highlight1'),
                 fontFamily: TSP.config.get('styles.fontFamilies.title'),
                 '& h1 button[is="tsp-expand-menu-button"]': {
@@ -90,6 +90,9 @@
                 [MOBILE_MEDIA_QUERY]: {
                     borderLeft: 'none',
                     borderBottom: 'none',
+                },
+                '@media screen and (min-width: 1100px)': {
+                    fontSize: '250%'
                 }
             },
             ulContainer: {},

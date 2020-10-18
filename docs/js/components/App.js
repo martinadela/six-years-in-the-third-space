@@ -83,7 +83,6 @@
             this.appendChild(TSP.utils.template(template))
 
             // ------------ event handlers
-            this.addEventListener('click', this.onClick.bind(this), false)
             window.addEventListener('popstate', (e) => {
                 TSP.state.set(
                     'App.currentUrl',
@@ -91,8 +90,14 @@
                 )
             })
             window.addEventListener('resize', () => {
-                TSP.state.set('window.width', window.innerWidth) 
-                TSP.state.set('window.height', window.innerHeight)
+                const rect = document.body.getBoundingClientRect()
+                TSP.state.set('window.dimensions', new THREE.Vector2(
+                    rect.width, 
+                    rect.height,
+                )) 
+            })
+            window.addEventListener('touchstart', () => {
+                TSP.state.set('App.isTouch', true)
             })
 
             // ------------ state change handlers
@@ -121,14 +126,6 @@
                 // We trigger the route change only after the canvas has started,
                 // otherwise we will miss some state (satellites, positions, etc ...)
                 TSP.utils.navigateTo(TSP.utils.relativeUrl(location.pathname))
-            }
-        }
-
-        onClick() {
-            const hoveredObject = TSP.state.get('Canvas3D.hoveredObject')
-            if (hoveredObject !== null) {
-                TSP.state.set('Canvas3D.hoveredObject', null)
-                TSP.utils.navigateTo(hoveredObject.getUrl())
             }
         }
 

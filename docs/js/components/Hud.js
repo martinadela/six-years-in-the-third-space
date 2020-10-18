@@ -88,7 +88,7 @@
         currentUrlChanged(url) {
             const hoveredObject = TSP.state.get('Canvas3D.hoveredObject')
             if (url === '' && hoveredObject !== null) {
-                this.bringIn()
+                this.bringIn(hoveredObject)
             } else {
                 this.bringOut()
             }

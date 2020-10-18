@@ -48,6 +48,15 @@
         ))
     }
 
+    // calculate position in normalized device coordinates
+    // (-1 to +1) for both components
+    // Ref : https://threejs.org/docs/#api/en/core/Raycaster
+    TSP.utils.toNDCPosition = (position_Screen, canvasDimensions_Screen, position_NDC) => {
+        position_NDC.x = (position_Screen.x / canvasDimensions_Screen.x) * 2 - 1
+        position_NDC.y = -(position_Screen.y / canvasDimensions_Screen.y) * 2 + 1
+        return position_NDC
+    }
+
     // REF : https://stackoverflow.com/questions/25224153/how-can-i-get-the-normalized-vector-of-the-direction-an-object3d-is-facing
     TSP.utils.getObjectDirection = (object3D) => {
         const vector = new THREE.Vector3( 0, 0, 1 )
@@ -84,8 +93,8 @@
         return new THREE.Box2(
             new THREE.Vector2(0, 0),
             new THREE.Vector2(
-                TSP.state.get('window.width'),
-                TSP.state.get('window.height'),
+                window.innerWidth,
+                window.innerHeight,
             ),
         )
     }
@@ -148,6 +157,7 @@
     }
 
     // Compute an orbital transform for `camera`, so that `boundingBox_World` is placed inside `boundingBox_Screen`.
+    // TODO : for all these calculations, use NDC.
     TSP.utils.computeCameraOrbitalTransform = (camera, boundingBox_World, canvasBoundingBox_Screen, boundingBox_Screen) => {
         const boundingBoxCenter_World = boundingBox_World.getCenter(new THREE.Vector3())
         

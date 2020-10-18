@@ -1,11 +1,14 @@
 ;(function () {
     const STATE = {
         window: {
-            width: window.innerWidth,
-            height: window.innerHeight,
+            dimensions: new THREE.Vector2(
+                window.innerWidth, 
+                window.innerHeight,
+            ),
         },
         App: {
             currentUrl: document.location.pathname,
+            isTouch: false,
         },
         Canvas3D: {
             loaded: false,
@@ -52,11 +55,11 @@
 
     TSP.state.listen = (path, callback) => {
         const value = TSP.utils.getOrThrow(STATE, path)
-        if (_.isObject(value) || _.isArray(value)) {
+        if (!(value instanceof THREE.Vector2) && (_.isObject(value) || _.isArray(value))) {
             throw new Error(
                 'Path "' +
-                    path.join(', ') +
-                    ' is a complex value and cant be listened to.'
+                    path +
+                    '" is a complex value and cant be listened to.'
             )
         }
         LISTENERS[path] = LISTENERS[path] || []

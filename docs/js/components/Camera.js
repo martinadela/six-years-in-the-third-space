@@ -18,11 +18,7 @@
                 this.currentUrlChanged.bind(this)
             )
             TSP.state.listen(
-                'window.width',
-                this.windowDimensionsChanged.bind(this)
-            )
-            TSP.state.listen(
-                'window.height',
+                'window.dimensions',
                 this.windowDimensionsChanged.bind(this)
             )
 
@@ -42,7 +38,8 @@
         }
         
         updateSize() {
-            this.camera.aspect = TSP.state.get('window.width') / TSP.state.get('window.height')
+            const windowDimensions = TSP.state.get('window.dimensions')
+            this.camera.aspect = windowDimensions.x / windowDimensions.y
             this.camera.updateProjectionMatrix()
         }
 
