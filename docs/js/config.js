@@ -33,6 +33,8 @@
                 Text: 'rgb(112, 109, 109)',
                 TextBold: 'rgb(19, 18, 18)',
                 H2: 'rgb(25, 233, 53)',
+                Loader: '#3DA6FC',
+                LoaderBackground: 'white',
             },
             spacings: {
                 size2: '2rem',

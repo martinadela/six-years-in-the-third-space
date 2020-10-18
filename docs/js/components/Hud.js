@@ -55,6 +55,10 @@
                 'App.currentUrl',
                 this.currentUrlChanged.bind(this)
             )
+            TSP.state.listen(
+                'Canvas3D.orbitControls',
+                this.orbitControlsChanged.bind(this)
+            )
         }
 
         bringOut() {
@@ -95,6 +99,13 @@
                 this.bringIn(hoveredObject)
             } else {
                 this.bringOut()
+            }
+        }
+
+        orbitControlsChanged() {
+            const hoveredObject = TSP.state.get('Canvas3D.hoveredObject')
+            if (hoveredObject) {
+                this.bringIn(hoveredObject)
             }
         }
     }

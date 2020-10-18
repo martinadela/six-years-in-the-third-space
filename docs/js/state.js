@@ -16,6 +16,8 @@
             satellites: {},
             planet: null,
             component: null,
+            // This will stay null, we only keep it to trigger events
+            orbitControls: null
         },
         Reader: {
             loaded: false,

@@ -161,6 +161,7 @@
 
         navigateToHoveredObject() {
             const hoveredDatum = this.hoverableObjectsManager.getHoveredDatum()
+            this.hoverableObjectsManager.clearState()
             TSP.state.set('Canvas3D.hoveredObject', null)
             TSP.utils.navigateTo(hoveredDatum.getUrl())
         }
@@ -353,6 +354,10 @@
             )
         }
 
+        clearState() {
+            this.hoveredObject = null
+        }
+
         _findHoverableObject(object3D) {
             while (
                 !(object3D.uuid in this.hoverableObjectsUuid) &&
@@ -374,12 +379,11 @@
     class Canvas3DOrbitControls {
         constructor(camera, canvas) {
             this.orbitControls = new THREE.OrbitControls(camera, canvas)
-            this.animate = this._animateNoop
+            this.orbitControls.addEventListener('end', this.onOrbitInteractionEnd.bind(this))
         }
 
-        _animateNoop() {}
-        _animateInteractiveControls() {
-            this.orbitControls.update()
+        onOrbitInteractionEnd() {
+            TSP.state.set('Canvas3D.orbitControls', null)            
         }
     }
 

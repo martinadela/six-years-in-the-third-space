@@ -29,6 +29,7 @@
             color: TSP.config.get('styles.colors.Highlight1'),
             textTransform: 'uppercase',
             fontStyle: 'italic',
+            cursor: 'pointer',
             '& tsp-anchor': {
                 display: 'inline-block',
                 height: '100%',
@@ -234,7 +235,9 @@
                 }
             },
             expandMenuButtonMainPage: {
-                fontSize: '100%'
+                fontSize: '0.7em',
+                position: 'relative',
+                bottom: '0.15em',
             },
         })
         .attach()
