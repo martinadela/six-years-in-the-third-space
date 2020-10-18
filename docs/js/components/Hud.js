@@ -4,13 +4,13 @@
 
     const sheet = jss.default
         .createStyleSheet({
-            'main': {
+            main: {
                 pointerEvents: 'none',
                 userSelect: 'none',
                 position: 'absolute',
                 transition: `top ${TRANSITION_DURATION}ms ease-in-out, opacity ${TRANSITION_DURATION}ms ease-in-out`,
             },
-            'arrow': {
+            arrow: {
                 position: 'absolute',
                 width: '100%',
                 top: '50%',
@@ -18,19 +18,18 @@
                 color: HIGHLIGHT_COLOR1,
                 fontSize: '300%',
                 transformOrigin: '0 0',
-                animation: '$circle 20s linear infinite'
+                animation: '$circle 20s linear infinite',
             },
             '@keyframes circle': {
-                'from': {
-                    transform: 'rotate(0deg) translate(50%, -50%)'
+                from: {
+                    transform: 'rotate(0deg) translate(50%, -50%)',
                 },
-                'to': {
-                    transform: 'rotate(360deg) translate(50%, -50%)'
+                to: {
+                    transform: 'rotate(360deg) translate(50%, -50%)',
                 },
             },
         })
         .attach()
-
 
     const template = `
         <template id="Hud">
@@ -70,7 +69,7 @@
             const circle = TSP.utils.getBoundingCircleInScreen(
                 TSP.state.get('Canvas3D.component').getCamera(),
                 hoveredObject.getBoundingSphere(),
-                TSP.utils.getCanvasBoundingBoxOnScreen(),
+                TSP.utils.getCanvasBoundingBoxOnScreen()
             )
 
             this.style.opacity = 1

@@ -50,7 +50,7 @@
                 position: 'absolute',
                 marginRight: '0.5em',
                 fontSize: '150%',
-            }
+            },
         })
         .attach()
 

@@ -2,8 +2,12 @@
     const COLOR_HIGHLIGHT1 = TSP.config.get('styles.colors.Highlight1')
     const COLOR_BACKGROUND = TSP.config.get('styles.colors.ContentBackground')
     const COLOR_TEXT_BOLD = TSP.config.get('styles.colors.TextBold')
-    const TRANSITION_DELAY = TSP.config.get('transitions.duration') * TSP.config.get('transitions.reader')[0]
-    const TRANSITION_DURATION = TSP.config.get('transitions.duration') * TSP.config.get('transitions.reader')[1]
+    const TRANSITION_DELAY =
+        TSP.config.get('transitions.duration') *
+        TSP.config.get('transitions.reader')[0]
+    const TRANSITION_DURATION =
+        TSP.config.get('transitions.duration') *
+        TSP.config.get('transitions.reader')[1]
     const sheet = jss.default
         .createStyleSheet({
             main: {
@@ -21,52 +25,52 @@
                         transitionDelay: `${TRANSITION_DELAY}ms`,
                     },
                     opacity: 1,
-                    // PageFrame disable pointer events to let control to orbit controls, 
+                    // PageFrame disable pointer events to let control to orbit controls,
                     // so we need to reactivate it here
                     pointerEvents: 'initial',
                 },
                 '&.contributions $contentContainer': {
                     textAlign: 'justify',
-    
+
                     '& p': {
                         marginBottom: '1em',
                         textAlign: 'justify',
                     },
-    
+
                     '& h2': {
                         marginBottom: '0em',
                         marginTop: '1em',
                         '& .subtitle': {
-                            fontSize: "80%",
-                            marginBottom: "2em",
+                            fontSize: '80%',
+                            marginBottom: '2em',
                         },
                     },
-    
+
                     '& .textcontent': {
-                        textAlign: "left",
+                        textAlign: 'left',
                     },
-    
+
                     '& .poemparagraph': {
                         textAlign: 'left',
                     },
-    
-                    '& .note': { 
+
+                    '& .note': {
                         position: 'relative',
-                        top: '-0.5em', 
+                        top: '-0.5em',
                     },
-    
+
                     '& .imagecaption': {
                         marginBottom: '2em',
                     },
-    
+
                     '& .imagecaption-title': {
                         fontWeight: 'bold',
                     },
-    
+
                     '& .imagecaption-description': {
                         fontStyle: 'italic',
                     },
-    
+
                     '& .bold': {
                         color: COLOR_TEXT_BOLD,
                         marginTop: '1em',
@@ -77,8 +81,8 @@
                         color: 'rgb(248, 51, 16)',
                         marginBottom: '0em',
                         marginTop: '3em',
-                    }
-                }
+                    },
+                },
             },
             innerContainer: {
                 backgroundColor: COLOR_BACKGROUND,
@@ -93,7 +97,9 @@
                 width: '4rem',
                 transform: 'translate(-50%, -50%)',
                 backgroundColor: COLOR_BACKGROUND,
-                border: `solid ${TSP.config.get('styles.dimensions.borderThickness')} ${COLOR_HIGHLIGHT1}`,
+                border: `solid ${TSP.config.get(
+                    'styles.dimensions.borderThickness'
+                )} ${COLOR_HIGHLIGHT1}`,
                 color: COLOR_HIGHLIGHT1,
                 borderRadius: '2rem',
                 fontSize: '200%',
@@ -103,14 +109,14 @@
                     '& img': {
                         width: '100%',
                         marginTop: '1em',
-                        marginBottom: '1em',    
-                    }
+                        marginBottom: '1em',
+                    },
                 },
             },
         })
         .attach()
 
-        const template = `
+    const template = `
             <template id="Reader">
                 <button class="${sheet.classes.closeButton}">X</button>
                 <div class="${sheet.classes.innerContainer}">
@@ -126,14 +132,21 @@
             this.contents = {
                 contributions: {},
                 collaborators: {},
-                otherPages: {}
+                otherPages: {},
             }
             this.appendChild(TSP.utils.template(template))
-            
-            this.contentContainer = this.querySelector(`.${sheet.classes.contentContainer}`)
-            this.closeButton = this.querySelector(`.${sheet.classes.closeButton}`)
 
-            this.closeButton.addEventListener('click', this.closeClicked.bind(this))
+            this.contentContainer = this.querySelector(
+                `.${sheet.classes.contentContainer}`
+            )
+            this.closeButton = this.querySelector(
+                `.${sheet.classes.closeButton}`
+            )
+
+            this.closeButton.addEventListener(
+                'click',
+                this.closeClicked.bind(this)
+            )
             TSP.state.listen(
                 'App.currentUrl',
                 this.currentUrlChanged.bind(this)
@@ -148,9 +161,15 @@
             if (url === '') {
                 this.classList.remove('enter')
             } else if (this.contents.contributions[url]) {
-                this.setContent('contributions', this.contents.contributions[url])
+                this.setContent(
+                    'contributions',
+                    this.contents.contributions[url]
+                )
             } else if (this.contents.collaborators[url]) {
-                this.setContent('collaborators', this.contents.collaborators[url])
+                this.setContent(
+                    'collaborators',
+                    this.contents.collaborators[url]
+                )
             } else if (this.contents.otherPages[url]) {
                 this.setContent('otherPages', this.contents.otherPages[url])
             } else {
@@ -177,24 +196,37 @@
             const contributions = TSP.config.get('contributions')
             const collaborators = TSP.config.get('collaborators')
             const otherPages = TSP.config.get('otherPages')
-            
-            const loadContributionsPromise = this.loadContent('contributions', contributions)
-            const loadCollaboratorsPromise = this.loadContent('collaborators', collaborators)
-            const loadOtherPagesPromise = this.loadContent('otherPages', otherPages)
-            
 
-            Promise.all([loadContributionsPromise, loadCollaboratorsPromise, loadOtherPagesPromise])
-                .then(() => {
-                    TSP.state.set('Reader.loaded', true)
-                })
+            const loadContributionsPromise = this.loadContent(
+                'contributions',
+                contributions
+            )
+            const loadCollaboratorsPromise = this.loadContent(
+                'collaborators',
+                collaborators
+            )
+            const loadOtherPagesPromise = this.loadContent(
+                'otherPages',
+                otherPages
+            )
+
+            Promise.all([
+                loadContributionsPromise,
+                loadCollaboratorsPromise,
+                loadOtherPagesPromise,
+            ]).then(() => {
+                TSP.state.set('Reader.loaded', true)
+            })
         }
 
         loadContent(group, definitions) {
             return Promise.all(
-                definitions.map((definition) => TSP.utils.fetch(definition.contentUrl))
+                definitions.map((definition) =>
+                    TSP.utils.fetch(definition.contentUrl)
+                )
             ).then((contents) => {
                 contents.forEach((html, i) => {
-                    this.contents[group][definitions[i].url] = { 
+                    this.contents[group][definitions[i].url] = {
                         html: html,
                     }
                 })

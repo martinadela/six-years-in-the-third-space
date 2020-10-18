@@ -1,5 +1,7 @@
 ;(function () {
-    const TEXTURE_RESOLUTION = Math.round(Math.pow(window.innerWidth / 1.7 * window.innerHeight / 1.7, 0.5)) // 1024 / 3
+    const TEXTURE_RESOLUTION = Math.round(
+        Math.pow(((window.innerWidth / 1.7) * window.innerHeight) / 1.7, 0.5)
+    ) // 1024 / 3
     console.log('RESOLUTION', TEXTURE_RESOLUTION)
 
     // REF : https://stackoverflow.com/questions/32233805/im-new-to-threejs-how-to-create-a-sky-dome
@@ -13,12 +15,12 @@
 
         load() {
             return Promise.all([
-                fetch(TSP.utils.absoluteUrl('shaders/texture.vert')).then((response) =>
-                    response.text()
-                ),
-                fetch(TSP.utils.absoluteUrl('shaders/nebula.frag')).then((response) =>
-                    response.text()
-                ),
+                fetch(
+                    TSP.utils.absoluteUrl('shaders/texture.vert')
+                ).then((response) => response.text()),
+                fetch(
+                    TSP.utils.absoluteUrl('shaders/nebula.frag')
+                ).then((response) => response.text()),
             ]).then((shaders) => {
                 this.shaders = {
                     vertex: shaders[0],
@@ -49,7 +51,11 @@
                     starsQuantity: { type: 'f', value: params.starsQuantity },
                     filterColor: {
                         type: 'vec3',
-                        value: new THREE.Vector3(params.filterColor[0], params.filterColor[1], params.filterColor[2]),
+                        value: new THREE.Vector3(
+                            params.filterColor[0],
+                            params.filterColor[1],
+                            params.filterColor[2]
+                        ),
                     },
                     filterOpacity: {
                         type: 'f',
@@ -76,21 +82,31 @@
                 filterColor: TSP.config.get('universe.filterColor'),
                 filterOpacity: TSP.config.get('universe.filterOpacity'),
                 nebulaOpacity: TSP.config.get('universe.nebulaOpacity'),
-                whiteCloudsIntensity: TSP.config.get('universe.whiteCloudsIntensity'),
+                whiteCloudsIntensity: TSP.config.get(
+                    'universe.whiteCloudsIntensity'
+                ),
             }
 
-            this.sphere = TSP.utils.getTexturedSphereMesh(TSP.config.get('universe.radius'), (i) => {
-                const shaderMaterial = this.createShaderMaterial(i, params)
-                const material = new THREE.MeshBasicMaterial({ side: THREE.BackSide })
-                material.map = TSP.utils.prerenderTexture(TSP.state.get('Canvas3D.component').getRenderer(), shaderMaterial, TEXTURE_RESOLUTION, TEXTURE_RESOLUTION)
-                return material
-            })
+            this.sphere = TSP.utils.getTexturedSphereMesh(
+                TSP.config.get('universe.radius'),
+                (i) => {
+                    const shaderMaterial = this.createShaderMaterial(i, params)
+                    const material = new THREE.MeshBasicMaterial({
+                        side: THREE.BackSide,
+                    })
+                    material.map = TSP.utils.prerenderTexture(
+                        TSP.state.get('Canvas3D.component').getRenderer(),
+                        shaderMaterial,
+                        TEXTURE_RESOLUTION,
+                        TEXTURE_RESOLUTION
+                    )
+                    return material
+                }
+            )
         }
 
         animate() {
-            this.sphere.applyQuaternion(
-                this.rotationQuaternion
-            )
+            this.sphere.applyQuaternion(this.rotationQuaternion)
         }
     }
 

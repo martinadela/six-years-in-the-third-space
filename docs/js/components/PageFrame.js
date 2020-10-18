@@ -15,7 +15,6 @@
                 height: '100%',
                 // To allow orbital controls
                 pointerEvents: 'none',
-
             },
 
             innerContainer: {
@@ -34,7 +33,7 @@
             readerContainer: {
                 flex: 1,
                 // Counter-intuitively, with the flex it forces the component to shrink / expand to the right size
-                width: '0%'
+                width: '0%',
             },
 
             textRibbon: {
@@ -42,7 +41,7 @@
                 [MOBILE_MEDIA_QUERY]: {
                     display: 'block',
                 },
-            }
+            },
         })
         .attach()
 

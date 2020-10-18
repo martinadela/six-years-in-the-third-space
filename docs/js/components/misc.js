@@ -1,5 +1,4 @@
 ;(function () {
-
     class Anchor extends HTMLAnchorElement {
         constructor() {
             super()

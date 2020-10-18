@@ -1,7 +1,11 @@
 ;(function () {
-    const COLOR_SCROLLBAR_BACKGROUND = TSP.config.get('styles.colors.ScrollbarBackground')
+    const COLOR_SCROLLBAR_BACKGROUND = TSP.config.get(
+        'styles.colors.ScrollbarBackground'
+    )
     const COLOR_SCROLLBAR = TSP.config.get('styles.colors.Scrollbar')
-    const COLOR_SCROLLBAR_BORDER = TSP.config.get('styles.colors.ScrollbarBorder')
+    const COLOR_SCROLLBAR_BORDER = TSP.config.get(
+        'styles.colors.ScrollbarBorder'
+    )
     const FONT_SIZE_DESKTOP = TSP.config.get('styles.fontSizes.desktop')
     const FONT_FAMILY_NORMAL = TSP.config.get('styles.fontFamilies.normal')
     const FONT_FAMILY_TITLE = TSP.config.get('styles.fontFamilies.title')
@@ -44,10 +48,10 @@
                     padding: 0,
                 },
                 '*::-webkit-scrollbar': {
-                    width: '12px'
+                    width: '12px',
                 },
                 '*::-webkit-scrollbar-track': {
-                    background: COLOR_SCROLLBAR_BACKGROUND
+                    background: COLOR_SCROLLBAR_BACKGROUND,
                 },
                 '*::-webkit-scrollbar-thumb': {
                     backgroundColor: COLOR_SCROLLBAR,
@@ -62,12 +66,11 @@
                     listStyle: 'none',
                 },
                 a: {
-                    textDecoration: 'none'
-                }
-            }
+                    textDecoration: 'none',
+                },
+            },
         })
         .attach()
-
 
     const template = `
         <template id="App">
@@ -91,10 +94,10 @@
             })
             window.addEventListener('resize', () => {
                 const rect = document.body.getBoundingClientRect()
-                TSP.state.set('window.dimensions', new THREE.Vector2(
-                    rect.width, 
-                    rect.height,
-                )) 
+                TSP.state.set(
+                    'window.dimensions',
+                    new THREE.Vector2(rect.width, rect.height)
+                )
             })
             window.addEventListener('touchstart', () => {
                 TSP.state.set('App.isTouch', true)

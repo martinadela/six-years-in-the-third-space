@@ -4,7 +4,9 @@
     const BORDER_STYLE = `solid ${TSP.config.get(
         'styles.colors.Highlight1'
     )} ${TSP.config.get('styles.dimensions.borderThickness')}`
-    const SIDEBAR_WIDTH_PERCENT = TSP.config.get('styles.dimensions.sidebarDesktopWidth')
+    const SIDEBAR_WIDTH_PERCENT = TSP.config.get(
+        'styles.dimensions.sidebarDesktopWidth'
+    )
 
     const sheet = jss.default
         .createStyleSheet({
@@ -14,22 +16,22 @@
                 color: TSP.config.get('styles.colors.Highlight1'),
                 fontFamily: TSP.config.get('styles.fontFamilies.title'),
                 '& h1 button[is="tsp-expand-menu-button"]': {
-                    display: 'none'
+                    display: 'none',
                 },
                 [MOBILE_MEDIA_QUERY]: {
                     width: '100%',
                     maxWidth: 'initial',
                     '& div[is="tsp-text-ribbon"]': {
-                        display: 'none'
+                        display: 'none',
                     },
                     '& h1 button[is="tsp-expand-menu-button"]': {
-                        display: 'inline-block'
+                        display: 'inline-block',
                     },
                     '& $innerContainer': {
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'flex-end',
-                    }
+                    },
                 },
 
                 /********** Menu transitions **********/
@@ -58,13 +60,12 @@
                     '& $ulContainer': {
                         [MOBILE_MEDIA_QUERY]: {
                             transform: 'translateX(0%)',
-                        }
+                        },
                     },
                     '& ul': {
                         transform: 'translateY(0%)',
-                    }
+                    },
                 },
-    
             },
             innerContainer: {},
             h1: {
@@ -83,7 +84,7 @@
                     },
                     [MOBILE_MEDIA_QUERY]: {
                         marginBottom: '0',
-                    }
+                    },
                 },
                 borderLeft: BORDER_STYLE,
                 borderBottom: BORDER_STYLE,
@@ -92,8 +93,8 @@
                     borderBottom: 'none',
                 },
                 '@media screen and (min-width: 1100px)': {
-                    fontSize: '250%'
-                }
+                    fontSize: '250%',
+                },
             },
             ulContainer: {},
             mobileMenuBackground: {
@@ -104,8 +105,9 @@
                     height: '100vh',
                     width: '100%',
                     background: 'rgb(255,255,255)',
-                    background: 'linear-gradient(270deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 84%, rgba(255,255,255,0) 100%)',
-                }
+                    background:
+                        'linear-gradient(270deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 84%, rgba(255,255,255,0) 100%)',
+                },
             },
             li: {
                 fontFamily: TSP.config.get('styles.fontFamilies.title'),
@@ -116,7 +118,7 @@
                     width: '100%',
                     padding: TSP.config.get('styles.spacings.size1'),
                     color: TSP.config.get('styles.colors.Highlight1'),
-                    pointerEvents: 'all'
+                    pointerEvents: 'all',
                 },
                 borderBottom: BORDER_STYLE,
                 borderLeft: BORDER_STYLE,
@@ -128,8 +130,8 @@
                 borderLeft: BORDER_STYLE,
             },
             expandMenuButtonMobile: {
-                fontSize: '130%'
-            }
+                fontSize: '130%',
+            },
         })
         .attach()
 
@@ -177,7 +179,10 @@
             this.classList.add(sheet.classes.main)
             this.appendChild(TSP.utils.template(template))
 
-            TSP.state.listen('SideBar.expanded', this.expandedChanged.bind(this))
+            TSP.state.listen(
+                'SideBar.expanded',
+                this.expandedChanged.bind(this)
+            )
             TSP.state.listen(
                 'App.currentUrl',
                 this.currentUrlChanged.bind(this)

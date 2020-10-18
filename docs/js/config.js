@@ -16,11 +16,11 @@
             duration: 2000,
             reader: [0.9, 0.1],
             hudDuration: 200,
-            sidebarDuration: 200
+            sidebarDuration: 200,
         },
         app: {
             // Must not have trailing slash
-            rootUrl: ''
+            rootUrl: '',
         },
         styles: {
             colors: {
@@ -52,7 +52,7 @@
             mobile: {
                 width: STYLES_MOBILE_THRESHOLD.width,
                 height: STYLES_MOBILE_THRESHOLD.height,
-                mediaQuery: `@media screen and (max-width: ${STYLES_MOBILE_THRESHOLD.width}px) , screen and (max-height: ${STYLES_MOBILE_THRESHOLD.height}px)`
+                mediaQuery: `@media screen and (max-width: ${STYLES_MOBILE_THRESHOLD.width}px) , screen and (max-height: ${STYLES_MOBILE_THRESHOLD.height}px)`,
             },
         },
         lights: {
@@ -65,7 +65,10 @@
         },
         universe: {
             // 2 colors in RGB format.
-            nebulaColors: [[235, 194, 226], [255, 199, 149]],
+            nebulaColors: [
+                [235, 194, 226],
+                [255, 199, 149],
+            ],
             // Between 0 and 2
             starsQuantity: 1.7,
             // Color of the general filter of the sky color
@@ -87,7 +90,7 @@
         planet: {
             radius: 8,
             color: 0xaaaaaa,
-            focusOnUrl: '/third-space'
+            focusOnUrl: '/third-space',
         },
         satellites: {
             planetaryRotationAxisRandomness: Math.PI * 0,
@@ -101,7 +104,8 @@
             {
                 url: '/contributions/The-Sky-Moved-City-to-City',
                 satelliteModelUrl: '/satellites/satellite2.glb',
-                contentUrl: '/pages/contributions/The-Sky-Moved-City-to-City.html',
+                contentUrl:
+                    '/pages/contributions/The-Sky-Moved-City-to-City.html',
             },
             // {
             //     url: '/contributions/3',
@@ -133,8 +137,6 @@
             //     satelliteModelUrl: '/satellites/satellite9.glb',
             //     contentUrl: '/pages/contributions/blu.html',
             // },
-
-
 
             // {
             //     url: '/contributions/blo',
@@ -206,9 +208,10 @@
         ],
 
         sidebar: {
-            'textRollDuration': 20, // in seconds
-            'textRolling': 'What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry.  What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
-        }
+            textRollDuration: 20, // in seconds
+            textRolling:
+                'What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry.  What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+        },
     }
 
     TSP.config = {}

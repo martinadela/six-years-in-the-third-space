@@ -31,7 +31,7 @@
         <link
             href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,700;1,400;1,700&display=swap"
             rel="stylesheet"
-        />  
+        />
     </head>
     <body>
         <div id="root"></div>
@@ -71,16 +71,16 @@
         <script src="/js/init.js"></script>
         <script>
             if (TSP.config.get('debug.performance')) {
-                var script=document.createElement('script')
-                script.onload=function(){
-                    var stats=new Stats()
+                var script = document.createElement('script')
+                script.onload = function () {
+                    var stats = new Stats()
                     document.body.appendChild(stats.dom)
                     requestAnimationFrame(function loop() {
                         stats.update()
                         requestAnimationFrame(loop)
                     })
                 }
-                script.src='//mrdoob.github.io/stats.js/build/stats.min.js'
+                script.src = '//mrdoob.github.io/stats.js/build/stats.min.js'
                 document.head.appendChild(script)
             }
         </script>

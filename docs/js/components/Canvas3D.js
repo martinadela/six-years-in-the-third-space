@@ -77,7 +77,11 @@
         }
 
         onMouseMove(event) {
-            if (TSP.state.get('App.isTouch') || this.frameCount % HOVER_DETECT_DEBOUNCE !== 0 || !this.hoverDetectionActive) {
+            if (
+                TSP.state.get('App.isTouch') ||
+                this.frameCount % HOVER_DETECT_DEBOUNCE !== 0 ||
+                !this.hoverDetectionActive
+            ) {
                 return
             }
             this.mousePosition_Screen.set(event.clientX, event.clientY)
@@ -86,7 +90,7 @@
 
         onClick() {
             if (TSP.state.get('App.isTouch') || !this.hoverDetectionActive) {
-                return 
+                return
             }
             if (TSP.state.get('Canvas3D.hoveredObject') !== null) {
                 this.navigateToHoveredObject()
@@ -95,15 +99,18 @@
 
         onTouchStart(event) {
             if (!this.hoverDetectionActive) {
-                return 
+                return
             }
             this.hadTouchMove = false
-            this.mousePosition_Screen.set(event.touches[0].clientX, event.touches[0].clientY)
+            this.mousePosition_Screen.set(
+                event.touches[0].clientX,
+                event.touches[0].clientY
+            )
         }
 
         onTouchMove() {
             if (!this.hoverDetectionActive) {
-                return 
+                return
             }
             this.hadTouchMove = true
         }
@@ -118,9 +125,12 @@
             } else {
                 const actualHoveredObject = this.hoverableObjectsManager.detectHoveredObject(
                     this.getMousePositionNDC(this.mousePosition_Screen),
-                    this.tspCamera.camera,
+                    this.tspCamera.camera
                 )
-                if (hoveredDatum === this.hoverableObjectsManager.getDatum(actualHoveredObject)) {
+                if (
+                    hoveredDatum ===
+                    this.hoverableObjectsManager.getDatum(actualHoveredObject)
+                ) {
                     this.navigateToHoveredObject()
                 } else {
                     this.refreshHoveredObjectState()
@@ -131,10 +141,13 @@
         refreshHoveredObjectState() {
             const hasChanged = this.hoverableObjectsManager.setNewPosition(
                 this.getMousePositionNDC(this.mousePosition_Screen),
-                this.tspCamera.camera,
+                this.tspCamera.camera
             )
             if (hasChanged) {
-                TSP.state.set('Canvas3D.hoveredObject', this.hoverableObjectsManager.getHoveredDatum())
+                TSP.state.set(
+                    'Canvas3D.hoveredObject',
+                    this.hoverableObjectsManager.getHoveredDatum()
+                )
             }
         }
 
@@ -236,11 +249,7 @@
                 false
             )
 
-            window.addEventListener(
-                'click',
-                this.onClick.bind(this),
-                false
-            )
+            window.addEventListener('click', this.onClick.bind(this), false)
 
             window.addEventListener(
                 'touchstart',
@@ -298,7 +307,7 @@
             return this.hoveredObject ? this.getDatum(this.hoveredObject) : null
         }
 
-        // Detects if a new object is hovered and set it to `this.hoveredObject`. 
+        // Detects if a new object is hovered and set it to `this.hoveredObject`.
         // Returns `true` if the `Canvas3DHoverableObjectsManager` state changed, `false` otherwise.
         setNewPosition(mouse, camera) {
             const newHoveredObject = this.detectHoveredObject(mouse, camera)
@@ -346,7 +355,7 @@
         }
 
         getDatum(object3D) {
-            return object3D ? this.hoverableObjectsUuid[object3D.uuid]: null
+            return object3D ? this.hoverableObjectsUuid[object3D.uuid] : null
         }
     }
 
