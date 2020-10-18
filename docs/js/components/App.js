@@ -74,13 +74,15 @@
 
     const template = `
         <template id="App">
-            <canvas is="tsp-canvas-3d"></canvas>
-            <div is="tsp-page-frame"></div>
-            <div is="tsp-hud"></div>
+            <div>
+                <tsp-canvas-3d></tsp-canvas-3d>
+                <div is="tsp-page-frame"></div>
+                <div is="tsp-hud"></div>
+            </div>
         </template>
     `
 
-    class App extends HTMLDivElement {
+    class App extends HTMLElement {
         constructor() {
             super()
             this.appendChild(TSP.utils.template(template))
@@ -113,7 +115,7 @@
         }
 
         connectedCallback() {
-            this.canvas3D = this.querySelector('canvas[is="tsp-canvas-3d"]')
+            this.canvas3D = this.querySelector('tsp-canvas-3d')
             this.pageFrame = this.querySelector('div[is="tsp-page-frame"]')
             TSP.state.set('Canvas3D.component', this.canvas3D)
             this.canvas3D.load()
@@ -141,5 +143,5 @@
         }
     }
 
-    customElements.define('tsp-app', App, { extends: 'div' })
+    customElements.define('tsp-app', App)
 })()

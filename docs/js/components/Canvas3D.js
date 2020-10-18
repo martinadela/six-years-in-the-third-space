@@ -14,10 +14,11 @@
         })
         .attach()
 
-    class Canvas3D extends HTMLCanvasElement {
+    class Canvas3D extends HTMLElement {
         constructor() {
             super()
-            this.classList.add(sheet.classes.main)
+            this.canvas = document.createElement('canvas', { class: sheet.classes.main })
+            this.appendChild(this.canvas)
             this.frameCount = 0
 
             // ------------ Camera
@@ -31,7 +32,7 @@
             this.renderer = new THREE.WebGLRenderer({
                 alpha: true,
                 antialias: true,
-                canvas: this,
+                canvas: this.canvas,
             })
             this.renderer.physicallyCorrectLights = true
 
@@ -62,8 +63,8 @@
         updateSize() {
             const windowDimensions = TSP.state.get('window.dimensions')
             this.canvasDimensions_Screen = windowDimensions.clone()
-            this.width = windowDimensions.x * this.pixelRatio
-            this.height = windowDimensions.y * this.pixelRatio
+            this.canvas.width = windowDimensions.x * this.canvas.pixelRatio
+            this.canvas.height = windowDimensions.y * this.canvas.pixelRatio
             this.renderer.setPixelRatio(window.devicePixelRatio)
             this.renderer.setSize(windowDimensions.x, windowDimensions.y)
         }
@@ -179,7 +180,7 @@
             this.universe = new TSP.components.Universe()
             this.orbitControls = new Canvas3DOrbitControls(
                 this.getCamera(),
-                this
+                this.getCanvas()
             )
 
             const contributions = TSP.config.get('contributions')
@@ -211,6 +212,10 @@
 
         getRenderer() {
             return this.renderer
+        }
+
+        getCanvas() {
+            return this.canvas
         }
 
         load() {
@@ -295,7 +300,7 @@
         _animateNoop() {}
     }
 
-    customElements.define('tsp-canvas-3d', Canvas3D, { extends: 'canvas' })
+    customElements.define('tsp-canvas-3d', Canvas3D)
 
     class Canvas3DHoverableObjectsManager {
         constructor() {
