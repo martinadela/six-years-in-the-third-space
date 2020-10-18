@@ -13,6 +13,8 @@
                 },
                 width: '100%',
                 height: '100%',
+                // To keep size right even when sidebar is offset
+                overflow: 'hidden',
                 // To allow orbital controls
                 pointerEvents: 'none',
             },

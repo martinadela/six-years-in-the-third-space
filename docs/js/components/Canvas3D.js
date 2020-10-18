@@ -108,11 +108,18 @@
             )
         }
 
-        onTouchMove() {
+        onTouchMove(event) {
             if (!this.hoverDetectionActive) {
                 return
             }
-            this.hadTouchMove = true
+            const newMousePosition_Screen = new THREE.Vector2(
+                event.touches[0].clientX,
+                event.touches[0].clientY,
+            )
+            // Some devices trigger touch move immediatelly after touch start with same position.
+            if (!newMousePosition_Screen.equals(this.mousePosition_Screen)) {
+                this.hadTouchMove = true
+            }
         }
 
         onTouchEnd() {
