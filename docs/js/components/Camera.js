@@ -1,5 +1,6 @@
 ;(function () {
     const PLANET_FOCUS_ON_URL = TSP.config.get('planet.focusOnUrl')
+    const IS_MOBILE = TSP.config.get('styles.isMobile')
 
     class Camera {
         constructor() {
@@ -130,9 +131,16 @@
         }
 
         getObjectBoundingBoxOnScreen() {
-            const sidebarBoundingRect = TSP.state
-                .get('SideBar.component')
-                .getBoundingClientRect()
+            let sidebarBoundingRect
+
+            if (IS_MOBILE()) {
+                sidebarBoundingRect = document.querySelector('h1').getBoundingClientRect()
+            } else {
+                sidebarBoundingRect = TSP.state
+                    .get('SideBar.component')
+                    .getBoundingClientRect()
+            }
+            
             return new THREE.Box2(
                 new THREE.Vector2(
                     sidebarBoundingRect.left,

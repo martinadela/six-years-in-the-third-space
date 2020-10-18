@@ -41,6 +41,8 @@
             dimensions: {
                 borderThickness: '4px',
                 sidebarDesktopWidth: 30,
+                sidebarMobileWidth: 50,
+                buttonSize: '4rem',
             },
             fontSizes: {
                 desktop: 14,
@@ -54,6 +56,10 @@
                 height: STYLES_MOBILE_THRESHOLD.height,
                 mediaQuery: `@media screen and (max-width: ${STYLES_MOBILE_THRESHOLD.width}px) , screen and (max-height: ${STYLES_MOBILE_THRESHOLD.height}px)`,
             },
+            isMobile: () => {
+                const windowDimensions = TSP.state.get('window.dimensions')
+                return windowDimensions.x < TSP.config.get('styles.mobile.width') || windowDimensions.y < TSP.config.get('styles.mobile.height')
+            }
         },
         lights: {
             ambientColor: 0xffffff,

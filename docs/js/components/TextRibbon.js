@@ -1,6 +1,9 @@
 ;(function () {
     const HIGHLIGHT_COLOR1 = TSP.config.get('styles.colors.Highlight1')
     const MOBILE_MEDIA_QUERY = TSP.config.get('styles.mobile.mediaQuery')
+    const EXPAND_TRANSITION_DURATION = TSP.config.get(
+        'transitions.sidebarDuration'
+    )
     const TEXT_ROLL_DURATION = TSP.config.get('sidebar.textRollDuration')
     const TEXT_RIBBON = TSP.config.get('sidebar.textRolling')
     const SIDEBAR_WIDTH_PERCENT = TSP.config.get(
@@ -50,6 +53,11 @@
                 position: 'absolute',
                 marginRight: '0.5em',
                 fontSize: '150%',
+                transition: `transform ${EXPAND_TRANSITION_DURATION}ms ease-in-out`,
+                transform: 'translateY(-50%) rotate(0deg)',
+                '&.expanded': {
+                    transform: 'translateY(-50%) rotate(180deg)',
+                },
             },
         })
         .attach()
@@ -57,7 +65,7 @@
     const template = `
         <template id="TextRibbon">
             <div>${TEXT_RIBBON}</div>
-            <button is="tsp-expand-menu-button" class="${sheet.classes.expandMenuButton}"></button>
+            <button is="tsp-expand-menu-button" class="${sheet.classes.expandMenuButton}">▾</button>
         </template>
     `
 

@@ -1,5 +1,4 @@
 ;(function () {
-    const COLOR_HIGHLIGHT1 = TSP.config.get('styles.colors.Highlight1')
     const COLOR_BACKGROUND = TSP.config.get('styles.colors.ContentBackground')
     const COLOR_TEXT_BOLD = TSP.config.get('styles.colors.TextBold')
     const TRANSITION_DELAY =
@@ -39,7 +38,6 @@
 
                     '& h2': {
                         marginBottom: '0em',
-                        marginTop: '1em',
                         '& .subtitle': {
                             fontSize: '80%',
                             marginBottom: '2em',
@@ -90,20 +88,7 @@
                 height: '100%',
                 overflow: 'auto',
             },
-            closeButton: {
-                position: 'absolute',
-                cursor: 'pointer',
-                height: '4rem',
-                width: '4rem',
-                transform: 'translate(-50%, -50%)',
-                backgroundColor: COLOR_BACKGROUND,
-                border: `solid ${TSP.config.get(
-                    'styles.dimensions.borderThickness'
-                )} ${COLOR_HIGHLIGHT1}`,
-                color: COLOR_HIGHLIGHT1,
-                borderRadius: '2rem',
-                fontSize: '200%',
-            },
+            closeButton: {},
             contentContainer: {
                 '& .fullwidthimage': {
                     '& img': {
@@ -118,7 +103,9 @@
 
     const template = `
             <template id="Reader">
-                <button class="${sheet.classes.closeButton}">X</button>
+                <div is="tsp-top-page-button-container" class="${sheet.classes.closeButton}">
+                    <button>X</button>
+                </div>
                 <div class="${sheet.classes.innerContainer}">
                     <div class="${sheet.classes.contentContainer}"></div>
                 </div>
