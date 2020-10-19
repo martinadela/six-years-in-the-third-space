@@ -45,6 +45,7 @@
             spacings: {
                 size2: '2rem',
                 size1: '1rem',
+                contentVerticalPadding: '1rem',
             },
             dimensions: {
                 borderThickness: '4px',
@@ -66,6 +67,9 @@
                 width: STYLES_MOBILE_THRESHOLD.width,
                 height: STYLES_MOBILE_THRESHOLD.height,
                 mediaQuery: `@media screen and (max-width: ${STYLES_MOBILE_THRESHOLD.width}px) , screen and (max-height: ${STYLES_MOBILE_THRESHOLD.height}px)`,
+            },
+            desktop: {
+                mediaQuery: `@media screen and (min-width: ${STYLES_MOBILE_THRESHOLD.width}px) and (min-height: ${STYLES_MOBILE_THRESHOLD.height}px)`,
             },
             isMobile: () => {
                 const windowDimensions = TSP.state.get('window.dimensions')

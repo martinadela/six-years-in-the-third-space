@@ -9,9 +9,11 @@
         TSP.config.get('transitions.reader')[1]
     const MOBILE_TITLE_WIDTH = TSP.config.get('reader.mobileTitleWidth')
     const MOBILE_MEDIA_QUERY = TSP.config.get('styles.mobile.mediaQuery')
+    const DESKTOP_MEDIA_QUERY = TSP.config.get('styles.desktop.mediaQuery')
     const Z_INDEX_INNER_CONTAINER = TSP.config.get('styles.zIndexes.reader')
     const Z_INDEX_TOP_BUTTONS = TSP.config.get('styles.zIndexes.topButtons')
     const PAGE_FRAME_PADDING_MOBILE = TSP.config.get('pageFrame.paddingMobile')
+    const VERTICAL_PADDING_CONTENT = TSP.config.get('styles.spacings.contentVerticalPadding')
     
     const sheet = jss.default
         .createStyleSheet({
@@ -96,9 +98,13 @@
             },
             innerContainer: {
                 backgroundColor: COLOR_BACKGROUND,
-                padding: '1em',
+                padding: VERTICAL_PADDING_CONTENT,
+                [DESKTOP_MEDIA_QUERY]: {
+                    // Smaller padding because of the scrollbar
+                    paddingRight: '0.2em',
+                },
+                overflowY: 'scroll',
                 height: '100%',
-                overflow: 'auto',
                 // To position the satellite viewer
                 position: 'relative',
                 zIndex: Z_INDEX_INNER_CONTAINER
@@ -120,6 +126,11 @@
                 flexDirection: 'row',
                 '& > *': {
                     flex: 1,
+                },
+                [DESKTOP_MEDIA_QUERY]: {
+                    '& tsp-satellite-viewer': {
+                        display: 'none'
+                    }
                 }
             }
         })
@@ -171,6 +182,7 @@
                 'App.currentUrl',
                 this.currentUrlChanged.bind(this)
             )
+            TSP.state.set('Reader.component', this)
         }
 
         connectedCallback() {}
@@ -204,8 +216,13 @@
         setContent(className, content) {
             this.contentContainer.innerHTML = content.html
             const h2 = this.contentContainer.querySelector('h2')
-            this.h2.innerHTML = h2.innerHTML
-            h2.remove()
+            if (h2) {
+                this.h2.innerHTML = h2.innerHTML
+                h2.remove()
+            } else {
+                this.h2.innerHTML = 'NO TITLE FOUND'
+                console.error(`h2 not found in page`)
+            }
             this.element.classList.add('enter')
             this.element.classList.add(className)
         }

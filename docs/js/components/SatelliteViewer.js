@@ -7,12 +7,19 @@
                 display: 'flex',
                 flexDirection: 'row',
                 height: '100%',
+                '&.hideNextPrevious': {
+                    '& $nextPreviousButton': {
+                        opacity: 0,
+                        pointerEvents: 'none',
+                    }
+                }
             },
             nextPreviousButton: {
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
                 cursor: 'pointer',
+                pointerEvents: 'initial',
                 '& svg': {
                     '& path': {
                         stroke: COLOR_HIGHLIGHT1,
@@ -51,6 +58,19 @@
 
             this.previousButton.addEventListener('click', this.onPreviousClick.bind(this), false)
             this.nextButton.addEventListener('click', this.onNextClick.bind(this), false)
+
+            TSP.state.listen(
+                'App.currentUrl',
+                this.currentUrlChanged.bind(this)
+            )
+        }
+
+        currentUrlChanged(url) {
+            this.element.classList.remove('hideNextPrevious')
+            const satellites = TSP.state.get('Canvas3D.satellites')
+            if (!satellites[url]) {
+                this.element.classList.add('hideNextPrevious')
+            }
         }
 
         onPreviousClick() {

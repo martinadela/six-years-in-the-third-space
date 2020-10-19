@@ -131,39 +131,28 @@
         }
 
         getObjectBoundingBoxOnScreen() {
+            let satelliteViewerBoundingRect = null
             if (IS_MOBILE()) {
-                const pageFrameBoundingRect = TSP.state
-                    .get('PageFrame.component')
-                    .children[0]
+                satelliteViewerBoundingRect = TSP.state
+                    .get('Reader.component')
+                    .querySelector('tsp-satellite-viewer')
                     .getBoundingClientRect()
-                const top = pageFrameBoundingRect.top
-                const left = pageFrameBoundingRect.left + MOBILE_TITLE_WIDTH / 100 * pageFrameBoundingRect.width
-                const size = (100 - MOBILE_TITLE_WIDTH) / 100  * pageFrameBoundingRect.width
-                return new THREE.Box2(
-                    new THREE.Vector2(
-                        left,
-                        top
-                    ),
-                    new THREE.Vector2(
-                        left + size,
-                        top + size
-                    )
-                )
             } else {
-                const sidebarBoundingRect = TSP.state
+                satelliteViewerBoundingRect = TSP.state
                     .get('SideBar.component')
+                    .querySelector('tsp-satellite-viewer')
                     .getBoundingClientRect()
-                return new THREE.Box2(
-                    new THREE.Vector2(
-                        sidebarBoundingRect.left,
-                        sidebarBoundingRect.bottom - sidebarBoundingRect.width
-                    ),
-                    new THREE.Vector2(
-                        sidebarBoundingRect.left + sidebarBoundingRect.width,
-                        sidebarBoundingRect.bottom
-                    )
-                )
             }
+            return new THREE.Box2(
+                new THREE.Vector2(
+                    satelliteViewerBoundingRect.left,
+                    satelliteViewerBoundingRect.top,
+                ),
+                new THREE.Vector2(
+                    satelliteViewerBoundingRect.right,
+                    satelliteViewerBoundingRect.bottom,
+                )
+            )
         }
 
         animateTransform(transform) {

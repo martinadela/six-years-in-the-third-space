@@ -1,4 +1,5 @@
 ;(function () {
+    const DESKTOP_MEDIA_QUERY = TSP.config.get('styles.desktop.mediaQuery')
     const COLOR_SCROLLBAR_BACKGROUND = TSP.config.get(
         'styles.colors.ScrollbarBackground'
     )
@@ -42,22 +43,26 @@
                 },
                 // REF scrollbars : https://www.digitalocean.com/community/tutorials/css-scrollbars
                 '*': {
-                    scrollbarWidth: 'thin',
-                    scrollbarColor: `${COLOR_SCROLLBAR} ${COLOR_SCROLLBAR_BACKGROUND}`,
+                    [DESKTOP_MEDIA_QUERY]: {
+                        scrollbarWidth: 'thin',
+                        scrollbarColor: `${COLOR_SCROLLBAR} ${COLOR_SCROLLBAR_BACKGROUND}`,
+                    },
                     boxSizing: 'border-box',
                     margin: 0,
                     padding: 0,
                 },
-                '*::-webkit-scrollbar': {
-                    width: '12px',
-                },
-                '*::-webkit-scrollbar-track': {
-                    background: COLOR_SCROLLBAR_BACKGROUND,
-                },
-                '*::-webkit-scrollbar-thumb': {
-                    backgroundColor: COLOR_SCROLLBAR,
-                    borderRadius: '20px',
-                    border: `3px solid ${COLOR_SCROLLBAR_BORDER}`,
+                [DESKTOP_MEDIA_QUERY]: {
+                    '*::-webkit-scrollbar': {
+                        width: '12px',
+                    },
+                    '*::-webkit-scrollbar-track': {
+                        background: COLOR_SCROLLBAR_BACKGROUND,
+                    },
+                    '*::-webkit-scrollbar-thumb': {
+                        backgroundColor: COLOR_SCROLLBAR,
+                        borderRadius: '20px',
+                        border: `3px solid ${COLOR_SCROLLBAR_BORDER}`,
+                    },    
                 },
                 h2: {
                     color: COLOR_H2,

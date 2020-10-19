@@ -82,6 +82,7 @@
     }
 
     //****************************** DESKTOP ******************************/
+    const VERTICAL_PADDING_CONTENT = TSP.config.get('styles.spacings.contentVerticalPadding')
 
     const sheetDesktop = jss.default
         .createStyleSheet({
@@ -106,9 +107,19 @@
                     '& tsp-expand-menu-button': {
                         display: 'none'
                     }
+                },
+                '& tsp-satellite-viewer': {
+                    paddingRight: VERTICAL_PADDING_CONTENT
                 }
             },
-            innerContainer: {},
+            innerContainer: {
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%',
+                '& tsp-satellite-viewer': {
+                    flex: 1,
+                }
+            },
             h1: {
                 ...sharedStyles.h1,
                 '& p': {
