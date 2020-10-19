@@ -5,10 +5,10 @@
         'styles.colors.Highlight1'
     )} ${TSP.config.get('styles.dimensions.borderThickness')}`
     const SIDEBAR_WIDTH_DESKTOP_PERCENT = TSP.config.get(
-        'styles.dimensions.sidebarDesktopWidth'
+        'sidebar.desktopWidth'
     )
     const SIDEBAR_WIDTH_MOBILE_PERCENT = TSP.config.get(
-        'styles.dimensions.sidebarMobileWidth'
+        'sidebar.mobileWidth'
     )
     const IS_MOBILE = TSP.config.get('styles.isMobile')
     const BACKGROUND_MOBILE = TSP.config.get('styles.colors.SideBarBackground')
@@ -180,6 +180,9 @@
                     '& $expandMenuButtonTop': {
                         transition: `opacity ${TRANSITION_DURATION}ms ease-in-out`,
                         opacity: 1,
+                    },
+                    '& $expandMenuButtonTitle': {
+                        display: 'none'
                     },
                 },
                 '&.mainPage': {

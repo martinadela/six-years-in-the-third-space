@@ -22,6 +22,9 @@
         Reader: {
             loaded: false,
         },
+        PageFrame: {
+            component: null
+        },
         SideBar: {
             component: null,
             expanded: false,

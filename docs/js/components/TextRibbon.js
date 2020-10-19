@@ -7,7 +7,7 @@
     const TEXT_ROLL_DURATION = TSP.config.get('sidebar.textRollDuration')
     const TEXT_RIBBON = TSP.config.get('sidebar.textRolling')
     const SIDEBAR_WIDTH_PERCENT = TSP.config.get(
-        'styles.dimensions.sidebarDesktopWidth'
+        'sidebar.desktopWidth'
     )
 
     const sheet = jss.default

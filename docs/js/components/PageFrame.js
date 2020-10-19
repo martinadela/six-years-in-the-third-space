@@ -71,6 +71,7 @@
         constructor() {
             super()
             this.appendChild(TSP.utils.template(template))
+            TSP.state.set('PageFrame.component', this)
         }
 
         connectedCallback() {

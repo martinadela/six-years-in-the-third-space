@@ -30,7 +30,8 @@
             colors: {
                 Highlight1: '#3DA6FC', // dark blue sky
                 // Highlight1: '#FF8575', // orange
-                ContentBackground: 'rgba(255, 255, 255, 0.9)',
+                ContentBackground: 'rgba(255, 255, 255, 0.0)',
+                ButtonBackground: 'rgba(255, 255, 255, 0.9)',
                 ScrollbarBackground: 'transparent',
                 ScrollbarBorder: 'white',
                 Scrollbar: '#F7903C',
@@ -47,8 +48,6 @@
             },
             dimensions: {
                 borderThickness: '4px',
-                sidebarDesktopWidth: 30,
-                sidebarMobileWidth: 50,
                 buttonSize: '4rem',
             },
             fontSizes: {
@@ -221,10 +220,16 @@
         ],
 
         sidebar: {
+            desktopWidth: 30, // in percents
+            mobileWidth: 50, // in percents
             textRollDuration: 20, // in seconds
             textRolling:
                 'What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry.  What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
         },
+
+        reader: {
+            mobileTitleWidth: 50, // in percents
+        }
     }
 
     TSP.config = {}

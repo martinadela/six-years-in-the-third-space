@@ -1,5 +1,6 @@
 ;(function () {
     const PLANET_FOCUS_ON_URL = TSP.config.get('planet.focusOnUrl')
+    const MOBILE_TITLE_WIDTH = TSP.config.get('reader.mobileTitleWidth')
     const IS_MOBILE = TSP.config.get('styles.isMobile')
 
     class Camera {
@@ -121,7 +122,6 @@
                     satelliteOrbitDiameter
                 )
             )
-            const allSatellites = new THREE.Group()
             return TSP.utils.computeCameraOrbitalTransform(
                 this.camera,
                 boundingBoxWorld,
@@ -131,26 +131,39 @@
         }
 
         getObjectBoundingBoxOnScreen() {
-            let sidebarBoundingRect
-
             if (IS_MOBILE()) {
-                sidebarBoundingRect = document.querySelector('h1').getBoundingClientRect()
+                const pageFrameBoundingRect = TSP.state
+                    .get('PageFrame.component')
+                    .children[0]
+                    .getBoundingClientRect()
+                const top = pageFrameBoundingRect.top
+                const left = pageFrameBoundingRect.left + MOBILE_TITLE_WIDTH / 100 * pageFrameBoundingRect.width
+                const size = (100 - MOBILE_TITLE_WIDTH) / 100  * pageFrameBoundingRect.width
+                return new THREE.Box2(
+                    new THREE.Vector2(
+                        left,
+                        top
+                    ),
+                    new THREE.Vector2(
+                        left + size,
+                        top + size
+                    )
+                )
             } else {
-                sidebarBoundingRect = TSP.state
+                const sidebarBoundingRect = TSP.state
                     .get('SideBar.component')
                     .getBoundingClientRect()
-            }
-            
-            return new THREE.Box2(
-                new THREE.Vector2(
-                    sidebarBoundingRect.left,
-                    sidebarBoundingRect.bottom - sidebarBoundingRect.width
-                ),
-                new THREE.Vector2(
-                    sidebarBoundingRect.left + sidebarBoundingRect.width,
-                    sidebarBoundingRect.bottom
+                return new THREE.Box2(
+                    new THREE.Vector2(
+                        sidebarBoundingRect.left,
+                        sidebarBoundingRect.bottom - sidebarBoundingRect.width
+                    ),
+                    new THREE.Vector2(
+                        sidebarBoundingRect.left + sidebarBoundingRect.width,
+                        sidebarBoundingRect.bottom
+                    )
                 )
-            )
+            }
         }
 
         animateTransform(transform) {

@@ -1,5 +1,5 @@
 ;(function () {
-    const COLOR_BACKGROUND = TSP.config.get('styles.colors.ContentBackground')
+    const COLOR_BUTTON_BACKGROUND = TSP.config.get('styles.colors.ButtonBackground')
     const COLOR_HIGHLIGHT1 = TSP.config.get('styles.colors.Highlight1')
     const BUTTON_SIZE = TSP.config.get('styles.dimensions.buttonSize')
     const MOBILE_MEDIA_QUERY = TSP.config.get('styles.mobile.mediaQuery')
@@ -25,7 +25,7 @@
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                backgroundColor: COLOR_BACKGROUND,
+                backgroundColor: COLOR_BUTTON_BACKGROUND,
                 border: `solid ${TSP.config.get(
                     'styles.dimensions.borderThickness'
                 )} ${COLOR_HIGHLIGHT1}`,

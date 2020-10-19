@@ -7,6 +7,9 @@
     const TRANSITION_DURATION =
         TSP.config.get('transitions.duration') *
         TSP.config.get('transitions.reader')[1]
+    const MOBILE_TITLE_WIDTH = TSP.config.get('reader.mobileTitleWidth')
+    const MOBILE_MEDIA_QUERY = TSP.config.get('styles.mobile.mediaQuery')
+    
     const sheet = jss.default
         .createStyleSheet({
             main: {
@@ -35,6 +38,15 @@
                     },
 
                     '& h2': {
+                        [MOBILE_MEDIA_QUERY]: {
+                            width: `${MOBILE_TITLE_WIDTH}%`,
+                            // take the width available and remove page padding
+                            height: `calc((100vw - ${MOBILE_TITLE_WIDTH}vw) - 2 * 1rem)`,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            textAlign: 'left',
+                        },
                         marginBottom: '0em',
                         '& .subtitle': {
                             fontSize: '80%',
