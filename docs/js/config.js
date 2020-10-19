@@ -99,94 +99,82 @@
         },
         contributions: [
             {
-                url: '/contributions/The-Sky-Moved-City-to-City',
+                url: '/contributions/theskymovedcitytocity',
                 satelliteModelUrl: '/satellites/satellite2.glb',
-                contentUrl: '/pages/contributions/The-Sky-Moved-City-to-City.html',
+                contentUrl: '/pages/contributions/theskymovedcitytocity.html',
             },
-            // {
-            //     url: '/contributions/3',
-            //     satelliteModelUrl: '/satellites/satellite3.glb',
-            //     contentUrl: '/pages/contributions/blo.html',
-            // },
-            // {
-            //     url: '/contributions/4',
-            //     satelliteModelUrl: '/satellites/satellite4.glb',
-            //     contentUrl: '/pages/contributions/bli.html',
-            // },
-            // {
-            //     url: '/contributions/5',
-            //     satelliteModelUrl: '/satellites/satellite5.glb',
-            //     contentUrl: '/pages/contributions/blu.html',
-            // },
-            // {
-            //     url: '/contributions/6',
-            //     satelliteModelUrl: '/satellites/satellite6.glb',
-            //     contentUrl: '/pages/contributions/bla.html',
-            // },
-            // {
-            //     url: '/contributions/7',
-            //     satelliteModelUrl: '/satellites/satellite7.glb',
-            //     contentUrl: '/pages/contributions/bli.html',
-            // },
-            // {
-            //     url: '/contributions/9',
-            //     satelliteModelUrl: '/satellites/satellite9.glb',
-            //     contentUrl: '/pages/contributions/blu.html',
-            // },
+            {
+                url: '/contributions/fromheretothere',
+                satelliteModelUrl: '/satellites/satellite3.glb',
+                contentUrl: '/pages/contributions/fromheretothere.html',
+            },
+            {
+                url: '/contributions/elaborately-collaborating-and-working-together',
+                satelliteModelUrl: '/satellites/satellite4.glb',
+                contentUrl: '/pages/contributions/elaborately-collaborating-and-working-together.html',
+            },
+
+            {
+                url: '/contributions/collaborating-as-a-multiplicity–a-dialogue-with-other-dialogues',
+                satelliteModelUrl: '/satellites/satellite5.glb',
+                contentUrl: '/pages/contributions/collaborating-as-a-multiplicity–a-dialogue-with-other-dialogues.html',
+            },
+
+            {
+                url: '/contributions/what-keeps-us-going',
+                satelliteModelUrl: '/satellites/satellite6.glb',
+                contentUrl: '/pages/contributions/what-keeps-us-going.html',
+            },
+
+            {
+                url: '/contributions/supradigm',
+                satelliteModelUrl: '/satellites/satellite7.glb',
+                contentUrl: '/pages/contributions/supradigm.html',
+            },
+
+            {
+                url: '/contributions/SAFE_R_Evolving-the-Conditions-for-Collaboration-Or-From-Safer-Spaces-to-Safer-People',
+                satelliteModelUrl: '/satellites/satellite8.glb',
+                contentUrl: '/pages/contributions/ALI.html'
+                
+            },
 
 
-
-            // {
-            //     url: '/contributions/blo',
-            //     satelliteModelUrl: '/satellites/satellite3.glb',
-            //     contentUrl: '/pages/contributions/blo.html',
-            // },
-            // {
-            //     url: '/contributions/bla',
-            //     satelliteModelUrl: '/satellites/satellite2.glb',
-            //     contentUrl: '/pages/contributions/bla.html',
-            // },
-            // {
-            //     url: '/contributions/blo',
-            //     satelliteModelUrl: '/satellites/satellite3.glb',
-            //     contentUrl: '/pages/contributions/blo.html',
-            // },
-            // {
-            //     url: '/contributions/bli',
-            //     satelliteModelUrl: '/satellites/satellite4.glb',
-            //     contentUrl: '/pages/contributions/bli.html',
-            // },
-            // {
-            //     url: '/contributions/bla',
-            //     satelliteModelUrl: '/satellites/satellite2.glb',
-            //     contentUrl: '/pages/contributions/bla.html',
-            // },
-            // {
-            //     url: '/contributions/blu',
-            //     satelliteModelUrl: '/satellites/satellite5.glb',
-            //     contentUrl: '/pages/contributions/blu.html',
-            // },
-            // {
-            //     url: '/contributions/blo',
-            //     satelliteModelUrl: '/satellites/satellite3.glb',
-            //     contentUrl: '/pages/contributions/blo.html',
-            // },
-            // {
-            //     url: '/contributions/bli',
-            //     satelliteModelUrl: '/satellites/satellite5.glb',
-            //     contentUrl: '/pages/contributions/bli.html',
-            // },
-            // {
-            //     url: '/contributions/blu',
-            //     satelliteModelUrl: '/satellites/satellite4.glb',
-            //     contentUrl: '/pages/contributions/blu.html',
-            // },
         ],
 
         collaborators: [
             {
+                url: '/collaborators/Vidha-Saumya',
+                contentUrl: '/pages/collaborators/Vidha-Saumya.html',
+            },
+
+            {
                 url: '/collaborators/Marten-Esko',
                 contentUrl: '/pages/collaborators/Marten-Esko.html',
+            },
+
+            {
+                url: '/collaborators/Marko-Timlin',
+                contentUrl: '/pages/collaborators/Marko-Timlin.html',
+            },
+
+            {
+                url: '/collaborators/Tina-Madsen',
+                contentUrl: '/pages/collaborators/Tina-Madsen.html',
+            },
+
+            {
+                url: '/collaborators/Diana-Soria',
+                contentUrl: '/pages/collaborators/Diana-Soria.html',
+            },
+
+            {
+                url: '/collaborators/Adrian-Balseca',
+                contentUrl: '/pages/collaborators/Adrian-Balseca.html',
+            },
+            {
+                url: '/collaborators/Ali-Akbar-Mehta',
+                contentUrl: '/pages/collaborators/Ali-Akbar-Mehta.html',
             },
         ],
 
