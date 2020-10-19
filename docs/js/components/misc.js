@@ -115,4 +115,31 @@
             />
         </svg> 
     `
+
+    TSP.components.burgerSvg = () => `
+        <svg
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:cc="http://creativecommons.org/ns#"
+            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+            xmlns:svg="http://www.w3.org/2000/svg"
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 5.2916665 5.2916668"
+            version="1.1"
+        >
+            <path
+                style="fill:none;stroke-width:0.396875;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+                d="M 0,0.7614375 H 5.2916667"
+            />
+            <path
+                style="fill:none;stroke-width:0.396875;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+                d="M 0,4.5304375 H 5.292"
+            />
+            <path
+                style="fill:none;stroke-width:0.396875;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+                d="M 0,2.6458372 H 5.292"
+            />
+        </svg>
+     `
 })()

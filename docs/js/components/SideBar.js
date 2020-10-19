@@ -277,7 +277,7 @@
                 fontSize: '0.7em',
                 position: 'relative',
                 marginRight: '0.15em',
-                top: '0.2em',
+                top: '0.1em',
                 '& svg': {
                     width: '0.8em',
                     transform: 'rotate(180deg)',
@@ -293,7 +293,7 @@
         <template id="SideBarMobile">
             <tsp-top-page-button-container class="${sheetMobile.classes.expandMenuButtonTop}" >
                 <tsp-expand-menu-button>
-                    ${TSP.components.triangleSvg()}
+                    ${TSP.components.burgerSvg()}
                     ${TSP.components.crossSvg()}
                 </tsp-expand-menu-button>
             </tsp-top-page-button-container>
