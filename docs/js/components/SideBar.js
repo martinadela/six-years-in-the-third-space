@@ -1,5 +1,6 @@
 ;(function () {
     const TRANSITION_DURATION = 400
+    const COLOR_HIGHLIGHT1 = TSP.config.get('styles.colors.Highlight1')
     const PAGE_TRANSITION_DURATION = TSP.config.get('transitions.duration')
     const BORDER_STYLE = `solid ${TSP.config.get(
         'styles.colors.Highlight1'
@@ -50,10 +51,7 @@
                 <div>
                     <p>Six years</p> 
                     <p>in the</p> 
-                    <p>
-                        ${expandButton ? expandButton : ''}
-                        Third Space
-                    </p>
+                    <p>${expandButton ? expandButton : ''}Third Space</p>
                 </div>
             </h1>
             `,
@@ -235,29 +233,36 @@
             },
             expandMenuButtonTop: {
                 '& button': {
-                    '& span': {
-                        display: 'inline-block',
+                    '& svg': {
                         '&:first-child': {
-                            transform: 'rotate(90deg)'
+                            transform: 'rotate(180deg)'
                         },
                         '&:last-child': {
                             display: 'none',
                         },
                     },
                     '&.expanded': {
-                        '& span:first-child': {
+                        '& svg:first-child': {
                             display: 'none',
                         },
-                        '& span:last-child': {
-                            display: 'inline-block',
+                        '& svg:last-child': {
+                            display: 'block',
                         },
                     }
                 }
             },
             expandMenuButtonTitle: {
-                fontSize: '0.6em',
+                fontSize: '0.7em',
                 position: 'relative',
-                bottom: '0.2em',
+                marginRight: '0.15em',
+                top: '0.2em',
+                '& svg': {
+                    width: '0.8em',
+                    transform: 'rotate(180deg)',
+                    '& path': {
+                        stroke: COLOR_HIGHLIGHT1
+                    }
+                }
             },
         })
         .attach()
@@ -266,17 +271,17 @@
         <template id="SideBarMobile">
             <tsp-top-page-button-container class="${sheetMobile.classes.expandMenuButtonTop}" >
                 <tsp-expand-menu-button>
-                    <span>▾</span>
-                    <span>X</span>
+                    ${TSP.components.triangleSvg()}
+                    ${TSP.components.crossSvg()}
                 </tsp-expand-menu-button>
             </tsp-top-page-button-container>
 
             <div class="${sheetMobile.classes.innerContainer}">
-                ${sharedHtml.h1(sheetMobile, `
-                    <tsp-expand-menu-button
+                ${sharedHtml.h1(sheetMobile, 
+                    `<tsp-expand-menu-button
                         class="${sheetMobile.classes.expandMenuButtonTitle}"
-                    >◀</tsp-expand-menu-button>
-                `)}
+                    >${TSP.components.triangleSvg()}</tsp-expand-menu-button>`
+                )}
                 ${sharedHtml.ulContainer(sheetMobile)}
             </div>
         </template>

@@ -25,6 +25,14 @@
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                '& svg': {
+                    // To force the flex display to have an effect
+                    display: 'block',
+                    '& path': {
+                        fill: COLOR_HIGHLIGHT1,
+                        stroke: COLOR_HIGHLIGHT1
+                    }
+                },
                 backgroundColor: COLOR_BUTTON_BACKGROUND,
                 border: `solid ${TSP.config.get(
                     'styles.dimensions.borderThickness'
@@ -36,6 +44,9 @@
                     background: 'none',
                     color: COLOR_HIGHLIGHT1,
                     fontSize: '200%',
+                    '&:focus': {
+                        outline: 0,
+                    },
                 },
                 position: 'absolute',
                 left: 0,
@@ -62,4 +73,44 @@
     }
 
     customElements.define('tsp-top-page-button-container', TopPageButtonContainer)
+
+    TSP.components.crossSvg = () => `
+        <svg
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:cc="http://creativecommons.org/ns#"
+            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+            xmlns:svg="http://www.w3.org/2000/svg"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+            width="20px"
+            height="20px"
+            viewBox="0 0 20 20"
+            version="1.1"
+        >
+        <path
+            d="m 11.273162,9.9689188 7.34455,7.1793612 -1.175435,1.12806 -7.34455,-7.161311 L 2.7531774,18.27634 1.5777411,17.14828 8.9222907,9.9689188 1.5777411,2.8076072 2.7531774,1.6614968 10.097727,8.8228083 17.460788,1.6614968 18.636224,2.7895574 Z"
+            style="fill-opacity:1;stroke:none;stroke-width:0"
+        />
+        </svg>
+    `
+
+    TSP.components.triangleSvg = () => `
+        <svg
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:cc="http://creativecommons.org/ns#"
+            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+            xmlns:svg="http://www.w3.org/2000/svg"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+            width="20px"
+            height="20px"
+            viewBox="0 0 20 20"
+            version="1.1"
+        >
+        <path
+            style="fill:none;fill-opacity:1;stroke-width:1.90134;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+            d="M 18.12581,9.9609181 5,18.259221 V 1.6626149 Z"
+            />
+        </svg> 
+    `
 })()

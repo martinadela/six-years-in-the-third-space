@@ -6,13 +6,11 @@
     )
     const TEXT_ROLL_DURATION = TSP.config.get('sidebar.textRollDuration')
     const TEXT_RIBBON = TSP.config.get('sidebar.textRolling')
-    const SIDEBAR_WIDTH_PERCENT = TSP.config.get(
-        'sidebar.desktopWidth'
-    )
 
     const sheet = jss.default
         .createStyleSheet({
             main: {
+                '--textRibbonRollTransformStart': `translateX(100vw)`,
                 // To be able to position the button
                 position: 'relative',
                 whiteSpace: 'nowrap',
@@ -41,22 +39,28 @@
             },
             '@keyframes roll': {
                 '0%': {
-                    transform: `translateX(${SIDEBAR_WIDTH_PERCENT}vw)`,
+                    transform: `var(--textRibbonRollTransformStart)`,
                 },
                 '100%': {
                     transform: 'translateX(-100%)',
                 },
             },
             expandMenuButton: {
-                top: '50%',
+                top: '49%',
                 right: 0,
                 position: 'absolute',
                 marginRight: '0.5em',
-                fontSize: '150%',
+                fontSize: '100%',
                 transition: `transform ${EXPAND_TRANSITION_DURATION}ms ease-in-out`,
-                transform: 'translateY(-50%) rotate(0deg)',
+                transform: 'translateY(-50%) rotate(90deg)',
+                '& svg': {
+                    height: '1em',
+                    '& path': {
+                        stroke: HIGHLIGHT_COLOR1
+                    }
+                },
                 '&.expanded': {
-                    transform: 'translateY(-50%) rotate(180deg)',
+                    transform: 'translateY(-50%) rotate(270deg)',
                 },
             },
         })
@@ -66,7 +70,9 @@
         <template id="TextRibbon">
             <div class="${sheet.classes.main}">
                 <div>${TEXT_RIBBON}</div>
-                <tsp-expand-menu-button class="${sheet.classes.expandMenuButton}">▾</tsp-expand-menu-button>
+                <tsp-expand-menu-button class="${sheet.classes.expandMenuButton}">
+                    ${TSP.components.triangleSvg()}
+                </tsp-expand-menu-button>
             </div>
         </template>
     `
@@ -81,6 +87,8 @@
             if (this.getAttribute('no-expand-button') !== null) {
                 this.element.classList.add('noExpandButton')
             }
+            const boundingRect = this.getBoundingClientRect()
+            this.element.style.setProperty('--textRibbonRollTransformStart', `translateX(${boundingRect.width}px)`)
 
             TSP.state.listen(
                 'App.currentUrl',

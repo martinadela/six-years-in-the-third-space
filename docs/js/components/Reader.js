@@ -115,7 +115,7 @@
         <template id="Reader">
             <div class="${sheet.classes.main}">
                 <tsp-top-page-button-container class="${sheet.classes.closeButton}">
-                    <button>X</button>
+                    <button>${TSP.components.crossSvg()}</button>
                 </tsp-top-page-button-container>
                 <div class="${sheet.classes.innerContainer}">
                     <div class="${sheet.classes.contentContainer}"></div>
