@@ -20,9 +20,7 @@
                 opacity: 0,
                 '&.enter': {
                     transition: `opacity ${TRANSITION_DURATION}ms ease-in-out`,
-                    '&.contributions': {
-                        transitionDelay: `${TRANSITION_DELAY}ms`,
-                    },
+                    transitionDelay: `${TRANSITION_DELAY}ms`,
                     opacity: 1,
                     // PageFrame disable pointer events to let control to orbit controls,
                     // so we need to reactivate it here

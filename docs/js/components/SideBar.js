@@ -1,5 +1,6 @@
 ;(function () {
-    const TRANSITION_DURATION = 200
+    const TRANSITION_DURATION = 400
+    const PAGE_TRANSITION_DURATION = TSP.config.get('transitions.duration')
     const BORDER_STYLE = `solid ${TSP.config.get(
         'styles.colors.Highlight1'
     )} ${TSP.config.get('styles.dimensions.borderThickness')}`
@@ -10,6 +11,7 @@
         'styles.dimensions.sidebarMobileWidth'
     )
     const IS_MOBILE = TSP.config.get('styles.isMobile')
+    const BACKGROUND_MOBILE = TSP.config.get('styles.colors.SideBarBackground')
 
     const sharedStyles = {
         main: {
@@ -156,7 +158,6 @@
             main: {
                 ...sharedStyles.main,
                 width: `${SIDEBAR_WIDTH_MOBILE_PERCENT}%`,
-                minWidth: '18em',
                 height: '100%',
                 position: 'absolute',
                 top: 0,
@@ -166,15 +167,28 @@
                 '& $innerContainer': {
                     transition: `opacity ${TRANSITION_DURATION}ms ease-in-out`,
                 },
+                '& $expandMenuButtonTop': {
+                    // To force transition to trigger on first page
+                    opacity: 0,
+                },
                 '&:not(.mainPage)': {
                     transform: `translateX(calc(100% - ${BUTTON_SIZE}))`,
                     '&:not(.expanded) $innerContainer': {
                         opacity: 0,
                     },
+                    // Transition expandMenuButtonTop when entering other than main page
+                    '& $expandMenuButtonTop': {
+                        transition: `opacity ${TRANSITION_DURATION}ms ease-in-out`,
+                        opacity: 1,
+                    },
                 },
                 '&.mainPage': {
-                    '&:not(.expanded) $expandMenuButtonContainer': {
-                        display: 'none',
+                    // We don't want transition here, because the icon is just brutally switched
+                    '&:not(.expanded) $expandMenuButtonTop': {
+                        opacity: 0,
+                    },
+                    '&.expanded $expandMenuButtonTop': {
+                        opacity: 1,
                     },
                     '& $ulContainer': {
                         transition: `transform ${TRANSITION_DURATION}ms ease-in-out`,
@@ -183,16 +197,14 @@
                 },
                 '&.expanded': {
                     transform: 'translateX(0%)',
-                    background: 'rgb(255,255,255)',
-                    background:
-                        `linear-gradient(270deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) calc(100% - ${BUTTON_SIZE} / 2), rgba(255,255,255,0) 100%)`,
+                    background: BACKGROUND_MOBILE,
                     '& > tsp-expand-menu-button': {
                         display: 'inline-block',
                     },
                     '& $innerContainer': {
                         opacity: 1,
                     },
-                    '& $expandMenuButtonMainPage': {
+                    '& $expandMenuButtonTitle': {
                         display: 'none'
                     },
                     '&.mainPage': {
@@ -200,12 +212,17 @@
                             transform: 'translateX(0%)'
                         },
                     },
+                    '& $expandMenuButtonTop': {
+                        left: `calc(-${BUTTON_SIZE} / 2)`,
+                    }
     
                 },
             },
             innerContainer: {},
             h1: {
                 ...sharedStyles.h1,
+                paddingLeft: 0,
+                pointerEvents: 'initial',
             },
             ulContainer: {},
             ul: {},
@@ -213,7 +230,7 @@
                 ...sharedStyles.li,
                 textAlign: 'right',
             },
-            expandMenuButtonContainer: {
+            expandMenuButtonTop: {
                 '& button': {
                     '& span': {
                         display: 'inline-block',
@@ -234,17 +251,17 @@
                     }
                 }
             },
-            expandMenuButtonMainPage: {
-                fontSize: '0.7em',
+            expandMenuButtonTitle: {
+                fontSize: '0.6em',
                 position: 'relative',
-                bottom: '0.15em',
+                bottom: '0.2em',
             },
         })
         .attach()
 
     const templateMobile = `
         <template id="SideBarMobile">
-            <tsp-top-page-button-container class="${sheetMobile.classes.expandMenuButtonContainer}" >
+            <tsp-top-page-button-container class="${sheetMobile.classes.expandMenuButtonTop}" >
                 <tsp-expand-menu-button>
                     <span>▾</span>
                     <span>X</span>
@@ -254,7 +271,7 @@
             <div class="${sheetMobile.classes.innerContainer}">
                 ${sharedHtml.h1(sheetMobile, `
                     <tsp-expand-menu-button
-                        class="${sheetMobile.classes.expandMenuButtonMainPage}"
+                        class="${sheetMobile.classes.expandMenuButtonTitle}"
                     >◀</tsp-expand-menu-button>
                 `)}
                 ${sharedHtml.ulContainer(sheetMobile)}
@@ -281,11 +298,15 @@
 
         mountHtml() {
             this.innerHTML = ''
+            // Add the `mainPage` by default, to facilitate enter transitions.
             if (IS_MOBILE()) {
                 this.classList.add(sheetMobile.classes.main)
+                this.classList.add('mainPage')
                 this.appendChild(TSP.utils.template(templateMobile))
+                this.querySelector('h1').addEventListener('click', () => this.querySelector('h1 tsp-expand-menu-button').click(), false)
             } else {
                 this.classList.add(sheetDesktop.classes.main)
+                this.classList.add('mainPage')
                 this.appendChild(TSP.utils.template(templateDesktop))
             }
         }
@@ -314,7 +335,10 @@
                     TSP.state.set('SideBar.expanded', false)
                 }
             } else {
-                this.classList.remove('mainPage')
+                // Delay a bit the transition to allow page to fade in
+                if (this.classList.contains('mainPage')) {
+                    setTimeout(() => this.classList.remove('mainPage'), 0.9 * PAGE_TRANSITION_DURATION)
+                }
                 // On desktop open sidebar when not main page
                 if (!IS_MOBILE()) {
                     TSP.state.set('SideBar.expanded', true)

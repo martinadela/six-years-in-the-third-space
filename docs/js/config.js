@@ -1,4 +1,8 @@
 ;(function () {
+    const NEBULA_COLOR1 = [235, 194, 226]
+    const NEBULA_COLOR2 = [255, 199, 149]
+    const NEBULA_GRADIENT = `linear-gradient(17deg, rgba(255,255,255,0.5) 0%, rgba(${NEBULA_COLOR1[0]},${NEBULA_COLOR1[1]},${NEBULA_COLOR1[2]},0.35) 40%, rgba(${NEBULA_COLOR2[0]},${NEBULA_COLOR2[1]},${NEBULA_COLOR2[2]},0.35) 60%, rgba(255,255,255,0.5) 100%)`
+
     const STYLES_MOBILE_THRESHOLD = {
         width: 800,
         height: 550,
@@ -34,7 +38,8 @@
                 TextBold: 'rgb(19, 18, 18)',
                 H2: 'rgb(25, 233, 53)',
                 Loader: '#3DA6FC',
-                LoaderBackground: 'white',
+                LoaderBackground: NEBULA_GRADIENT,
+                SideBarBackground: NEBULA_GRADIENT,
             },
             spacings: {
                 size2: '2rem',
@@ -74,8 +79,8 @@
         universe: {
             // 2 colors in RGB format.
             nebulaColors: [
-                [235, 194, 226],
-                [255, 199, 149],
+                NEBULA_COLOR1,
+                NEBULA_COLOR2,
             ],
             // Between 0 and 2
             starsQuantity: 1.7,

@@ -90,7 +90,7 @@
             },
             innerContainer: {},
             loaderContainer: {
-                backgroundColor: TSP.config.get('styles.colors.LoaderBackground'),
+                background: TSP.config.get('styles.colors.LoaderBackground'),
                 width: '100%',
                 height: '100%',
                 position: 'fixed',
