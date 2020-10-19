@@ -1,8 +1,10 @@
 ;(function () {
     const COLOR_BUTTON_BACKGROUND = TSP.config.get('styles.colors.ButtonBackground')
     const COLOR_HIGHLIGHT1 = TSP.config.get('styles.colors.Highlight1')
+    const BORDER_THICKNESS = TSP.config.get('styles.dimensions.borderThickness')
     const BUTTON_SIZE = TSP.config.get('styles.dimensions.buttonSize')
     const MOBILE_MEDIA_QUERY = TSP.config.get('styles.mobile.mediaQuery')
+    const PAGE_FRAME_PADDING_MOBILE = TSP.config.get('pageFrame.paddingMobile')
 
     class Anchor extends HTMLElement {
         constructor() {
@@ -34,12 +36,12 @@
                     }
                 },
                 backgroundColor: COLOR_BUTTON_BACKGROUND,
-                border: `solid ${TSP.config.get(
-                    'styles.dimensions.borderThickness'
-                )} ${COLOR_HIGHLIGHT1}`,
+                border: `solid ${BORDER_THICKNESS} ${COLOR_HIGHLIGHT1}`,
                 borderRadius: `calc(${BUTTON_SIZE} / 2)`,
                 pointerEvents: 'initial',
                 '& button': {
+                    display: 'block',
+                    cursor: 'pointer',
                     border: 'none',
                     background: 'none',
                     color: COLOR_HIGHLIGHT1,
@@ -54,7 +56,7 @@
                 transform: 'translate(-50%, -50%)',
                 [MOBILE_MEDIA_QUERY]: {
                     transform: 'initial',
-                    top: `calc(-1rem - 3px)`,
+                    top: `calc(-${PAGE_FRAME_PADDING_MOBILE} - ${BORDER_THICKNESS})`,
                 }
             },
         })

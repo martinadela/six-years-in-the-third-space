@@ -57,6 +57,11 @@
                 title: "'Cormorant Infant', serif",
                 normal: "'Archivo', sans-serif",
             },
+            zIndexes: {
+                reader: 1,
+                topButtons: 5,
+                sideBar: 10,
+            },
             mobile: {
                 width: STYLES_MOBILE_THRESHOLD.width,
                 height: STYLES_MOBILE_THRESHOLD.height,
@@ -218,6 +223,11 @@
 
         reader: {
             mobileTitleWidth: 50, // in percents
+        },
+
+        pageFrame: {
+            paddingDesktop: '2.5rem',
+            paddingMobile: '1rem',
         }
     }
 

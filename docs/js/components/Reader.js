@@ -9,6 +9,9 @@
         TSP.config.get('transitions.reader')[1]
     const MOBILE_TITLE_WIDTH = TSP.config.get('reader.mobileTitleWidth')
     const MOBILE_MEDIA_QUERY = TSP.config.get('styles.mobile.mediaQuery')
+    const Z_INDEX_INNER_CONTAINER = TSP.config.get('styles.zIndexes.reader')
+    const Z_INDEX_TOP_BUTTONS = TSP.config.get('styles.zIndexes.topButtons')
+    const PAGE_FRAME_PADDING_MOBILE = TSP.config.get('pageFrame.paddingMobile')
     
     const sheet = jss.default
         .createStyleSheet({
@@ -29,29 +32,28 @@
                     // so we need to reactivate it here
                     pointerEvents: 'initial',
                 },
+                '& h2': {
+                    [MOBILE_MEDIA_QUERY]: {
+                        width: `${MOBILE_TITLE_WIDTH}%`,
+                        // take the width available and remove page padding
+                        height: `calc((100vw - ${MOBILE_TITLE_WIDTH}vw) - 2 * ${PAGE_FRAME_PADDING_MOBILE})`,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        textAlign: 'left',
+                    },
+                    marginBottom: '0em',
+                    '& .subtitle': {
+                        fontSize: '80%',
+                        marginBottom: '2em',
+                    },
+                },
                 '&.contributions $contentContainer': {
                     textAlign: 'justify',
 
                     '& p': {
                         marginBottom: '1em',
                         textAlign: 'justify',
-                    },
-
-                    '& h2': {
-                        [MOBILE_MEDIA_QUERY]: {
-                            width: `${MOBILE_TITLE_WIDTH}%`,
-                            // take the width available and remove page padding
-                            height: `calc((100vw - ${MOBILE_TITLE_WIDTH}vw) - 2 * 1rem)`,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            textAlign: 'left',
-                        },
-                        marginBottom: '0em',
-                        '& .subtitle': {
-                            fontSize: '80%',
-                            marginBottom: '2em',
-                        },
                     },
 
                     '& .textcontent': {
@@ -97,8 +99,13 @@
                 padding: '1em',
                 height: '100%',
                 overflow: 'auto',
+                // To position the satellite viewer
+                position: 'relative',
+                zIndex: Z_INDEX_INNER_CONTAINER
             },
-            closeButton: {},
+            closeButton: {
+                zIndex: Z_INDEX_TOP_BUTTONS
+            },
             contentContainer: {
                 '& .fullwidthimage': {
                     '& img': {
@@ -108,6 +115,13 @@
                     },
                 },
             },
+            headerContainer: {
+                display: 'flex',
+                flexDirection: 'row',
+                '& > *': {
+                    flex: 1,
+                }
+            }
         })
         .attach()
 
@@ -118,6 +132,10 @@
                     <button>${TSP.components.crossSvg()}</button>
                 </tsp-top-page-button-container>
                 <div class="${sheet.classes.innerContainer}">
+                    <div class="${sheet.classes.headerContainer}">
+                        <h2></h2>
+                        <tsp-satellite-viewer></tsp-satellite-viewer>
+                    </div>
                     <div class="${sheet.classes.contentContainer}"></div>
                 </div>
             </div>
@@ -140,6 +158,9 @@
             )
             this.closeButton = this.querySelector(
                 `.${sheet.classes.closeButton}`
+            )
+            this.h2 = this.querySelector(
+                `.${sheet.classes.headerContainer} h2`
             )
 
             this.closeButton.addEventListener(
@@ -182,6 +203,9 @@
 
         setContent(className, content) {
             this.contentContainer.innerHTML = content.html
+            const h2 = this.contentContainer.querySelector('h2')
+            this.h2.innerHTML = h2.innerHTML
+            h2.remove()
             this.element.classList.add('enter')
             this.element.classList.add(className)
         }

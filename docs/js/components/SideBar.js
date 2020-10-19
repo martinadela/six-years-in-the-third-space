@@ -13,11 +13,13 @@
     )
     const IS_MOBILE = TSP.config.get('styles.isMobile')
     const BACKGROUND_MOBILE = TSP.config.get('styles.colors.SideBarBackground')
+    const Z_INDEX_SIDE_BAR = TSP.config.get('styles.zIndexes.sideBar')
 
     const sharedStyles = {
         main: {
             color: TSP.config.get('styles.colors.Highlight1'),
             fontFamily: TSP.config.get('styles.fontFamilies.title'),
+            zIndex: Z_INDEX_SIDE_BAR,
         },
         h1: {
             textTransform: 'uppercase',
@@ -144,6 +146,7 @@
                     sheetDesktop.classes.textRibbon
                 }"></tsp-text-ribbon>
                 ${sharedHtml.ulContainer(sheetDesktop)}
+                <tsp-satellite-viewer></tsp-satellite-viewer>
             </div>
         </template>
     `
@@ -170,7 +173,7 @@
                     opacity: 0,
                 },
                 '&:not(.mainPage)': {
-                    transform: `translateX(calc(100% - ${BUTTON_SIZE}))`,
+                    transform: `translateX(100%)`,
                     '&:not(.expanded) $innerContainer': {
                         opacity: 0,
                     },
@@ -184,10 +187,6 @@
                     },
                 },
                 '&.mainPage': {
-                    // We don't want transition here, because the icon is just brutally switched
-                    '&:not(.expanded) $expandMenuButtonTop': {
-                        opacity: 0,
-                    },
                     '&.expanded $expandMenuButtonTop': {
                         opacity: 1,
                     },
@@ -195,6 +194,9 @@
                         transition: `transform ${TRANSITION_DURATION}ms ease-in-out`,
                         transform: 'translateX(100%)'
                     },
+                    '& h1': {
+                        pointerEvents: 'initial',
+                    }
                 },
                 '&.expanded': {
                     transform: 'translateX(0%)',
@@ -215,15 +217,24 @@
                     },
                     '& $expandMenuButtonTop': {
                         left: `calc(-${BUTTON_SIZE} / 2)`,
-                    }
-    
+                    },
                 },
+                '&:not(.mainPage):not(.expanded)': {
+                    '& $expandMenuButtonTop': {
+                        left: `-${BUTTON_SIZE}`,
+                    },
+                },
+                '&.mainPage:not(.expanded)': {
+                    '& $expandMenuButtonTop': {
+                        // We don't want transition here, because the svg icons are just brutally switched
+                        opacity: 0,
+                    },
+                }
             },
             innerContainer: {},
             h1: {
                 ...sharedStyles.h1,
                 paddingLeft: 0,
-                pointerEvents: 'initial',
             },
             ulContainer: {},
             ul: {},
