@@ -4,13 +4,13 @@
 
     const sheet = jss.default
         .createStyleSheet({
-            'main': {
+            main: {
                 pointerEvents: 'none',
                 userSelect: 'none',
                 position: 'absolute',
                 transition: `top ${TRANSITION_DURATION}ms ease-in-out, opacity ${TRANSITION_DURATION}ms ease-in-out`,
             },
-            'arrow': {
+            arrow: {
                 position: 'absolute',
                 width: '100%',
                 top: '50%',
@@ -18,31 +18,32 @@
                 color: HIGHLIGHT_COLOR1,
                 fontSize: '300%',
                 transformOrigin: '0 0',
-                animation: '$circle 20s linear infinite'
+                animation: '$circle 20s linear infinite',
             },
             '@keyframes circle': {
-                'from': {
-                    transform: 'rotate(0deg) translate(50%, -50%)'
+                from: {
+                    transform: 'rotate(0deg) translate(50%, -50%)',
                 },
-                'to': {
-                    transform: 'rotate(360deg) translate(50%, -50%)'
+                to: {
+                    transform: 'rotate(360deg) translate(50%, -50%)',
                 },
             },
         })
         .attach()
 
-
     const template = `
         <template id="Hud">
-            <div class=${sheet.classes.arrow}>⇦</div>
+            <div class="${sheet.classes.main}">
+                <div class=${sheet.classes.arrow}>⇦</div>
+            </div>
         </template>
     `
 
-    class Hud extends HTMLDivElement {
+    class Hud extends HTMLElement {
         constructor() {
             super()
-            this.classList.add(sheet.classes.main)
             this.appendChild(TSP.utils.template(template))
+            this.element = this.querySelector(`.${sheet.classes.main}`)
             this.bringOut()
 
             // ------------ state change handlers
@@ -54,34 +55,33 @@
                 'App.currentUrl',
                 this.currentUrlChanged.bind(this)
             )
-        }
-
-        connectedCallback() {
-            this.canvas3D = this.querySelector('canvas[is="tsp-canvas-3d"]')
-            this.pageFrame = this.querySelector('div[is="tsp-page-frame"]')
+            TSP.state.listen(
+                'Canvas3D.orbitControls',
+                this.orbitControlsChanged.bind(this)
+            )
         }
 
         bringOut() {
-            this.style.top = 0
-            this.style.opacity = 0
+            this.element.style.top = 0
+            this.element.style.opacity = 0
         }
 
         bringIn(hoveredObject) {
             const circle = TSP.utils.getBoundingCircleInScreen(
                 TSP.state.get('Canvas3D.component').getCamera(),
                 hoveredObject.getBoundingSphere(),
-                TSP.utils.getCanvasBoundingBoxOnScreen(),
+                TSP.utils.getCanvasBoundingBoxOnScreen()
             )
 
-            this.style.opacity = 1
-            this.style.left = `${circle.center.x - circle.radius}px`
-            this.style.top = `${circle.center.y - circle.radius}px`
-            this.style.borderRadius = `${circle.radius}px`
-            this.style.height = `${circle.radius * 2}px`
-            this.style.width = `${circle.radius * 2}px`
+            this.element.style.opacity = 1
+            this.element.style.left = `${circle.center.x - circle.radius}px`
+            this.element.style.top = `${circle.center.y - circle.radius}px`
+            this.element.style.borderRadius = `${circle.radius}px`
+            this.element.style.height = `${circle.radius * 2}px`
+            this.element.style.width = `${circle.radius * 2}px`
 
             if (TSP.config.get('debug.satellites')) {
-                this.style.border = `solid 1px blue`
+                this.element.style.border = `solid 1px blue`
             }
         }
 
@@ -101,7 +101,14 @@
                 this.bringOut()
             }
         }
+
+        orbitControlsChanged() {
+            const hoveredObject = TSP.state.get('Canvas3D.hoveredObject')
+            if (hoveredObject) {
+                this.bringIn(hoveredObject)
+            }
+        }
     }
 
-    customElements.define('tsp-hud', Hud, { extends: 'div' })
+    customElements.define('tsp-hud', Hud)
 })()

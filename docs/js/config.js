@@ -1,4 +1,8 @@
 ;(function () {
+    const NEBULA_COLOR1 = [235, 194, 226]
+    const NEBULA_COLOR2 = [255, 199, 149]
+    const NEBULA_GRADIENT = `linear-gradient(17deg, rgba(255,255,255,0.5) 0%, rgba(${NEBULA_COLOR1[0]},${NEBULA_COLOR1[1]},${NEBULA_COLOR1[2]},0.35) 40%, rgba(${NEBULA_COLOR2[0]},${NEBULA_COLOR2[1]},${NEBULA_COLOR2[2]},0.35) 60%, rgba(255,255,255,0.5) 100%)`
+
     const STYLES_MOBILE_THRESHOLD = {
         width: 800,
         height: 550,
@@ -16,23 +20,27 @@
             duration: 2000,
             reader: [0.9, 0.1],
             hudDuration: 200,
-            sidebarDuration: 200
+            sidebarDuration: 200,
         },
         app: {
             // Must not have trailing slash
-            rootUrl: ''
+            rootUrl: '',
         },
         styles: {
             colors: {
                 Highlight1: '#3DA6FC', // dark blue sky
                 // Highlight1: '#FF8575', // orange
-                ContentBackground: 'rgba(255, 255, 255, 0.9)',
+                ContentBackground: 'rgba(255, 255, 255, 0.0)',
+                ButtonBackground: 'rgba(255, 255, 255, 0.9)',
                 ScrollbarBackground: 'transparent',
                 ScrollbarBorder: 'white',
                 Scrollbar: '#F7903C',
                 Text: 'rgb(112, 109, 109)',
                 TextBold: 'rgb(19, 18, 18)',
                 H2: 'rgb(25, 233, 53)',
+                Loader: '#3DA6FC',
+                LoaderBackground: NEBULA_GRADIENT,
+                SideBarBackground: NEBULA_GRADIENT,
             },
             spacings: {
                 size2: '2rem',
@@ -40,7 +48,7 @@
             },
             dimensions: {
                 borderThickness: '4px',
-                sidebarDesktopWidth: 30,
+                buttonSize: '4rem',
             },
             fontSizes: {
                 desktop: 14,
@@ -52,8 +60,12 @@
             mobile: {
                 width: STYLES_MOBILE_THRESHOLD.width,
                 height: STYLES_MOBILE_THRESHOLD.height,
-                mediaQuery: `@media screen and (max-width: ${STYLES_MOBILE_THRESHOLD.width}px) , screen and (max-height: ${STYLES_MOBILE_THRESHOLD.height}px)`
+                mediaQuery: `@media screen and (max-width: ${STYLES_MOBILE_THRESHOLD.width}px) , screen and (max-height: ${STYLES_MOBILE_THRESHOLD.height}px)`,
             },
+            isMobile: () => {
+                const windowDimensions = TSP.state.get('window.dimensions')
+                return windowDimensions.x < TSP.config.get('styles.mobile.width') || windowDimensions.y < TSP.config.get('styles.mobile.height')
+            }
         },
         lights: {
             ambientColor: 0xffffff,
@@ -65,7 +77,10 @@
         },
         universe: {
             // 2 colors in RGB format.
-            nebulaColors: [[235, 194, 226], [255, 199, 149]],
+            nebulaColors: [
+                NEBULA_COLOR1,
+                NEBULA_COLOR2,
+            ],
             // Between 0 and 2
             starsQuantity: 1.7,
             // Color of the general filter of the sky color
@@ -87,7 +102,7 @@
         planet: {
             radius: 8,
             color: 0xaaaaaa,
-            focusOnUrl: '/third-space'
+            focusOnUrl: '/third-space',
         },
         satellites: {
             planetaryRotationAxisRandomness: Math.PI * 0,
@@ -194,8 +209,15 @@
         ],
 
         sidebar: {
-            'textRollDuration': 20, // in seconds
-            'textRolling': 'What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry.  What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
+            desktopWidth: 30, // in percents
+            mobileWidth: 50, // in percents
+            textRollDuration: 20, // in seconds
+            textRolling:
+                'What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry.  What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+        },
+
+        reader: {
+            mobileTitleWidth: 50, // in percents
         }
     }
 

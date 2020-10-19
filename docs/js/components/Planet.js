@@ -4,11 +4,7 @@
 
     class Planet {
         constructor() {
-            this.geometry = new THREE.SphereBufferGeometry(
-                RADIUS,
-                32,
-                32
-            )
+            this.geometry = new THREE.SphereBufferGeometry(RADIUS, 32, 32)
             this.material = new THREE.MeshBasicMaterial({
                 color: TSP.config.get('planet.color'),
             })
@@ -31,7 +27,7 @@
         getHoverableObject3D() {
             return this.mesh
         }
-        
+
         getBoundingSphere() {
             return this.boundingSphere
         }

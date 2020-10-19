@@ -1,5 +1,5 @@
 ;(function () {
     document
         .querySelector('#root')
-        .insertAdjacentHTML('beforeend', '<div is="tsp-app"></div>')
+        .insertAdjacentHTML('beforeend', '<tsp-app></tsp-app>')
 })()

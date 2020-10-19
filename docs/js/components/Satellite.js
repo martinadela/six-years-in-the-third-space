@@ -62,14 +62,21 @@
         }
 
         updateClickSphere() {
-            this.boundingSphere = TSP.utils.getObjectBoundingSphereInWorld(this.model.scene)
-            this.clickSphere = new THREE.Mesh(new THREE.SphereBufferGeometry(
-                this.boundingSphere.radius,
-                6,
-                6
-            ), new THREE.MeshBasicMaterial({
-                color: 'red', opacity: TSP.config.get('debug.satellites') ? 0.4 : 0, transparent: true,
-            }))
+            this.boundingSphere = TSP.utils.getObjectBoundingSphereInWorld(
+                this.model.scene
+            )
+            this.clickSphere = new THREE.Mesh(
+                new THREE.SphereBufferGeometry(
+                    this.boundingSphere.radius,
+                    6,
+                    6
+                ),
+                new THREE.MeshBasicMaterial({
+                    color: 'red',
+                    opacity: TSP.config.get('debug.satellites') ? 0.4 : 0,
+                    transparent: true,
+                })
+            )
             this.clickSphere.position.copy(this.boundingSphere.center)
             this.group.add(this.clickSphere)
         }
@@ -114,7 +121,12 @@
         }
 
         getBoundingSphere() {
-            return new THREE.Sphere(new THREE.Vector3().setFromMatrixPosition(this.clickSphere.matrixWorld), this.boundingSphere.radius)
+            return new THREE.Sphere(
+                new THREE.Vector3().setFromMatrixPosition(
+                    this.clickSphere.matrixWorld
+                ),
+                this.boundingSphere.radius
+            )
         }
 
         getUrl() {

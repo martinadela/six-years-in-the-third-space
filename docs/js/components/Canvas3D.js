@@ -14,10 +14,11 @@
         })
         .attach()
 
-    class Canvas3D extends HTMLCanvasElement {
+    class Canvas3D extends HTMLElement {
         constructor() {
             super()
-            this.classList.add(sheet.classes.main)
+            this.canvas = document.createElement('canvas', { class: sheet.classes.main })
+            this.appendChild(this.canvas)
             this.frameCount = 0
 
             // ------------ Camera
@@ -31,7 +32,7 @@
             this.renderer = new THREE.WebGLRenderer({
                 alpha: true,
                 antialias: true,
-                canvas: this,
+                canvas: this.canvas,
             })
             this.renderer.physicallyCorrectLights = true
 
@@ -62,8 +63,8 @@
         updateSize() {
             const windowDimensions = TSP.state.get('window.dimensions')
             this.canvasDimensions_Screen = windowDimensions.clone()
-            this.width = windowDimensions.x * this.pixelRatio
-            this.height = windowDimensions.y * this.pixelRatio
+            this.canvas.width = windowDimensions.x * this.canvas.pixelRatio
+            this.canvas.height = windowDimensions.y * this.canvas.pixelRatio
             this.renderer.setPixelRatio(window.devicePixelRatio)
             this.renderer.setSize(windowDimensions.x, windowDimensions.y)
         }
@@ -77,7 +78,11 @@
         }
 
         onMouseMove(event) {
-            if (TSP.state.get('App.isTouch') || this.frameCount % HOVER_DETECT_DEBOUNCE !== 0 || !this.hoverDetectionActive) {
+            if (
+                TSP.state.get('App.isTouch') ||
+                this.frameCount % HOVER_DETECT_DEBOUNCE !== 0 ||
+                !this.hoverDetectionActive
+            ) {
                 return
             }
             this.mousePosition_Screen.set(event.clientX, event.clientY)
@@ -86,7 +91,7 @@
 
         onClick() {
             if (TSP.state.get('App.isTouch') || !this.hoverDetectionActive) {
-                return 
+                return
             }
             if (TSP.state.get('Canvas3D.hoveredObject') !== null) {
                 this.navigateToHoveredObject()
@@ -95,17 +100,27 @@
 
         onTouchStart(event) {
             if (!this.hoverDetectionActive) {
-                return 
+                return
             }
             this.hadTouchMove = false
-            this.mousePosition_Screen.set(event.touches[0].clientX, event.touches[0].clientY)
+            this.mousePosition_Screen.set(
+                event.touches[0].clientX,
+                event.touches[0].clientY
+            )
         }
 
-        onTouchMove() {
+        onTouchMove(event) {
             if (!this.hoverDetectionActive) {
-                return 
+                return
             }
-            this.hadTouchMove = true
+            const newMousePosition_Screen = new THREE.Vector2(
+                event.touches[0].clientX,
+                event.touches[0].clientY,
+            )
+            // Some devices trigger touch move immediatelly after touch start with same position.
+            if (!newMousePosition_Screen.equals(this.mousePosition_Screen)) {
+                this.hadTouchMove = true
+            }
         }
 
         onTouchEnd() {
@@ -118,9 +133,12 @@
             } else {
                 const actualHoveredObject = this.hoverableObjectsManager.detectHoveredObject(
                     this.getMousePositionNDC(this.mousePosition_Screen),
-                    this.tspCamera.camera,
+                    this.tspCamera.camera
                 )
-                if (hoveredDatum === this.hoverableObjectsManager.getDatum(actualHoveredObject)) {
+                if (
+                    hoveredDatum ===
+                    this.hoverableObjectsManager.getDatum(actualHoveredObject)
+                ) {
                     this.navigateToHoveredObject()
                 } else {
                     this.refreshHoveredObjectState()
@@ -131,15 +149,19 @@
         refreshHoveredObjectState() {
             const hasChanged = this.hoverableObjectsManager.setNewPosition(
                 this.getMousePositionNDC(this.mousePosition_Screen),
-                this.tspCamera.camera,
+                this.tspCamera.camera
             )
             if (hasChanged) {
-                TSP.state.set('Canvas3D.hoveredObject', this.hoverableObjectsManager.getHoveredDatum())
+                TSP.state.set(
+                    'Canvas3D.hoveredObject',
+                    this.hoverableObjectsManager.getHoveredDatum()
+                )
             }
         }
 
         navigateToHoveredObject() {
             const hoveredDatum = this.hoverableObjectsManager.getHoveredDatum()
+            this.hoverableObjectsManager.clearState()
             TSP.state.set('Canvas3D.hoveredObject', null)
             TSP.utils.navigateTo(hoveredDatum.getUrl())
         }
@@ -159,7 +181,7 @@
             this.universe = new TSP.components.Universe()
             this.orbitControls = new Canvas3DOrbitControls(
                 this.getCamera(),
-                this
+                this.getCanvas()
             )
 
             const contributions = TSP.config.get('contributions')
@@ -191,6 +213,10 @@
 
         getRenderer() {
             return this.renderer
+        }
+
+        getCanvas() {
+            return this.canvas
         }
 
         load() {
@@ -236,11 +262,7 @@
                 false
             )
 
-            window.addEventListener(
-                'click',
-                this.onClick.bind(this),
-                false
-            )
+            window.addEventListener('click', this.onClick.bind(this), false)
 
             window.addEventListener(
                 'touchstart',
@@ -279,7 +301,7 @@
         _animateNoop() {}
     }
 
-    customElements.define('tsp-canvas-3d', Canvas3D, { extends: 'canvas' })
+    customElements.define('tsp-canvas-3d', Canvas3D)
 
     class Canvas3DHoverableObjectsManager {
         constructor() {
@@ -298,7 +320,7 @@
             return this.hoveredObject ? this.getDatum(this.hoveredObject) : null
         }
 
-        // Detects if a new object is hovered and set it to `this.hoveredObject`. 
+        // Detects if a new object is hovered and set it to `this.hoveredObject`.
         // Returns `true` if the `Canvas3DHoverableObjectsManager` state changed, `false` otherwise.
         setNewPosition(mouse, camera) {
             const newHoveredObject = this.detectHoveredObject(mouse, camera)
@@ -332,6 +354,10 @@
             )
         }
 
+        clearState() {
+            this.hoveredObject = null
+        }
+
         _findHoverableObject(object3D) {
             while (
                 !(object3D.uuid in this.hoverableObjectsUuid) &&
@@ -346,19 +372,18 @@
         }
 
         getDatum(object3D) {
-            return object3D ? this.hoverableObjectsUuid[object3D.uuid]: null
+            return object3D ? this.hoverableObjectsUuid[object3D.uuid] : null
         }
     }
 
     class Canvas3DOrbitControls {
         constructor(camera, canvas) {
             this.orbitControls = new THREE.OrbitControls(camera, canvas)
-            this.animate = this._animateNoop
+            this.orbitControls.addEventListener('end', this.onOrbitInteractionEnd.bind(this))
         }
 
-        _animateNoop() {}
-        _animateInteractiveControls() {
-            this.orbitControls.update()
+        onOrbitInteractionEnd() {
+            TSP.state.set('Canvas3D.orbitControls', null)            
         }
     }
 

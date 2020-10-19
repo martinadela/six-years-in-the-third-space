@@ -1,49 +1,33 @@
 ;(function () {
     const HIGHLIGHT_COLOR1 = TSP.config.get('styles.colors.Highlight1')
-    const EXPAND_TRANSITION_DURATION = TSP.config.get('transitions.sidebarDuration')
-
     const sheet = jss.default
         .createStyleSheet({
             main: {
-                display: 'block',
                 background: 'none',
                 color: HIGHLIGHT_COLOR1,
                 border: 'none',
                 cursor: 'pointer',
                 pointerEvents: 'initial',
                 '&:focus': {
-                    outline: 0
-                },
-                transition: `transform ${EXPAND_TRANSITION_DURATION}ms ease-in-out`,
-                transform: 'translateY(-50%) rotate(0deg)',
-                '&.expanded': {
-                    transform: 'translateY(-50%) rotate(180deg)',
-                },
-                '&[orientation="horizontal"]': {
-                    transform: 'rotate(90deg)',
-                    '&.expanded': {
-                        transform: 'rotate(270deg)',
-                    },  
-                },
-                '&.locked': {
-                    display: 'none',
+                    outline: 0,
                 },
             },
         })
         .attach()
 
-    class ExpandMenuButton extends HTMLButtonElement {
+    class ExpandMenuButton extends HTMLElement {
         constructor() {
             super()
-            this.classList.add(sheet.classes.main)
-            this.innerText = '▾'
+            this.element = document.createElement('button')
+            this.element.innerHTML = this.innerHTML
+            this.innerHTML = ''
+            this.appendChild(this.element)
+            this.element.className = this.className
+            this.element.classList.add(sheet.classes.main)
+            this.className = ''
             TSP.state.listen(
                 'SideBar.expanded',
                 this.expandedChanged.bind(this)
-            )
-            TSP.state.listen(
-                'App.currentUrl',
-                this.currentUrlChanged.bind(this)
             )
         }
 
@@ -62,22 +46,12 @@
 
         expandedChanged(expanded) {
             if (expanded) {
-                this.classList.add('expanded')
+                this.element.classList.add('expanded')
             } else {
-                this.classList.remove('expanded')
-            }
-        }
-
-        currentUrlChanged(url) {
-            if (url === '') {
-                this.classList.remove('locked')
-            } else {
-                this.classList.add('locked')
+                this.element.classList.remove('expanded')
             }
         }
     }
 
-    customElements.define('tsp-expand-menu-button', ExpandMenuButton, {
-        extends: 'button',
-    })
+    customElements.define('tsp-expand-menu-button', ExpandMenuButton)
 })()

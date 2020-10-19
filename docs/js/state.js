@@ -2,8 +2,8 @@
     const STATE = {
         window: {
             dimensions: new THREE.Vector2(
-                window.innerWidth, 
-                window.innerHeight,
+                window.innerWidth,
+                window.innerHeight
             ),
         },
         App: {
@@ -16,15 +16,19 @@
             satellites: {},
             planet: null,
             component: null,
+            // This will stay null, we only keep it to trigger events
+            orbitControls: null
         },
         Reader: {
             loaded: false,
+        },
+        PageFrame: {
+            component: null
         },
         SideBar: {
             component: null,
             expanded: false,
         },
-
     }
 
     TSP.state = {}
@@ -55,7 +59,10 @@
 
     TSP.state.listen = (path, callback) => {
         const value = TSP.utils.getOrThrow(STATE, path)
-        if (!(value instanceof THREE.Vector2) && (_.isObject(value) || _.isArray(value))) {
+        if (
+            !(value instanceof THREE.Vector2) &&
+            (_.isObject(value) || _.isArray(value))
+        ) {
             throw new Error(
                 'Path "' +
                     path +

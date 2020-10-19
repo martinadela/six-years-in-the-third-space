@@ -1,10 +1,13 @@
 ;(function () {
     const HIGHLIGHT_COLOR1 = TSP.config.get('styles.colors.Highlight1')
     const MOBILE_MEDIA_QUERY = TSP.config.get('styles.mobile.mediaQuery')
+    const EXPAND_TRANSITION_DURATION = TSP.config.get(
+        'transitions.sidebarDuration'
+    )
     const TEXT_ROLL_DURATION = TSP.config.get('sidebar.textRollDuration')
     const TEXT_RIBBON = TSP.config.get('sidebar.textRolling')
     const SIDEBAR_WIDTH_PERCENT = TSP.config.get(
-        'styles.dimensions.sidebarDesktopWidth'
+        'sidebar.desktopWidth'
     )
 
     const sheet = jss.default
@@ -29,9 +32,9 @@
                 cursor: 'pointer',
                 userSelect: 'none',
                 pointerEvents: 'initial',
-                '&.locked, &[no-expand-button]': {
+                '&.locked, &.noExpandButton': {
                     pointerEvents: 'none',
-                    '& button[is="tsp-expand-menu-button"]': {
+                    '& tsp-expand-menu-button': {
                         display: 'none',
                     },
                 },
@@ -50,23 +53,34 @@
                 position: 'absolute',
                 marginRight: '0.5em',
                 fontSize: '150%',
-            }
+                transition: `transform ${EXPAND_TRANSITION_DURATION}ms ease-in-out`,
+                transform: 'translateY(-50%) rotate(0deg)',
+                '&.expanded': {
+                    transform: 'translateY(-50%) rotate(180deg)',
+                },
+            },
         })
         .attach()
 
     const template = `
         <template id="TextRibbon">
-            <div>${TEXT_RIBBON}</div>
-            <button is="tsp-expand-menu-button" class="${sheet.classes.expandMenuButton}"></button>
+            <div class="${sheet.classes.main}">
+                <div>${TEXT_RIBBON}</div>
+                <tsp-expand-menu-button class="${sheet.classes.expandMenuButton}">▾</tsp-expand-menu-button>
+            </div>
         </template>
     `
 
-    class TextRibbon extends HTMLDivElement {
+    class TextRibbon extends HTMLElement {
         constructor() {
             super()
-            this.classList.add(sheet.classes.main)
             this.appendChild(TSP.utils.template(template))
-            // this.showExpandButton = this.getAttribute()
+            this.element = this.querySelector(`.${sheet.classes.main}`)
+            this.element.classList.add(this.className)
+            this.className = ""
+            if (this.getAttribute('no-expand-button') !== null) {
+                this.element.classList.add('noExpandButton')
+            }
 
             TSP.state.listen(
                 'App.currentUrl',
@@ -75,7 +89,7 @@
         }
 
         connectedCallback() {
-            this.addEventListener('click', this.onClicked.bind(this))
+            this.element.addEventListener('click', this.onClicked.bind(this))
         }
 
         onClicked() {
@@ -87,12 +101,12 @@
 
         currentUrlChanged(url) {
             if (url === '') {
-                this.classList.remove('locked')
+                this.element.classList.remove('locked')
             } else {
-                this.classList.add('locked')
+                this.element.classList.add('locked')
             }
         }
     }
 
-    customElements.define('tsp-text-ribbon', TextRibbon, { extends: 'div' })
+    customElements.define('tsp-text-ribbon', TextRibbon)
 })()
