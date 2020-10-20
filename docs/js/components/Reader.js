@@ -1,10 +1,11 @@
 ;(function () {
     const COLOR_BACKGROUND = TSP.config.get('styles.colors.ContentBackground')
     const COLOR_TEXT_BOLD = TSP.config.get('styles.colors.TextBold')
-    const TRANSITION_DELAY =
+    const ENTER_TRANSITION_DELAY =
         TSP.config.get('transitions.duration') *
         TSP.config.get('transitions.reader')[0]
-    const TRANSITION_DURATION =
+    const PAGE_TRANSITION_DURATION = TSP.config.get('transitions.duration')
+    const TRANSITION_DURATION = 
         TSP.config.get('transitions.duration') *
         TSP.config.get('transitions.reader')[1]
     const MOBILE_TITLE_WIDTH = TSP.config.get('reader.mobileTitleWidth')
@@ -24,11 +25,9 @@
                 // To allow positioning of button
                 position: 'relative',
                 // Transitions
-                transition: `opacity ${TRANSITION_DURATION}ms ease-in-out 0ms`,
+                transition: `opacity ${TRANSITION_DURATION}ms ease-in-out`,
                 opacity: 0,
                 '&.enter': {
-                    transition: `opacity ${TRANSITION_DURATION}ms ease-in-out`,
-                    transitionDelay: `${TRANSITION_DELAY}ms`,
                     opacity: 1,
                     // PageFrame disable pointer events to let control to orbit controls,
                     // so we need to reactivate it here
@@ -48,6 +47,15 @@
                     '& .subtitle': {
                         fontSize: '80%',
                         marginBottom: '2em',
+                    },
+                },
+            },
+            contentContainer: {
+                '& .fullwidthimage': {
+                    '& img': {
+                        width: '100%',
+                        marginTop: '1em',
+                        marginBottom: '1em',
                     },
                 },
                 '&.contributions $contentContainer': {
@@ -95,6 +103,15 @@
                         marginTop: '3em',
                     },
                 },
+
+                transition: `opacity ${TRANSITION_DURATION}ms ease-in-out 0ms`,
+                opacity: 0,
+                '&.enter': {
+                    opacity: 1,
+                },
+                '&.exit': {
+                    opacity: 0,
+                },
             },
             innerContainer: {
                 backgroundColor: COLOR_BACKGROUND,
@@ -111,15 +128,6 @@
             },
             closeButton: {
                 zIndex: Z_INDEX_TOP_BUTTONS
-            },
-            contentContainer: {
-                '& .fullwidthimage': {
-                    '& img': {
-                        width: '100%',
-                        marginTop: '1em',
-                        marginBottom: '1em',
-                    },
-                },
             },
             headerContainer: {
                 display: 'flex',
@@ -164,8 +172,8 @@
             this.appendChild(TSP.utils.template(template))
             this.element = this.querySelector(`.${sheet.classes.main}`)
 
-            this.contentContainer = this.querySelector(
-                `.${sheet.classes.contentContainer}`
+            this.headerContainer = this.querySelector(
+                `.${sheet.classes.headerContainer}`
             )
             this.closeButton = this.querySelector(
                 `.${sheet.classes.closeButton}`
@@ -188,11 +196,27 @@
         connectedCallback() {}
 
         currentUrlChanged(url) {
-            this.element.classList.remove('contributions')
-            this.element.classList.remove('collaborators')
             if (url === '') {
-                this.element.classList.remove('enter')
-            } else if (this.contents.contributions[url]) {
+                TSP.utils
+                    .elementsTransitionHelper([this.element], {
+                        classPrevious: 'enter',
+                        classTransition: 'exit',
+                        duration: TRANSITION_DURATION,
+                    })
+                return
+            } else {
+                // Delay entering, so we let the canvas3d transition happen first
+                TSP.utils.timeoutPromise(ENTER_TRANSITION_DELAY)
+                    .then(() => 
+                        TSP.utils.elementsTransitionHelper([this.element], {
+                            classPrevious: 'exit',
+                            classTransition: 'enter',
+                            duration: TRANSITION_DURATION,
+                        })
+                    )
+            }
+            
+            if (this.contents.contributions[url]) {
                 this.setContent(
                     'contributions',
                     this.contents.contributions[url]
@@ -214,22 +238,53 @@
         }
 
         setContent(className, content) {
-            this.contentContainer.innerHTML = content.html
-            const h2 = this.contentContainer.querySelector('h2')
-            if (h2) {
-                this.h2.innerHTML = h2.innerHTML
-                h2.remove()
+            this.element.classList.remove('contributions')
+            this.element.classList.remove('collaborators')
+            this.element.classList.add(className)
+
+            const exitingContentContainer = this.querySelectorAll(`.${sheet.classes.contentContainer}`)
+            
+            const enteringContentContainer = document.createElement('div')
+            enteringContentContainer.classList.add(sheet.classes.contentContainer)
+            enteringContentContainer.innerHTML = content.html
+
+            TSP.utils
+                .elementsTransitionHelper(exitingContentContainer, {
+                    classPrevious: 'enter',
+                    classTransition: 'exit',
+                    duration: TRANSITION_DURATION,
+                })
+                .then((exitingContentContainer) => {
+                    exitingContentContainer.forEach(element => element.remove())
+                    this.setTitle(enteringContentContainer)
+                    this.headerContainer.after(enteringContentContainer)
+                    return TSP.utils.waitAtleast(
+                        PAGE_TRANSITION_DURATION - 2 * TRANSITION_DURATION, 
+                        TSP.utils.allImagesLoaded(enteringContentContainer)
+                    )
+                })
+                .then(() => 
+                    TSP.utils.elementsTransitionHelper([enteringContentContainer], {
+                        classTransition: 'enter',
+                        duration: TRANSITION_DURATION,
+                    })
+                )
+        }
+
+        setContent404() {
+            this.h2.innerHTML = 'Page not found'
+            this.element.classList.add('enter')
+        }
+
+        setTitle(enteringContentContainer) {
+            const enteringH2 = enteringContentContainer.querySelector('h2')
+            if (enteringH2) {
+                this.h2.innerHTML = enteringH2.innerHTML
+                enteringH2.remove()
             } else {
                 this.h2.innerHTML = 'NO TITLE FOUND'
                 console.error(`h2 not found in page`)
             }
-            this.element.classList.add('enter')
-            this.element.classList.add(className)
-        }
-
-        setContent404() {
-            this.contentContainer.innerHTML = 'Page not found'
-            this.element.classList.add('enter')
         }
 
         load() {

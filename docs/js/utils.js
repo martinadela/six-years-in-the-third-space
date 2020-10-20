@@ -1,6 +1,68 @@
 ;(function () {
     TSP.utils = {}
-    
+
+    TSP.utils.timeoutPromise = (delay, value) => {
+        let timeoutHandle = null
+        const promise = new Promise((resolve) => {
+            timeoutHandle = setTimeout(() => resolve(value), delay)
+        })
+        promise.cancel = () => {
+            if (timeoutHandle !== null) {
+                clearTimeout(timeoutHandle)
+            }
+        }
+        return promise
+    }
+        
+    TSP.utils.waitAtleast = (delay, promise) => {
+        return TSP.utils.timeoutPromise(delay).then(() => promise)
+    }
+
+    TSP.utils.imgLoaded = (img) => {
+        return new Promise((resolve) => {
+            // This is also true if image responded with 404 or other error
+            if (img.complete) {
+                resolve(img)
+                return
+            }
+            img.onload = () => resolve(img)
+        })
+    }
+
+    TSP.utils.allImagesLoaded = (element) => {
+        const allImages = element.querySelectorAll('img')
+        // Fullfils too if `allImages` is empty
+        return Promise.all(Array.prototype.map.call(allImages, TSP.utils.imgLoaded))
+    }
+
+    TSP.utils.elementsTransitionHelper = (elements, opts) => {
+        const duration = opts.duration === undefined ? 400 : opts.duration
+        const classPrevious = opts.classPrevious
+        const classTransition = opts.classTransition || 'transition-progress'
+        const classFinal = opts.classFinal
+        if (elements.length) {
+            // Forces reflow before adding the transition class to ensure animation will be triggered
+            // REF : https://gist.github.com/paulirish/5d52fb081b3570c81e3a
+            // REF : https://stackoverflow.com/questions/21664940/force-browser-to-trigger-reflow-while-changing-css
+            void(elements[0].offsetLeft)
+        }
+        elements.forEach(element => {
+            if (classPrevious) {
+                element.classList.remove(classPrevious) 
+            }
+            element.classList.add(classTransition)
+        })
+        return TSP.utils.timeoutPromise(duration).then(() => {
+            elements.forEach(element => {
+                if (classFinal) {
+                    element.classList.remove(classTransition)
+                    element.classList.add(classFinal)
+                }
+            })
+            return elements
+        })        
+    }
+ 
     TSP.utils.sphericalSpacedOnSphere = (numPoints, radius) => {
         const sphericals = []
         const rowOrColumnCount = Math.pow(numPoints, 0.5)

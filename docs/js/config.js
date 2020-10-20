@@ -18,7 +18,7 @@
         },
         transitions: {
             duration: 2000,
-            reader: [0.9, 0.1],
+            reader: [0.8, 0.2],
             hudDuration: 200,
             sidebarDuration: 200,
         },
