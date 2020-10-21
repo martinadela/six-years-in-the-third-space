@@ -1,4 +1,6 @@
 ;(function () {
+    const PAGE_FRAME_PADDING_DESKTOP = TSP.config.get('pageFrame.paddingDesktop')
+    const PAGE_FRAME_PADDING_MOBILE = TSP.config.get('pageFrame.paddingMobile')
     const MOBILE_MEDIA_QUERY = TSP.config.get('styles.mobile.mediaQuery')
 
     const sheet = jss.default
@@ -7,9 +9,9 @@
                 position: 'absolute',
                 left: 0,
                 top: 0,
-                padding: '2.5rem 2.5rem',
+                padding: PAGE_FRAME_PADDING_DESKTOP,
                 [MOBILE_MEDIA_QUERY]: {
-                    padding: '1rem 1rem',
+                    padding: PAGE_FRAME_PADDING_MOBILE,
                 },
                 width: '100%',
                 height: '100%',

@@ -1,5 +1,6 @@
 ;(function () {
     const TRANSITION_DURATION = 400
+    const COLOR_HIGHLIGHT1 = TSP.config.get('styles.colors.Highlight1')
     const PAGE_TRANSITION_DURATION = TSP.config.get('transitions.duration')
     const BORDER_STYLE = `solid ${TSP.config.get(
         'styles.colors.Highlight1'
@@ -12,11 +13,13 @@
     )
     const IS_MOBILE = TSP.config.get('styles.isMobile')
     const BACKGROUND_MOBILE = TSP.config.get('styles.colors.SideBarBackground')
+    const Z_INDEX_SIDE_BAR = TSP.config.get('styles.zIndexes.sideBar')
 
     const sharedStyles = {
         main: {
             color: TSP.config.get('styles.colors.Highlight1'),
             fontFamily: TSP.config.get('styles.fontFamilies.title'),
+            zIndex: Z_INDEX_SIDE_BAR,
         },
         h1: {
             textTransform: 'uppercase',
@@ -50,10 +53,7 @@
                 <div>
                     <p>Six years</p> 
                     <p>in the</p> 
-                    <p>
-                        ${expandButton ? expandButton : ''}
-                        Third Space
-                    </p>
+                    <p>${expandButton ? expandButton : ''}Third Space</p>
                 </div>
             </h1>
             `,
@@ -82,6 +82,7 @@
     }
 
     //****************************** DESKTOP ******************************/
+    const VERTICAL_PADDING_CONTENT = TSP.config.get('styles.spacings.contentVerticalPadding')
 
     const sheetDesktop = jss.default
         .createStyleSheet({
@@ -106,9 +107,19 @@
                     '& tsp-expand-menu-button': {
                         display: 'none'
                     }
+                },
+                '& tsp-satellite-viewer': {
+                    paddingRight: VERTICAL_PADDING_CONTENT
                 }
             },
-            innerContainer: {},
+            innerContainer: {
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%',
+                '& tsp-satellite-viewer': {
+                    flex: 1,
+                }
+            },
             h1: {
                 ...sharedStyles.h1,
                 '& p': {
@@ -146,6 +157,7 @@
                     sheetDesktop.classes.textRibbon
                 }"></tsp-text-ribbon>
                 ${sharedHtml.ulContainer(sheetDesktop)}
+                <tsp-satellite-viewer></tsp-satellite-viewer>
             </div>
         </template>
     `
@@ -172,7 +184,7 @@
                     opacity: 0,
                 },
                 '&:not(.mainPage)': {
-                    transform: `translateX(calc(100% - ${BUTTON_SIZE}))`,
+                    transform: `translateX(100%)`,
                     '&:not(.expanded) $innerContainer': {
                         opacity: 0,
                     },
@@ -186,10 +198,6 @@
                     },
                 },
                 '&.mainPage': {
-                    // We don't want transition here, because the icon is just brutally switched
-                    '&:not(.expanded) $expandMenuButtonTop': {
-                        opacity: 0,
-                    },
                     '&.expanded $expandMenuButtonTop': {
                         opacity: 1,
                     },
@@ -197,6 +205,9 @@
                         transition: `transform ${TRANSITION_DURATION}ms ease-in-out`,
                         transform: 'translateX(100%)'
                     },
+                    '& h1': {
+                        pointerEvents: 'initial',
+                    }
                 },
                 '&.expanded': {
                     transform: 'translateX(0%)',
@@ -217,15 +228,24 @@
                     },
                     '& $expandMenuButtonTop': {
                         left: `calc(-${BUTTON_SIZE} / 2)`,
-                    }
-    
+                    },
                 },
+                '&:not(.mainPage):not(.expanded)': {
+                    '& $expandMenuButtonTop': {
+                        left: `-${BUTTON_SIZE}`,
+                    },
+                },
+                '&.mainPage:not(.expanded)': {
+                    '& $expandMenuButtonTop': {
+                        // We don't want transition here, because the svg icons are just brutally switched
+                        opacity: 0,
+                    },
+                }
             },
             innerContainer: {},
             h1: {
                 ...sharedStyles.h1,
                 paddingLeft: 0,
-                pointerEvents: 'initial',
             },
             ulContainer: {},
             ul: {},
@@ -235,29 +255,36 @@
             },
             expandMenuButtonTop: {
                 '& button': {
-                    '& span': {
-                        display: 'inline-block',
+                    '& svg': {
                         '&:first-child': {
-                            transform: 'rotate(90deg)'
+                            transform: 'rotate(180deg)'
                         },
                         '&:last-child': {
                             display: 'none',
                         },
                     },
                     '&.expanded': {
-                        '& span:first-child': {
+                        '& svg:first-child': {
                             display: 'none',
                         },
-                        '& span:last-child': {
-                            display: 'inline-block',
+                        '& svg:last-child': {
+                            display: 'block',
                         },
                     }
                 }
             },
             expandMenuButtonTitle: {
-                fontSize: '0.6em',
+                fontSize: '0.7em',
                 position: 'relative',
-                bottom: '0.2em',
+                marginRight: '0.15em',
+                top: '0.1em',
+                '& svg': {
+                    width: '0.8em',
+                    transform: 'rotate(180deg)',
+                    '& path': {
+                        stroke: COLOR_HIGHLIGHT1
+                    }
+                }
             },
         })
         .attach()
@@ -266,17 +293,17 @@
         <template id="SideBarMobile">
             <tsp-top-page-button-container class="${sheetMobile.classes.expandMenuButtonTop}" >
                 <tsp-expand-menu-button>
-                    <span>▾</span>
-                    <span>X</span>
+                    ${TSP.components.burgerSvg()}
+                    ${TSP.components.crossSvg()}
                 </tsp-expand-menu-button>
             </tsp-top-page-button-container>
 
             <div class="${sheetMobile.classes.innerContainer}">
-                ${sharedHtml.h1(sheetMobile, `
-                    <tsp-expand-menu-button
+                ${sharedHtml.h1(sheetMobile, 
+                    `<tsp-expand-menu-button
                         class="${sheetMobile.classes.expandMenuButtonTitle}"
-                    >◀</tsp-expand-menu-button>
-                `)}
+                    >${TSP.components.triangleSvg()}</tsp-expand-menu-button>`
+                )}
                 ${sharedHtml.ulContainer(sheetMobile)}
             </div>
         </template>

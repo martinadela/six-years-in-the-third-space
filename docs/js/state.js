@@ -21,6 +21,7 @@
         },
         Reader: {
             loaded: false,
+            component: null,
         },
         PageFrame: {
             component: null

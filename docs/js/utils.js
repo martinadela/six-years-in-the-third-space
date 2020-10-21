@@ -1,6 +1,68 @@
 ;(function () {
     TSP.utils = {}
-    
+
+    TSP.utils.timeoutPromise = (delay, value) => {
+        let timeoutHandle = null
+        const promise = new Promise((resolve) => {
+            timeoutHandle = setTimeout(() => resolve(value), delay)
+        })
+        promise.cancel = () => {
+            if (timeoutHandle !== null) {
+                clearTimeout(timeoutHandle)
+            }
+        }
+        return promise
+    }
+        
+    TSP.utils.waitAtleast = (delay, promise) => {
+        return TSP.utils.timeoutPromise(delay).then(() => promise)
+    }
+
+    TSP.utils.imgLoaded = (img) => {
+        return new Promise((resolve) => {
+            // This is also true if image responded with 404 or other error
+            if (img.complete) {
+                resolve(img)
+                return
+            }
+            img.onload = () => resolve(img)
+        })
+    }
+
+    TSP.utils.allImagesLoaded = (element) => {
+        const allImages = element.querySelectorAll('img')
+        // Fullfils too if `allImages` is empty
+        return Promise.all(Array.prototype.map.call(allImages, TSP.utils.imgLoaded))
+    }
+
+    TSP.utils.elementsTransitionHelper = (elements, opts) => {
+        const duration = opts.duration === undefined ? 400 : opts.duration
+        const classPrevious = opts.classPrevious
+        const classTransition = opts.classTransition || 'transition-progress'
+        const classFinal = opts.classFinal
+        if (elements.length) {
+            // Forces reflow before adding the transition class to ensure animation will be triggered
+            // REF : https://gist.github.com/paulirish/5d52fb081b3570c81e3a
+            // REF : https://stackoverflow.com/questions/21664940/force-browser-to-trigger-reflow-while-changing-css
+            void(elements[0].offsetLeft)
+        }
+        elements.forEach(element => {
+            if (classPrevious) {
+                element.classList.remove(classPrevious) 
+            }
+            element.classList.add(classTransition)
+        })
+        return TSP.utils.timeoutPromise(duration).then(() => {
+            elements.forEach(element => {
+                if (classFinal) {
+                    element.classList.remove(classTransition)
+                    element.classList.add(classFinal)
+                }
+            })
+            return elements
+        })        
+    }
+ 
     TSP.utils.sphericalSpacedOnSphere = (numPoints, radius) => {
         const sphericals = []
         const rowOrColumnCount = Math.pow(numPoints, 0.5)
@@ -201,6 +263,37 @@
         }
     }
 
+    // Simple shader loader that also does a simple build step, prepending declared dependencies to the shader files.
+    TSP.utils.loadShaders = (shaderDefinitions) => {
+        const dependencyUrls = shaderDefinitions.reduce((allDependencies, shaderDefinition) => {
+            return allDependencies.concat(shaderDefinition.dependencyUrls || [])
+        }, [])
+        const dependencies = {}
+        return Promise.all(
+            _.uniq(dependencyUrls).map(dependencyUrl =>
+                TSP.utils.fetch(dependencyUrl)
+                    .then((dependencyText) => {
+                        dependencies[dependencyUrl] = dependencyText
+                    })
+            )
+        ).then(() =>
+            Promise.all(
+                shaderDefinitions.map(shaderDefinition =>
+                    TSP.utils.fetch(shaderDefinition.url)
+                        .then((shaderText) => {
+                            ;(shaderDefinition.dependencyUrls || []).forEach(dependencyUrl => {
+                                if (!dependencies[dependencyUrl]) {
+                                    debugger
+                                }
+                                shaderText = dependencies[dependencyUrl] + '\n// ------------- INSERTED DEPENDENCY ------------- \n' + shaderText
+                            })
+                            return shaderText
+                        })
+                )
+            )
+        )
+    }
+
     TSP.utils.prerenderTexture = (renderer, material, width, height) => {
         const renderTarget = new THREE.WebGLRenderTarget(width, height, {
             minFilter: THREE.LinearFilter,
@@ -249,6 +342,31 @@
         }
         return new THREE.Mesh(geometry, materials)
     }
+
+    TSP.utils.getTexturedSphereBufferMesh = (createMaterial) => {
+        const materials = []
+        for (let i = 0; i < 6; i++) {
+            materials[i] = createMaterial(i)
+        }
+    
+        const geometry = new THREE.BoxBufferGeometry(1, 1, 1, 64, 64, 64)
+    
+        // displacement = new Float32Array( geometry.attributes.position.count );
+        // noise = new Float32Array( geometry.attributes.position.count );
+    
+        // for ( var i = 0; i < displacement.length; i ++ ) {
+        //     noise[ i ] = Math.random() * 5;
+        //     displacement[ i ] = 1//Math.sin( 0.1 * i + time );
+        //     noise[ i ] += 0.5 * ( 0.5 - Math.random() );
+        //     noise[ i ] = THREE.MathUtils.clamp( noise[ i ], - 5, 5 );
+        //     displacement[ i ] += noise[ i ];
+        // }
+    
+        // geometry.setAttribute( 'displacement', new THREE.BufferAttribute( displacement, 1 ) );
+    
+        return new THREE.Mesh(geometry, materials)
+    }
+    
 
     TSP.utils.randRange = (lower, upper) => lower + Math.random() * (upper - lower)
 

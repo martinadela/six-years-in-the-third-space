@@ -2,6 +2,8 @@
     const HOVER_DETECT_DEBOUNCE = TSP.config.get(
         'satellites.hoverDetectDebounce'
     )
+    const CONTRIBUTIONS = TSP.config.get('contributions')
+    // const SPEAKER = TSP.config.get('speaker')
 
     const sheet = jss.default
         .createStyleSheet({
@@ -38,10 +40,6 @@
 
             // ------------ state change handlers
             TSP.state.listen('window.dimensions', this.updateSize.bind(this))
-            TSP.state.listen(
-                'App.currentUrl',
-                this.currentUrlChanged.bind(this)
-            )
 
             // ------------
             this.loader = new THREE.GLTFLoader()
@@ -49,10 +47,7 @@
                 this.getCamera(),
                 this.getScene()
             )
-            this.canvasDimensions_Screen = null
-            this.mousePosition_Screen = new THREE.Vector2()
-            this.currentTouch_Screen = new THREE.Vector2()
-            this.hoverableObjectsManager = new Canvas3DHoverableObjectsManager()
+            this.pointerEventsManager = new Canvas3DPointerEventsManager(this.getCamera())
             this.createObjects()
         }
 
@@ -62,135 +57,27 @@
 
         updateSize() {
             const windowDimensions = TSP.state.get('window.dimensions')
-            this.canvasDimensions_Screen = windowDimensions.clone()
             this.canvas.width = windowDimensions.x * this.canvas.pixelRatio
             this.canvas.height = windowDimensions.y * this.canvas.pixelRatio
             this.renderer.setPixelRatio(window.devicePixelRatio)
             this.renderer.setSize(windowDimensions.x, windowDimensions.y)
         }
 
-        currentUrlChanged(url) {
-            if (url === '') {
-                this.hoverDetectionActive = true
-            } else {
-                this.hoverDetectionActive = false
-            }
-        }
-
-        onMouseMove(event) {
-            if (
-                TSP.state.get('App.isTouch') ||
-                this.frameCount % HOVER_DETECT_DEBOUNCE !== 0 ||
-                !this.hoverDetectionActive
-            ) {
-                return
-            }
-            this.mousePosition_Screen.set(event.clientX, event.clientY)
-            this.refreshHoveredObjectState()
-        }
-
-        onClick() {
-            if (TSP.state.get('App.isTouch') || !this.hoverDetectionActive) {
-                return
-            }
-            if (TSP.state.get('Canvas3D.hoveredObject') !== null) {
-                this.navigateToHoveredObject()
-            }
-        }
-
-        onTouchStart(event) {
-            if (!this.hoverDetectionActive) {
-                return
-            }
-            this.hadTouchMove = false
-            this.mousePosition_Screen.set(
-                event.touches[0].clientX,
-                event.touches[0].clientY
-            )
-        }
-
-        onTouchMove(event) {
-            if (!this.hoverDetectionActive) {
-                return
-            }
-            const newMousePosition_Screen = new THREE.Vector2(
-                event.touches[0].clientX,
-                event.touches[0].clientY,
-            )
-            // Some devices trigger touch move immediatelly after touch start with same position.
-            if (!newMousePosition_Screen.equals(this.mousePosition_Screen)) {
-                this.hadTouchMove = true
-            }
-        }
-
-        onTouchEnd() {
-            if (this.hadTouchMove || !this.hoverDetectionActive) {
-                return
-            }
-            const hoveredDatum = TSP.state.get('Canvas3D.hoveredObject')
-            if (hoveredDatum === null) {
-                this.refreshHoveredObjectState()
-            } else {
-                const actualHoveredObject = this.hoverableObjectsManager.detectHoveredObject(
-                    this.getMousePositionNDC(this.mousePosition_Screen),
-                    this.tspCamera.camera
-                )
-                if (
-                    hoveredDatum ===
-                    this.hoverableObjectsManager.getDatum(actualHoveredObject)
-                ) {
-                    this.navigateToHoveredObject()
-                } else {
-                    this.refreshHoveredObjectState()
-                }
-            }
-        }
-
-        refreshHoveredObjectState() {
-            const hasChanged = this.hoverableObjectsManager.setNewPosition(
-                this.getMousePositionNDC(this.mousePosition_Screen),
-                this.tspCamera.camera
-            )
-            if (hasChanged) {
-                TSP.state.set(
-                    'Canvas3D.hoveredObject',
-                    this.hoverableObjectsManager.getHoveredDatum()
-                )
-            }
-        }
-
-        navigateToHoveredObject() {
-            const hoveredDatum = this.hoverableObjectsManager.getHoveredDatum()
-            this.hoverableObjectsManager.clearState()
-            TSP.state.set('Canvas3D.hoveredObject', null)
-            TSP.utils.navigateTo(hoveredDatum.getUrl())
-        }
-
-        getMousePositionNDC(mousePosition_Screen) {
-            // calculate mouse position in normalized device coordinates
-            // Ref : https://threejs.org/docs/#api/en/core/Raycaster
-            return TSP.utils.toNDCPosition(
-                mousePosition_Screen,
-                this.canvasDimensions_Screen,
-                new THREE.Vector2()
-            )
-        }
-
         createObjects() {
             this.planet = new TSP.components.Planet()
             this.universe = new TSP.components.Universe()
+            // this.speaker = new TSP.components.Satellite()
             this.orbitControls = new Canvas3DOrbitControls(
                 this.getCamera(),
                 this.getCanvas()
             )
 
-            const contributions = TSP.config.get('contributions')
             const planetaryRotationAxes = TSP.utils
-                .sphericalSpacedOnSphere(contributions.length)
+                .sphericalSpacedOnSphere(CONTRIBUTIONS.length)
                 .map((spherical) => new TSP.components.RotationAxis(spherical))
 
             const satellitesState = {}
-            this.satellites = contributions.map((contribution, i) => {
+            this.satellites = CONTRIBUTIONS.map((contribution, i) => {
                 const satellite = new TSP.components.Satellite(
                     contribution.url,
                     contribution.satelliteModelUrl,
@@ -234,13 +121,13 @@
             this.universe.show(this.scene)
             this.tspCamera.show(this.scene)
 
-            this.hoverableObjectsManager.addHoverable(
+            this.pointerEventsManager.hoverableObjectsManager.addHoverable(
                 this.planet.getHoverableObject3D(),
                 this.planet
             )
             Object.values(this.satellites).forEach((satellite) => {
                 satellite.show(this.scene)
-                this.hoverableObjectsManager.addHoverable(
+                this.pointerEventsManager.hoverableObjectsManager.addHoverable(
                     satellite.getHoverableObject3D(),
                     satellite
                 )
@@ -255,35 +142,6 @@
                 )
                 this.scene.add(this.axesHelper)
             }
-
-            window.addEventListener(
-                'mousemove',
-                this.onMouseMove.bind(this),
-                false
-            )
-
-            window.addEventListener('click', this.onClick.bind(this), false)
-
-            window.addEventListener(
-                'touchstart',
-                this.onTouchStart.bind(this),
-                false
-            )
-
-            window.addEventListener(
-                'touchmove',
-                this.onTouchMove.bind(this),
-                // With OrbitControls, we need `useCapture`
-                // REF : https://github.com/mrdoob/three.js/issues/16254
-                true
-            )
-
-            window.addEventListener(
-                'touchend',
-                this.onTouchEnd.bind(this),
-                false
-            )
-
             this.animate()
         }
 
@@ -296,6 +154,7 @@
             this.renderer.render(this.scene, this.tspCamera.camera)
             this.tspCamera.animate()
             this.universe.animate()
+            this.pointerEventsManager.animate()
         }
 
         _animateNoop() {}
@@ -374,6 +233,171 @@
         getDatum(object3D) {
             return object3D ? this.hoverableObjectsUuid[object3D.uuid] : null
         }
+    }
+
+    class Canvas3DPointerEventsManager {
+
+        constructor(camera) {
+            this.camera = camera
+            this.hoverDetectionActive = false
+            this.hoverableObjectsManager = new Canvas3DHoverableObjectsManager()
+            this.mousePosition_Screen = new THREE.Vector2()
+            this.canvasDimensions_Screen = null
+            this.windowDimensionsChanged()
+
+            // ------------ state change and event handlers
+            TSP.state.listen(
+                'App.currentUrl',
+                this.currentUrlChanged.bind(this)
+            )
+            TSP.state.listen('window.dimensions', this.windowDimensionsChanged.bind(this))
+            this.frameCount = 0
+
+            window.addEventListener(
+                'mousemove',
+                this.onMouseMove.bind(this),
+                false
+            )
+
+            window.addEventListener('click', this.onClick.bind(this), false)
+
+            window.addEventListener(
+                'touchstart',
+                this.onTouchStart.bind(this),
+                false
+            )
+
+            window.addEventListener(
+                'touchmove',
+                this.onTouchMove.bind(this),
+                // With OrbitControls, we need `useCapture`
+                // REF : https://github.com/mrdoob/three.js/issues/16254
+                true
+            )
+
+            window.addEventListener(
+                'touchend',
+                this.onTouchEnd.bind(this),
+                false
+            )
+        }
+
+        currentUrlChanged(url) {
+            if (url === '') {
+                this.hoverDetectionActive = true
+            } else {
+                this.hoverDetectionActive = false
+            }
+        }
+
+        windowDimensionsChanged() {
+            const windowDimensions = TSP.state.get('window.dimensions')
+            this.canvasDimensions_Screen = windowDimensions.clone()
+        }
+
+        onMouseMove(event) {
+            if (
+                TSP.state.get('App.isTouch') ||
+                this.frameCount % HOVER_DETECT_DEBOUNCE !== 0 ||
+                !this.hoverDetectionActive
+            ) {
+                return
+            }
+            this.mousePosition_Screen.set(event.clientX, event.clientY)
+            this.refreshHoveredObjectState()
+        }
+
+        onClick() {
+            if (TSP.state.get('App.isTouch') || !this.hoverDetectionActive) {
+                return
+            }
+            if (TSP.state.get('Canvas3D.hoveredObject') !== null) {
+                this.navigateToHoveredObject()
+            }
+        }
+
+        onTouchStart(event) {
+            if (!this.hoverDetectionActive) {
+                return
+            }
+            this.hadTouchMove = false
+            this.mousePosition_Screen.set(
+                event.touches[0].clientX,
+                event.touches[0].clientY
+            )
+        }
+
+        onTouchMove(event) {
+            if (!this.hoverDetectionActive) {
+                return
+            }
+            const newMousePosition_Screen = new THREE.Vector2(
+                event.touches[0].clientX,
+                event.touches[0].clientY,
+            )
+            // Some devices trigger touch move immediatelly after touch start with same position.
+            if (!newMousePosition_Screen.equals(this.mousePosition_Screen)) {
+                this.hadTouchMove = true
+            }
+        }
+
+        onTouchEnd() {
+            if (this.hadTouchMove || !this.hoverDetectionActive) {
+                return
+            }
+            const hoveredDatum = TSP.state.get('Canvas3D.hoveredObject')
+            if (hoveredDatum === null) {
+                this.refreshHoveredObjectState()
+            } else {
+                const actualHoveredObject = this.hoverableObjectsManager.detectHoveredObject(
+                    this.getMousePositionNDC(this.mousePosition_Screen),
+                    this.camera
+                )
+                if (
+                    hoveredDatum ===
+                    this.hoverableObjectsManager.getDatum(actualHoveredObject)
+                ) {
+                    this.navigateToHoveredObject()
+                } else {
+                    this.refreshHoveredObjectState()
+                }
+            }
+        }
+
+        refreshHoveredObjectState() {
+            const hasChanged = this.hoverableObjectsManager.setNewPosition(
+                this.getMousePositionNDC(this.mousePosition_Screen),
+                this.camera
+            )
+            if (hasChanged) {
+                TSP.state.set(
+                    'Canvas3D.hoveredObject',
+                    this.hoverableObjectsManager.getHoveredDatum()
+                )
+            }
+        }
+
+        navigateToHoveredObject() {
+            const hoveredDatum = this.hoverableObjectsManager.getHoveredDatum()
+            this.hoverableObjectsManager.clearState()
+            TSP.state.set('Canvas3D.hoveredObject', null)
+            TSP.utils.navigateTo(hoveredDatum.getUrl())
+        }
+
+        getMousePositionNDC(mousePosition_Screen) {
+            // calculate mouse position in normalized device coordinates
+            // Ref : https://threejs.org/docs/#api/en/core/Raycaster
+            return TSP.utils.toNDCPosition(
+                mousePosition_Screen,
+                this.canvasDimensions_Screen,
+                new THREE.Vector2()
+            )
+        }
+
+        animate() {
+            this.frameCount++
+        }
+
     }
 
     class Canvas3DOrbitControls {

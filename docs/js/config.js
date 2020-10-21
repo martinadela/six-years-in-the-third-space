@@ -18,7 +18,7 @@
         },
         transitions: {
             duration: 2000,
-            reader: [0.9, 0.1],
+            reader: [0.8, 0.2],
             hudDuration: 200,
             sidebarDuration: 200,
         },
@@ -45,6 +45,7 @@
             spacings: {
                 size2: '2rem',
                 size1: '1rem',
+                contentVerticalPadding: '1rem',
             },
             dimensions: {
                 borderThickness: '4px',
@@ -57,10 +58,18 @@
                 title: "'Cormorant Infant', serif",
                 normal: "'Archivo', sans-serif",
             },
+            zIndexes: {
+                reader: 1,
+                topButtons: 5,
+                sideBar: 10,
+            },
             mobile: {
                 width: STYLES_MOBILE_THRESHOLD.width,
                 height: STYLES_MOBILE_THRESHOLD.height,
                 mediaQuery: `@media screen and (max-width: ${STYLES_MOBILE_THRESHOLD.width}px) , screen and (max-height: ${STYLES_MOBILE_THRESHOLD.height}px)`,
+            },
+            desktop: {
+                mediaQuery: `@media screen and (min-width: ${STYLES_MOBILE_THRESHOLD.width}px) and (min-height: ${STYLES_MOBILE_THRESHOLD.height}px)`,
             },
             isMobile: () => {
                 const windowDimensions = TSP.state.get('window.dimensions')
@@ -294,6 +303,11 @@
 
         reader: {
             mobileTitleWidth: 50, // in percents
+        },
+
+        pageFrame: {
+            paddingDesktop: '2.5rem',
+            paddingMobile: '1rem',
         }
     }
 
