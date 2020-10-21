@@ -111,6 +111,7 @@
                 return satellite.load(this.loader)
             })
             promises.push(this.universe.load())
+            promises.push(this.planet.load())
             Promise.all(promises).then(() => {
                 TSP.state.set('Canvas3D.loaded', true)
             })

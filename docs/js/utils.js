@@ -62,7 +62,10 @@
             return elements
         })        
     }
- 
+
+    TSP.utils.quantize = (value, quantization) =>
+        Math.round(value / quantization) * quantization
+
     TSP.utils.sphericalSpacedOnSphere = (numPoints, radius) => {
         const sphericals = []
         const rowOrColumnCount = Math.pow(numPoints, 0.5)
@@ -292,6 +295,38 @@
                 )
             )
         )
+    }
+
+    TSP.utils.readAttributeToVector3 = (bufferAttributeArray, index, vector) => 
+        vector.set(
+            bufferAttributeArray[3 * index], 
+            bufferAttributeArray[3 * index + 1],
+            bufferAttributeArray[3 * index + 2],
+        )
+
+    TSP.utils.readAttributeToVector2 = (bufferAttributeArray, index, vector) =>
+        vector.set(
+            bufferAttributeArray[2 * index], 
+            bufferAttributeArray[2 * index + 1],
+        )
+
+    TSP.utils.setVector3ToAttribute = (vector, bufferAttributeArray, index) => {
+        bufferAttributeArray[3 * index] = vector.x
+        bufferAttributeArray[3 * index + 1] = vector.y
+        bufferAttributeArray[3 * index + 2] = vector.z
+        return bufferAttributeArray
+    }
+
+    TSP.utils.setVector2ToAttribute = (vector, bufferAttributeArray, index) => {
+        bufferAttributeArray[2 * index] = vector.x
+        bufferAttributeArray[2 * index + 1] = vector.y
+        return bufferAttributeArray
+    }
+
+    TSP.utils.loadTexture = (url) => {
+        return new Promise ((resolve, reject ) => {
+            const texture = new THREE.TextureLoader().load(url, resolve, undefined, reject)
+        })
     }
 
     TSP.utils.prerenderTexture = (renderer, material, width, height) => {
