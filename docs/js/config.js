@@ -154,6 +154,50 @@
                 
             },
 
+            {
+                url: '/contributions/rec-on.org',
+                satelliteModelUrl: '/satellites/satellite9.glb',
+                contentUrl: '/pages/contributions/rec-on.org.html'
+                
+            },
+
+            {
+                url: '/contributions/Stuff-asking-stuff-Stuff-of-stuff-Stuff-about stuff-Inside-out-stuff-Vital-stuff-inside-and-outside',
+                satelliteModelUrl: '/satellites/satellite10.glb',
+                contentUrl: '/pages/contributions/kraamtext.html'
+                
+            },
+
+            {
+                url: '/contributions/Venyvät-Huoneet-Stretchy-Rooms',
+                satelliteModelUrl: '/satellites/satellite11.glb',
+                contentUrl: '/pages/contributions/Stretchy-Rooms.html'
+                
+            },
+
+            {
+                url: '/contributions/Mythological-Migrations-On-Collaboration-Organization-and-Production',
+                satelliteModelUrl: '/satellites/satellite12.glb',
+                contentUrl: '/pages/contributions/Mythological-Migrations.html'
+                
+            },
+
+            {
+                url: '/contributions/Terms-Conditions-What-do-we-need-in-order-to-work-together?',
+                satelliteModelUrl: '/satellites/satellite13.glb',
+                contentUrl: '/pages/contributions/Terms-Conditions.html'
+                
+            },
+
+            {
+                url: '/contributions/Reading-as-collaboration-deconstructing-single-narratives-and-the-myth-of-the-individual',
+                satelliteModelUrl: '/satellites/satellite14.glb',
+                contentUrl: '/pages/contributions/Reading-as-collaboration.html'
+                
+            },
+
+            
+
 
         ],
 
@@ -191,6 +235,38 @@
                 url: '/collaborators/Ali-Akbar-Mehta',
                 contentUrl: '/pages/collaborators/Ali-Akbar-Mehta.html',
             },
+
+            {
+                url: '/collaborators/Antye-Greie-Ripatti',
+                contentUrl: '/pages/collaborators/Antye-Greie-Ripatti.html',
+            },
+
+            {
+                url: '/collaborators/kraam',
+                contentUrl: '/pages/collaborators/kraam.html',
+            },
+            {
+                url: '/collaborators/Juulia-Terho-Milja-Maaria-Terho',
+                contentUrl: '/pages/collaborators/Juulia-Terho-Milja-Maaria-Terho.html',
+            },
+            {
+                url: '/collaborators/Abdullah-Qureshi-Danai-Anagnostou',
+                contentUrl: '/pages/collaborators/Abdullah-Qureshi-Danai-Anagnostou.html',
+            },
+
+            {
+                url: '/collaborators/Feminist-Culture-House',
+                contentUrl: '/pages/collaborators/Feminist-Culture-House.html',
+            },
+
+            {
+                url: '/collaborators/Yvonne-Billimore',
+                contentUrl: '/pages/collaborators/Yvonne-Billimore.html',
+            },
+
+
+           
+            
         ],
 
         otherPages: [
