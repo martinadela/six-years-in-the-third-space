@@ -1,7 +1,12 @@
 ;(function () {
     const TEXTURE_RESOLUTION = Math.round(
         Math.pow(((window.innerWidth / 1.7) * window.innerHeight) / 1.7, 0.5)
-    ) // 1024 / 3
+    )
+    const NEBULA_RGB1 = TSP.config.get('universe.nebulaColors')[0]
+    const NEBULA_RGB2 = TSP.config.get('universe.nebulaColors')[1]
+    const TEXTURE_GENERATOR = document.createElement('tsp-gradient-texture-generator')    
+    TEXTURE_GENERATOR.setDebug(TSP.config.get('debug.universe'))
+
     console.log('RESOLUTION', TEXTURE_RESOLUTION)
 
     // REF : https://stackoverflow.com/questions/32233805/im-new-to-threejs-how-to-create-a-sky-dome
@@ -14,13 +19,14 @@
         }
 
         load() {
-            return Promise.all([
-                fetch(
-                    TSP.utils.absoluteUrl('shaders/texture.vert')
-                ).then((response) => response.text()),
-                fetch(
-                    TSP.utils.absoluteUrl('shaders/nebula.frag')
-                ).then((response) => response.text()),
+            return TSP.utils.loadShaders([
+                {
+                    url: 'shaders/universe.vert',
+                },
+                {
+                    url: 'shaders/universe.frag',
+                    dependencyUrls: ['shaders/perlin-noise.shader', 'shaders/worley.shader'],
+                },
             ]).then((shaders) => {
                 this.shaders = {
                     vertex: shaders[0],
@@ -36,35 +42,37 @@
         }
 
         createShaderMaterial(index, params) {
+            const filterColor = TSP.config.get('universe.filterColor')
             return new THREE.ShaderMaterial({
                 vertexShader: this.shaders.vertex,
                 fragmentShader: this.shaders.fragment,
                 uniforms: {
                     index: { type: 'i', value: index },
                     seed: { type: 'f', value: params.seed },
-                    resolution: { type: 'f', value: params.resolution },
+                    resolution: { type: 'f', value: TEXTURE_RESOLUTION },
                     res1: { type: 'f', value: params.res1 },
                     res2: { type: 'f', value: params.res2 },
                     resMix: { type: 'f', value: params.resMix },
-                    mixScale: { type: 'f', value: params.mixScale },
                     nebulaeMap: { type: 't', value: params.nebulaeMap },
-                    starsQuantity: { type: 'f', value: params.starsQuantity },
+                    starsQuantity: { type: 'f', value: TSP.config.get('universe.starsQuantity') },
                     filterColor: {
                         type: 'vec3',
                         value: new THREE.Vector3(
-                            params.filterColor[0],
-                            params.filterColor[1],
-                            params.filterColor[2]
+                            filterColor[0],
+                            filterColor[1],
+                            filterColor[2]
                         ),
                     },
                     filterOpacity: {
                         type: 'f',
-                        value: params.filterOpacity,
+                        value: TSP.config.get('universe.filterOpacity'),
                     },
-                    nebulaOpacity: { type: 'f', value: params.nebulaOpacity },
+                    nebulaOpacity: { type: 'f', value: TSP.config.get('universe.nebulaOpacity') },
                     whiteCloudsIntensity: {
                         type: 'f',
-                        value: params.whiteCloudsIntensity,
+                        value: TSP.config.get(
+                            'universe.whiteCloudsIntensity'
+                        ),
                     },
                 },
             })
@@ -73,18 +81,10 @@
         createObjects() {
             const params = {
                 seed: Math.round(TSP.utils.randRange(0, 1000)),
-                resolution: TEXTURE_RESOLUTION,
                 res1: TSP.utils.randRange(0.5, 2.0),
                 res2: TSP.utils.randRange(0.5, 2.0),
                 resMix: TSP.utils.randRange(0.5, 2.0),
-                nebulaeMap: TEXTURE_GENERATOR.buildTexture(),
-                starsQuantity: TSP.config.get('universe.starsQuantity'),
-                filterColor: TSP.config.get('universe.filterColor'),
-                filterOpacity: TSP.config.get('universe.filterOpacity'),
-                nebulaOpacity: TSP.config.get('universe.nebulaOpacity'),
-                whiteCloudsIntensity: TSP.config.get(
-                    'universe.whiteCloudsIntensity'
-                ),
+                nebulaeMap: TEXTURE_GENERATOR.buildTexture({rgbs: [NEBULA_RGB1, NEBULA_RGB2] }),
             }
 
             this.sphere = TSP.utils.getTexturedSphereMesh(
@@ -109,68 +109,6 @@
             this.sphere.applyQuaternion(this.rotationQuaternion)
         }
     }
-
-    class TextureGenerator extends HTMLElement {
-        constructor() {
-            super()
-            this.canvas = document.createElement('canvas')
-            this.canvas.width = 512
-            this.canvas.height = 512
-            this.canvas.style.width = '200px'
-            this.canvas.style.height = '200px'
-            this.ctx = this.canvas.getContext('2d')
-            this.canvas.style.display = 'none'
-            if (TSP.config.get('debug.universe')) {
-                document.body.prepend(this.canvas)
-                this.canvas.style.display = 'block'
-                this.canvas.style.zIndex = '100'
-                this.canvas.style.position = 'fixed'
-                this.canvas.style.top = '0'
-                this.canvas.style.left = '0'
-            }
-        }
-
-        buildTexture() {
-            const baseColor = 'rgba(0, 0, 0, 1)'
-            const rgb1 = TSP.config.get('universe.nebulaColors')[0]
-            const rgb2 = TSP.config.get('universe.nebulaColors')[1]
-            const opacity = 0.5
-
-            this.ctx.fillStyle = baseColor
-            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
-
-            this.gradientCircle(
-                `rgba(${rgb1[0]},${rgb1[1]},${rgb1[2]},${opacity})`,
-                `rgba(${rgb2[0]},${rgb2[1]},${rgb2[2]},0)`
-            )
-            this.gradientCircle(
-                `rgba(${rgb2[0]},${rgb2[1]},${rgb2[2]},${opacity})`,
-                `rgba(${rgb1[0]},${rgb1[1]},${rgb1[2]},0)`
-            )
-
-            return new THREE.CanvasTexture(this.canvas)
-        }
-
-        gradientCircle(rgb1, rgb2) {
-            let x1 = TSP.utils.randRange(0, this.canvas.width)
-            let y1 = TSP.utils.randRange(0, this.canvas.height)
-            let size = TSP.utils.randRange(100, 200)
-            let x2 = x1
-            let y2 = y1
-            let r1 = 0
-            let r2 = size
-
-            let gradient = this.ctx.createRadialGradient(x1, y1, r1, x2, y2, r2)
-            gradient.addColorStop(0, rgb1)
-            gradient.addColorStop(1, rgb2)
-
-            this.ctx.fillStyle = gradient
-            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
-        }
-    }
-
-    customElements.define('tsp-universe-texture-generator', TextureGenerator)
-    const TEXTURE_GENERATOR = document.createElement('tsp-universe-texture-generator')
 
     TSP.components.Universe = Universe
 })()

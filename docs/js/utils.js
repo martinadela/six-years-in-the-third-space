@@ -263,6 +263,37 @@
         }
     }
 
+    // Simple shader loader that also does a simple build step, prepending declared dependencies to the shader files.
+    TSP.utils.loadShaders = (shaderDefinitions) => {
+        const dependencyUrls = shaderDefinitions.reduce((allDependencies, shaderDefinition) => {
+            return allDependencies.concat(shaderDefinition.dependencyUrls || [])
+        }, [])
+        const dependencies = {}
+        return Promise.all(
+            _.uniq(dependencyUrls).map(dependencyUrl =>
+                TSP.utils.fetch(dependencyUrl)
+                    .then((dependencyText) => {
+                        dependencies[dependencyUrl] = dependencyText
+                    })
+            )
+        ).then(() =>
+            Promise.all(
+                shaderDefinitions.map(shaderDefinition =>
+                    TSP.utils.fetch(shaderDefinition.url)
+                        .then((shaderText) => {
+                            ;(shaderDefinition.dependencyUrls || []).forEach(dependencyUrl => {
+                                if (!dependencies[dependencyUrl]) {
+                                    debugger
+                                }
+                                shaderText = dependencies[dependencyUrl] + '\n// ------------- INSERTED DEPENDENCY ------------- \n' + shaderText
+                            })
+                            return shaderText
+                        })
+                )
+            )
+        )
+    }
+
     TSP.utils.prerenderTexture = (renderer, material, width, height) => {
         const renderTarget = new THREE.WebGLRenderTarget(width, height, {
             minFilter: THREE.LinearFilter,
@@ -311,6 +342,31 @@
         }
         return new THREE.Mesh(geometry, materials)
     }
+
+    TSP.utils.getTexturedSphereBufferMesh = (createMaterial) => {
+        const materials = []
+        for (let i = 0; i < 6; i++) {
+            materials[i] = createMaterial(i)
+        }
+    
+        const geometry = new THREE.BoxBufferGeometry(1, 1, 1, 64, 64, 64)
+    
+        // displacement = new Float32Array( geometry.attributes.position.count );
+        // noise = new Float32Array( geometry.attributes.position.count );
+    
+        // for ( var i = 0; i < displacement.length; i ++ ) {
+        //     noise[ i ] = Math.random() * 5;
+        //     displacement[ i ] = 1//Math.sin( 0.1 * i + time );
+        //     noise[ i ] += 0.5 * ( 0.5 - Math.random() );
+        //     noise[ i ] = THREE.MathUtils.clamp( noise[ i ], - 5, 5 );
+        //     displacement[ i ] += noise[ i ];
+        // }
+    
+        // geometry.setAttribute( 'displacement', new THREE.BufferAttribute( displacement, 1 ) );
+    
+        return new THREE.Mesh(geometry, materials)
+    }
+    
 
     TSP.utils.randRange = (lower, upper) => lower + Math.random() * (upper - lower)
 
