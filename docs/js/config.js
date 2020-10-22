@@ -97,7 +97,7 @@
             filterOpacity: 0.7,
             nebulaOpacity: 0.8,
             whiteCloudsIntensity: 0.1,
-            rotationAngleStep: (Math.PI / 2) * 0.00015,
+            rotationAngleStep: (Math.PI / 2) * 0.0002,
             radius: 10000,
         },
         camera: {
@@ -112,6 +112,9 @@
             radius: 8,
             color: 0xaaaaaa,
             focusOnUrl: '/third-space',
+            rotationAngleStep: (Math.PI / 2) * 0.001,
+            color1: [250, 250, 250],
+            color2: [255, 199, 149],
         },
         satellites: {
             planetaryRotationAxisRandomness: Math.PI * 0,

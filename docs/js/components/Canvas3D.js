@@ -155,6 +155,7 @@
             this.renderer.render(this.scene, this.tspCamera.camera)
             this.tspCamera.animate()
             this.universe.animate()
+            this.planet.animate()
             this.pointerEventsManager.animate()
         }
 
