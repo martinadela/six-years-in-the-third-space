@@ -70,6 +70,9 @@
                     color: COLOR_LINK,
                     textDecoration: 'none',
                 },
+                'tsp-anchor': {
+                    cursor: 'pointer'
+                }
             },
             main: {
                 '& $innerContainer': {

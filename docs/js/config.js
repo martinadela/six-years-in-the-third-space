@@ -1,7 +1,7 @@
 ;(function () {
     const NEBULA_COLOR1 = [235, 194, 226] // Pink
     const NEBULA_COLOR2 = [255, 199, 149] // Orange
-    const NEBULA_GRADIENT = `linear-gradient(17deg, rgba(255,255,255,0.5) 0%, rgba(${NEBULA_COLOR1[0]},${NEBULA_COLOR1[1]},${NEBULA_COLOR1[2]},0.35) 40%, rgba(${NEBULA_COLOR2[0]},${NEBULA_COLOR2[1]},${NEBULA_COLOR2[2]},0.35) 60%, rgba(255,255,255,0.5) 100%)`
+    const NEBULA_GRADIENT = `linear-gradient(17deg, rgba(255,255,255,0.2) 0%, rgba(${NEBULA_COLOR1[0]},${NEBULA_COLOR1[1]},${NEBULA_COLOR1[2]},0.2) 40%, rgba(${NEBULA_COLOR2[0]},${NEBULA_COLOR2[1]},${NEBULA_COLOR2[2]},0.2) 60%, rgba(255,255,255,0.2) 100%)`
 
     const COLOR_HIGHLIGHT1 = '#FA8802'
     const COLOR_H2 = `#FA8802`
@@ -39,7 +39,7 @@
                 ContentBackground: [255, 255, 255],
                 ButtonBackground: 'rgba(255, 255, 255, 0.65)',
                 ScrollbarBackground: 'transparent',
-                ScrollbarBorder: 'LightGrey',
+                ScrollbarBorder: 'white',
                 Scrollbar: COLOR_HIGHLIGHT1,
                 Text: COLOR_TEXT,
                 TextBold: 'rgb(19, 18, 18)',

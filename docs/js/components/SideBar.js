@@ -17,16 +17,12 @@
                 color: COLOR_HIGHLIGHT1,
                 fontFamily: TSP.config.get('styles.fontFamilies.title'),
                 zIndex: Z_INDEX_SIDE_BAR,
-                width: `${SIDEBAR_WIDTH_MOBILE_PERCENT}%`,
-                [DESKTOP_MEDIA_QUERY]: {
-                    maxWidth: '20em',
-                },
                 height: '100%',
                 position: 'absolute',
                 top: 0,
                 right: 0,
                 
-                transition: `transform ${TRANSITION_DURATION}ms ease-in-out, background ${TRANSITION_DURATION}ms ease-in-out`,
+                transition: `transform ${TRANSITION_DURATION}ms ease-in-out`,
                 '& $innerContainer': {
                     transition: `opacity ${TRANSITION_DURATION}ms ease-in-out`,
                 },
@@ -62,12 +58,17 @@
                 },
                 '&.expanded': {
                     transform: 'translateX(0%)',
-                    background: BACKGROUND,
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    width: `${SIDEBAR_WIDTH_MOBILE_PERCENT}%`,
+                    [DESKTOP_MEDIA_QUERY]: {
+                        maxWidth: '20em',
+                    },
                     '& > tsp-expand-menu-button': {
                         display: 'inline-block',
                     },
                     '& $innerContainer': {
                         opacity: 1,
+                        background: BACKGROUND,
                     },
                     '& $expandMenuButtonTitle': {
                         display: 'none'
@@ -97,7 +98,10 @@
                     },
                 }
             },
-            innerContainer: {},
+            innerContainer: {
+                height: '100%',
+                overflow: 'hidden'
+            },
             h1: {
                 textTransform: 'uppercase',
                 fontFamily: TSP.config.get('styles.fontFamilies.title'),
@@ -150,6 +154,9 @@
                 position: 'relative',
                 marginRight: '0.15em',
                 top: '0.1em',
+                [MOBILE_MEDIA_QUERY]: {
+                    top: '0.2em',
+                },
                 '& svg': {
                     width: '0.8em',
                     transform: 'rotate(180deg)',
@@ -162,7 +169,7 @@
         .attach()
 
     const template = `
-        <template id="SideBarMobile">
+        <template id="SideBar">
             <tsp-top-page-button-container class="${sheet.classes.expandMenuButtonTop}" >
                 <tsp-expand-menu-button>
                     ${TSP.components.burgerSvg()}
