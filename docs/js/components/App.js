@@ -7,11 +7,10 @@
     const COLOR_SCROLLBAR_BORDER = TSP.config.get(
         'styles.colors.ScrollbarBorder'
     )
+    const COLOR_LINK = TSP.config.get('styles.colors.Links')
     const FONT_SIZE_DESKTOP = TSP.config.get('styles.fontSizes.desktop')
     const FONT_FAMILY_NORMAL = TSP.config.get('styles.fontFamilies.normal')
-    const FONT_FAMILY_TITLE = TSP.config.get('styles.fontFamilies.title')
     const COLOR_TEXT = TSP.config.get('styles.colors.Text')
-    const COLOR_H2 = TSP.config.get('styles.colors.H2')
     const TRANSITION_DURATION = 500
 
     const sheet = jss.default
@@ -64,14 +63,11 @@
                         border: `3px solid ${COLOR_SCROLLBAR_BORDER}`,
                     },    
                 },
-                h2: {
-                    color: COLOR_H2,
-                    fontFamily: FONT_FAMILY_TITLE,
-                },
                 ul: {
                     listStyle: 'none',
                 },
                 a: {
+                    color: COLOR_LINK,
                     textDecoration: 'none',
                 },
             },

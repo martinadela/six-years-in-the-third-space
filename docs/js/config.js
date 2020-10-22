@@ -1,7 +1,11 @@
 ;(function () {
-    const NEBULA_COLOR1 = [235, 194, 226]
-    const NEBULA_COLOR2 = [255, 199, 149]
+    const NEBULA_COLOR1 = [235, 194, 226] // Pink
+    const NEBULA_COLOR2 = [255, 199, 149] // Orange
     const NEBULA_GRADIENT = `linear-gradient(17deg, rgba(255,255,255,0.5) 0%, rgba(${NEBULA_COLOR1[0]},${NEBULA_COLOR1[1]},${NEBULA_COLOR1[2]},0.35) 40%, rgba(${NEBULA_COLOR2[0]},${NEBULA_COLOR2[1]},${NEBULA_COLOR2[2]},0.35) 60%, rgba(255,255,255,0.5) 100%)`
+
+    const COLOR_HIGHLIGHT1 = '#3DA6FC'
+    const COLOR_H2 = `rgb(${NEBULA_COLOR2[0] - 25}, ${NEBULA_COLOR2[1] - 25}, ${NEBULA_COLOR2[2] - 25})`
+    const COLOR_TEXT = 'rgb(112, 109, 109)'
 
     const STYLES_MOBILE_THRESHOLD = {
         width: 800,
@@ -28,17 +32,20 @@
         },
         styles: {
             colors: {
-                Highlight1: '#3DA6FC', // dark blue sky
+                Highlight1: COLOR_HIGHLIGHT1, // dark blue sky
                 // Highlight1: '#FF8575', // orange
-                ContentBackground: 'rgba(255, 255, 255, 0.0)',
-                ButtonBackground: 'rgba(255, 255, 255, 0.9)',
+                Links: COLOR_TEXT,
+                Border: COLOR_HIGHLIGHT1,
+                ContentBackground: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 4%, rgba(255,255,255,1.7) 96%, rgba(255,255,255,0) 100%)',
+                ButtonBackground: 'rgba(255, 255, 255, 0.65)',
                 ScrollbarBackground: 'transparent',
-                ScrollbarBorder: 'white',
-                Scrollbar: '#F7903C',
-                Text: 'rgb(112, 109, 109)',
+                ScrollbarBorder: 'LightGrey',
+                Scrollbar: 'LightGrey',
+                Text: COLOR_TEXT,
                 TextBold: 'rgb(19, 18, 18)',
-                H2: 'rgb(25, 233, 53)',
-                Loader: '#3DA6FC',
+                H2: COLOR_H2,
+                H2Subtitle: COLOR_H2,
+                Loader: COLOR_HIGHLIGHT1,
                 LoaderBackground: NEBULA_GRADIENT,
                 SideBarBackground: NEBULA_GRADIENT,
             },
@@ -82,7 +89,7 @@
             directColor: 0xffffff,
             directIntensity: 4 * Math.PI,
             directPosition: new THREE.Spherical(0, 0, 0),
-            spotIntensity: 400,
+            spotIntensity: 100,
         },
         universe: {
             // 2 colors in RGB format.
@@ -142,7 +149,7 @@
             },
 
             {
-                url: '/contributions/collaborating-as-a-multiplicity–a-dialogue-with-other-dialogues',
+                url: '/contributions/collaborating-as-a-multiplicity-a-dialogue-with-other-dialogues',
                 satelliteModelUrl: '/satellites/satellite5.glb',
                 contentUrl: '/pages/contributions/collaborating-as-a-multiplicity–a-dialogue-with-other-dialogues.html',
             },
@@ -167,21 +174,21 @@
             },
 
             {
-                url: '/contributions/rec-on.org',
+                url: '/contributions/rec-on-org',
                 satelliteModelUrl: '/satellites/satellite9.glb',
                 contentUrl: '/pages/contributions/rec-on.org.html'
                 
             },
 
             {
-                url: '/contributions/Stuff-asking-stuff-Stuff-of-stuff-Stuff-about stuff-Inside-out-stuff-Vital-stuff-inside-and-outside',
+                url: '/contributions/Stuff-asking-stuff-Stuff-of-stuff-Stuff-about-stuff-Inside-out-stuff-Vital-stuff-inside-and-outside',
                 satelliteModelUrl: '/satellites/satellite10.glb',
                 contentUrl: '/pages/contributions/kraamtext.html'
                 
             },
 
             {
-                url: '/contributions/Venyvät-Huoneet-Stretchy-Rooms',
+                url: '/contributions/Venyvat-Huoneet-Stretchy-Rooms',
                 satelliteModelUrl: '/satellites/satellite11.glb',
                 contentUrl: '/pages/contributions/Stretchy-Rooms.html'
                 
@@ -195,7 +202,7 @@
             },
 
             {
-                url: '/contributions/Terms-Conditions-What-do-we-need-in-order-to-work-together?',
+                url: '/contributions/Terms-Conditions-What-do-we-need-in-order-to-work-together',
                 satelliteModelUrl: '/satellites/satellite13.glb',
                 contentUrl: '/pages/contributions/Terms-Conditions.html'
                 
@@ -215,6 +222,12 @@
                 
             },
 
+            {
+                url: '/contributions/speaker',
+                satelliteModelUrl: '/satellites/speaker.glb',
+                contentUrl: '/pages/contributions/RSVP.html'
+                
+            },
             
 
 

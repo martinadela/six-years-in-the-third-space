@@ -1,6 +1,9 @@
 ;(function () {
     const COLOR_BACKGROUND = TSP.config.get('styles.colors.ContentBackground')
+    const COLOR_SUBTITLE = TSP.config.get('styles.colors.H2Subtitle')
     const COLOR_TEXT_BOLD = TSP.config.get('styles.colors.TextBold')
+    const COLOR_H2 = TSP.config.get('styles.colors.H2')
+    const FONT_FAMILY_TITLE = TSP.config.get('styles.fontFamilies.title')
     const ENTER_TRANSITION_DELAY =
         TSP.config.get('transitions.duration') *
         TSP.config.get('transitions.reader')[0]
@@ -14,8 +17,7 @@
     const Z_INDEX_INNER_CONTAINER = TSP.config.get('styles.zIndexes.reader')
     const Z_INDEX_TOP_BUTTONS = TSP.config.get('styles.zIndexes.topButtons')
     const PAGE_FRAME_PADDING_MOBILE = TSP.config.get('pageFrame.paddingMobile')
-    const VERTICAL_PADDING_CONTENT = TSP.config.get('styles.spacings.contentVerticalPadding')
-    
+        
     const sheet = jss.default
         .createStyleSheet({
             main: {
@@ -34,6 +36,14 @@
                     pointerEvents: 'initial',
                 },
                 '& h2': {
+                    color: COLOR_H2,
+                    fontFamily: FONT_FAMILY_TITLE,
+                    textTransform: 'uppercase',
+                    textAlign: 'left',
+                    paddingTop: '1em',
+                    fontStyle: 'italic',
+                    fontSize: '200%',
+                    fontWeight: 'normal',
                     [MOBILE_MEDIA_QUERY]: {
                         width: `${MOBILE_TITLE_WIDTH}%`,
                         // take the width available and remove page padding
@@ -45,56 +55,77 @@
                     },
                     marginBottom: '0em',
                     '& .subtitle': {
-                        fontSize: '80%',
                         marginBottom: '2em',
+                        color: COLOR_SUBTITLE,
+                        fontStyle: 'initial',
+                        fontSize: '60%',
+                        '& a': {
+                            color: COLOR_SUBTITLE,
+                        }
                     },
                 },
             },
             contentContainer: {
+                textAlign: 'justify',
+
                 '& .fullwidthimage': {
                     '& img': {
                         width: '100%',
-                        marginTop: '1em',
-                        marginBottom: '1em',
+                        [MOBILE_MEDIA_QUERY]: {
+                            marginTop: '1em',
+                            marginBottom: '1em',
+                        }
                     },
                 },
-                '&.contributions $contentContainer': {
+
+                '& .flexibleimage': {
+                    [DESKTOP_MEDIA_QUERY]: {
+                        float: 'right',
+                        marginLeft: '1em',
+                        width: '50%',
+                    },
+                    '& img': {
+                        width: '100%',
+                        [MOBILE_MEDIA_QUERY]: {
+                            marginTop: '1em',
+                            marginBottom: '1em',
+                        }
+                    },
+                },
+
+                '& p': {
+                    marginBottom: '1em',
                     textAlign: 'justify',
+                },
 
-                    '& p': {
-                        marginBottom: '1em',
-                        textAlign: 'justify',
-                    },
+                '& .textcontent': {
+                    textAlign: 'left',
+                },
 
-                    '& .textcontent': {
-                        textAlign: 'left',
-                    },
+                '& .poemparagraph': {
+                    textAlign: 'left',
+                },
 
-                    '& .poemparagraph': {
-                        textAlign: 'left',
-                    },
+                '& .note': {
+                    position: 'relative',
+                    top: '-0.5em',
+                },
 
-                    '& .note': {
-                        position: 'relative',
-                        top: '-0.5em',
-                    },
+                '& .imagecaption': {
+                    marginBottom: '2em',
+                },
 
-                    '& .imagecaption': {
-                        marginBottom: '2em',
-                    },
+                '& .imagecaption-title': {
+                    fontWeight: 'bold',
+                },
 
-                    '& .imagecaption-title': {
-                        fontWeight: 'bold',
-                    },
+                '& .imagecaption-description': {
+                    fontStyle: 'italic',
+                },
 
-                    '& .imagecaption-description': {
-                        fontStyle: 'italic',
-                    },
-
-                    '& .bold': {
-                        color: COLOR_TEXT_BOLD,
-                        marginTop: '1em',
-                    },
+                '& .bold': {
+                    color: COLOR_TEXT_BOLD,
+                    marginTop: '1em',
                 },
                 '&.collaborators $contentContainer': {
                     '& .names': {
@@ -114,11 +145,11 @@
                 },
             },
             innerContainer: {
-                backgroundColor: COLOR_BACKGROUND,
-                padding: VERTICAL_PADDING_CONTENT,
+                background: COLOR_BACKGROUND,
+                padding: '2.5rem',
                 [DESKTOP_MEDIA_QUERY]: {
                     // Smaller padding because of the scrollbar
-                    paddingRight: '0.2em',
+                    paddingRight: '2.3em',
                 },
                 overflowY: 'scroll',
                 height: '100%',
@@ -175,6 +206,9 @@
             this.headerContainer = this.querySelector(
                 `.${sheet.classes.headerContainer}`
             )
+            this.innerContainer = this.querySelector(
+                `.${sheet.classes.innerContainer}`
+            )
             this.closeButton = this.querySelector(
                 `.${sheet.classes.closeButton}`
             )
@@ -214,6 +248,7 @@
                             duration: TRANSITION_DURATION,
                         })
                     )
+                this.innerContainer.scrollTo({top: 0, behavior: 'smooth'});
             }
             
             if (this.contents.contributions[url]) {

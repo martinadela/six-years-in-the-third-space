@@ -2,6 +2,7 @@
     const PAGE_FRAME_PADDING_DESKTOP = TSP.config.get('pageFrame.paddingDesktop')
     const PAGE_FRAME_PADDING_MOBILE = TSP.config.get('pageFrame.paddingMobile')
     const MOBILE_MEDIA_QUERY = TSP.config.get('styles.mobile.mediaQuery')
+    const COLOR_BORDER = TSP.config.get('styles.colors.Border')
 
     const sheet = jss.default
         .createStyleSheet({
@@ -26,9 +27,7 @@
                 position: 'relative',
                 display: 'flex',
                 flexDirection: 'row',
-                border: `solid ${TSP.config.get(
-                    'styles.colors.Highlight1'
-                )} ${TSP.config.get('styles.dimensions.borderThickness')}`,
+                border: `solid ${COLOR_BORDER} ${TSP.config.get('styles.dimensions.borderThickness')}`,
                 width: '100%',
                 height: '100%',
                 [MOBILE_MEDIA_QUERY]: {

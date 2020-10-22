@@ -2,6 +2,7 @@
     const COLOR_BUTTON_BACKGROUND = TSP.config.get('styles.colors.ButtonBackground')
     const COLOR_HIGHLIGHT1 = TSP.config.get('styles.colors.Highlight1')
     const BORDER_THICKNESS = TSP.config.get('styles.dimensions.borderThickness')
+    const COLOR_BORDER = TSP.config.get('styles.colors.Border')
     const BUTTON_SIZE = TSP.config.get('styles.dimensions.buttonSize')
     const MOBILE_MEDIA_QUERY = TSP.config.get('styles.mobile.mediaQuery')
     const PAGE_FRAME_PADDING_MOBILE = TSP.config.get('pageFrame.paddingMobile')
@@ -36,7 +37,7 @@
                     }
                 },
                 backgroundColor: COLOR_BUTTON_BACKGROUND,
-                border: `solid ${BORDER_THICKNESS} ${COLOR_HIGHLIGHT1}`,
+                border: `solid ${BORDER_THICKNESS} ${COLOR_BORDER}`,
                 borderRadius: `calc(${BUTTON_SIZE} / 2)`,
                 pointerEvents: 'initial',
                 '& button': {
