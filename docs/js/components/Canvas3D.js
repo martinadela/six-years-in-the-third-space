@@ -118,7 +118,7 @@
         }
 
         start() {
-            this.planet.show(this.scene)
+            // this.planet.show(this.scene)
             this.universe.show(this.scene)
             this.tspCamera.show(this.scene)
 
@@ -155,7 +155,7 @@
             this.renderer.render(this.scene, this.tspCamera.camera)
             this.tspCamera.animate()
             this.universe.animate()
-            this.planet.animate()
+            // this.planet.animate()
             this.pointerEventsManager.animate()
         }
 
