@@ -2,9 +2,8 @@
     const TRANSITION_DURATION = 400
     const COLOR_HIGHLIGHT1 = TSP.config.get('styles.colors.Highlight1')
     const PAGE_TRANSITION_DURATION = TSP.config.get('transitions.duration')
-    const BORDER_STYLE = `solid ${TSP.config.get(
-        'styles.colors.Highlight1'
-    )} ${TSP.config.get('styles.dimensions.borderThickness')}`
+    const COLOR_BORDER = TSP.config.get('styles.colors.Border')
+    const BORDER_STYLE = `solid ${COLOR_BORDER} ${TSP.config.get('styles.dimensions.borderThickness')}`
     const SIDEBAR_WIDTH_DESKTOP_PERCENT = TSP.config.get(
         'sidebar.desktopWidth'
     )
