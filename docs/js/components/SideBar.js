@@ -67,12 +67,12 @@
                         </tsp-anchor>
                     </li>
                     <li class="${sheet.classes.li}">
-                        <tsp-anchor href="/about">
+                        <tsp-anchor href="/about-this-book">
                             About this book
                         </tsp-anchor>
                     </li>
                     <li class="${sheet.classes.li}">
-                        <tsp-anchor href="/third-space">
+                        <tsp-anchor href="/third-space-collective">
                             Third space collective
                         </tsp-anchor>
                     </li>
@@ -246,6 +246,7 @@
             h1: {
                 ...sharedStyles.h1,
                 paddingLeft: 0,
+                cursor: 'pointer',
             },
             ulContainer: {},
             ul: {},
