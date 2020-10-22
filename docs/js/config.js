@@ -174,8 +174,8 @@
                 satelliteModelUrl: '/satellites/satellite6.glb',
                 contentUrl: '/pages/contributions/what-keeps-us-going.html',
                 title: 'What keeps us going',
-                subtitle: 'Diana Soria',
-                subtitleUrl: '/collaborators/Diana-Soria',
+                subtitle: 'Diana Soria Hernández',
+                subtitleUrl: '/collaborators/Diana-Soria-Hernández',
                 
             },
 
@@ -289,68 +289,82 @@
             {
                 url: '/collaborators/Vidha-Saumya',
                 contentUrl: '/pages/collaborators/Vidha-Saumya.html',
+                title: 'Vidha Saumya'
             },
 
             {
                 url: '/collaborators/Marten-Esko',
                 contentUrl: '/pages/collaborators/Marten-Esko.html',
+                title: 'Marten Esko'
             },
 
             {
                 url: '/collaborators/Marko-Timlin',
                 contentUrl: '/pages/collaborators/Marko-Timlin.html',
+                title: 'Marko Timlin'
             },
 
             {
                 url: '/collaborators/Tina-Madsen',
                 contentUrl: '/pages/collaborators/Tina-Madsen.html',
+                title: 'Tina Mariane Krogh Madsen'
             },
 
             {
                 url: '/collaborators/Diana-Soria',
                 contentUrl: '/pages/collaborators/Diana-Soria.html',
+                title:'Diana Soria Hernández'
             },
 
             {
                 url: '/collaborators/Adrian-Balseca',
                 contentUrl: '/pages/collaborators/Adrian-Balseca.html',
+                title:'Adrián Balseca'
             },
             {
                 url: '/collaborators/Ali-Akbar-Mehta',
                 contentUrl: '/pages/collaborators/Ali-Akbar-Mehta.html',
+                title: 'Ali Akbar Mehta (Museum of Impossible Forms)'
             },
 
             {
                 url: '/collaborators/Antye-Greie-Ripatti',
                 contentUrl: '/pages/collaborators/Antye-Greie-Ripatti.html',
+                title:'Antye Greie-Ripatti'
             },
 
             {
                 url: '/collaborators/kraam',
                 contentUrl: '/pages/collaborators/kraam.html',
+                title:'Minna Hint & Killu Sukmit (Kraam Art Space)'
             },
             {
                 url: '/collaborators/Juulia-Terho-Milja-Maaria-Terho',
                 contentUrl: '/pages/collaborators/Juulia-Terho-Milja-Maaria-Terho.html',
+                title:'Milja-Maaria Terho & Juulia Terho'
             },
             {
                 url: '/collaborators/Abdullah-Qureshi-Danai-Anagnostou',
                 contentUrl: '/pages/collaborators/Abdullah-Qureshi-Danai-Anagnostou.html',
+                title:'Abdullah Qureshi & Danai Anagnostou'
             },
 
             {
                 url: '/collaborators/Feminist-Culture-House',
                 contentUrl: '/pages/collaborators/Feminist-Culture-House.html',
+                title:'Feminist Culture House'
             },
 
             {
                 url: '/collaborators/Yvonne-Billimore',
                 contentUrl: '/pages/collaborators/Yvonne-Billimore.html',
+                title:'Yvonne Bilimore'
             },
 
             {
                 url: '/collaborators/Iida Nissinen-Tuisku Lehto-Laura Rämö-Oona Heinänen-QUERQ',
                 contentUrl: '/pages/collaborators/Iida Nissinen-Tuisku Lehto-Laura Rämö-Oona Heinänen-QUERQ.html',
+                title:'Iida Nissinen, Tuisku Lehto, Laura Rämö & Oona Heinänen (QUERQ Community)'
             },
 
 
@@ -362,14 +376,18 @@
             {
                 url: '/book-index',
                 contentUrl: '/pages/book-index.html',
+                title: 'INDEX'
             },
             {
                 url: '/about-this-book',
                 contentUrl: '/pages/about-this-book.html',
+                title: 'PROLOGUE'
             },
             {
                 url: '/third-space-collective',
                 contentUrl: '/pages/third-space-collective.html',
+                title:' Cartography of 6 years at Third Space.',
+                subtitle: 'This is a conversation between the current members of Third Space Collective on the past,the present, and future of the space.'
             },
         ],
 
