@@ -1,173 +1,21 @@
 ;(function () {
     const TRANSITION_DURATION = 400
-    const COLOR_HIGHLIGHT1 = TSP.config.get('styles.colors.Highlight1')
-    const PAGE_TRANSITION_DURATION = TSP.config.get('transitions.duration')
-    const COLOR_BORDER = TSP.config.get('styles.colors.Border')
-    const BORDER_STYLE = `solid ${COLOR_BORDER} ${TSP.config.get('styles.dimensions.borderThickness')}`
-    const SIDEBAR_WIDTH_DESKTOP_PERCENT = TSP.config.get(
-        'sidebar.desktopWidth'
-    )
     const SIDEBAR_WIDTH_MOBILE_PERCENT = TSP.config.get(
         'sidebar.mobileWidth'
     )
-    const IS_MOBILE = TSP.config.get('styles.isMobile')
-    const BACKGROUND_MOBILE = TSP.config.get('styles.colors.SideBarBackground')
+    const COLOR_HIGHLIGHT1 = TSP.config.get('styles.colors.Highlight1')
+    const PAGE_TRANSITION_DURATION = TSP.config.get('transitions.duration')
+    const BACKGROUND = TSP.config.get('styles.colors.SideBarBackground')
     const Z_INDEX_SIDE_BAR = TSP.config.get('styles.zIndexes.sideBar')
-
-    const sharedStyles = {
-        main: {
-            color: TSP.config.get('styles.colors.Highlight1'),
-            fontFamily: TSP.config.get('styles.fontFamilies.title'),
-            zIndex: Z_INDEX_SIDE_BAR,
-        },
-        h1: {
-            textTransform: 'uppercase',
-            fontFamily: TSP.config.get('styles.fontFamilies.title'),
-            fontWeight: 'normal',
-            fontStyle: 'italic',
-            textAlign: 'right',
-            padding: TSP.config.get('styles.spacings.size1'),
-        },
-        li: {
-            fontFamily: TSP.config.get('styles.fontFamilies.title'),
-            color: TSP.config.get('styles.colors.Highlight1'),
-            textTransform: 'uppercase',
-            fontStyle: 'italic',
-            cursor: 'pointer',
-            '& tsp-anchor': {
-                display: 'inline-block',
-                height: '100%',
-                width: '100%',
-                padding: TSP.config.get('styles.spacings.size1'),
-                color: TSP.config.get('styles.colors.Highlight1'),
-                pointerEvents: 'all',
-            },
-        },
-    }
-
-    const sharedHtml = {
-        h1: (sheet, expandButton) =>
-            `
-            <h1 class="${sheet.classes.h1}">
-                <div>
-                    <p>Six years</p> 
-                    <p>in the</p> 
-                    <p>${expandButton ? expandButton : ''}Third Space</p>
-                </div>
-            </h1>
-            `,
-        ulContainer: (sheet) =>
-            `
-            <div class="${sheet.classes.ulContainer}">
-                <ul class="${sheet.classes.ul}">
-                    <li class="${sheet.classes.li}">
-                        <tsp-anchor href="/book-index">
-                            Index
-                        </tsp-anchor>
-                    </li>
-                    <li class="${sheet.classes.li}">
-                        <tsp-anchor href="/about-this-book">
-                            About this book
-                        </tsp-anchor>
-                    </li>
-                    <li class="${sheet.classes.li}">
-                        <tsp-anchor href="/third-space-collective">
-                            Third space collective
-                        </tsp-anchor>
-                    </li>
-                </ul>
-            </div>
-            `,
-    }
-
-    //****************************** DESKTOP ******************************/
-    const VERTICAL_PADDING_CONTENT = TSP.config.get('styles.spacings.contentVerticalPadding')
-
-    const sheetDesktop = jss.default
-        .createStyleSheet({
-            main: {
-                ...sharedStyles.main,
-                width: `${SIDEBAR_WIDTH_DESKTOP_PERCENT}%`,
-                maxWidth: '30em',
-                '& ul': {
-                    transition: `transform ${TRANSITION_DURATION}ms ease-in-out`,
-                    transform: 'translateY(-100%)',
-                },
-                '& $ulContainer': {
-                    /* to allow sliding animation from top, we need to hide overflow */
-                    overflow: 'hidden',
-                },
-                '&.expanded': {
-                    '& ul': {
-                        transform: 'translateY(0%)',
-                    },
-                },
-                '&:not(.mainPage)': {
-                    '& tsp-expand-menu-button': {
-                        display: 'none'
-                    }
-                },
-                '& tsp-satellite-viewer': {
-                    paddingRight: VERTICAL_PADDING_CONTENT
-                }
-            },
-            innerContainer: {
-                display: 'flex',
-                flexDirection: 'column',
-                height: '100%',
-                '& tsp-satellite-viewer': {
-                    flex: 1,
-                }
-            },
-            h1: {
-                ...sharedStyles.h1,
-                '& p': {
-                    marginBottom: '3.5rem',
-                    '&:last-child': {
-                        marginBottom: '0',
-                    },
-                },
-                borderLeft: BORDER_STYLE,
-                borderBottom: BORDER_STYLE,
-                '@media screen and (min-width: 1100px)': {
-                    fontSize: '250%',
-                },
-            },
-            ulContainer: {},
-            ul: {},
-            li: {
-                ...sharedStyles.li,
-                borderBottom: BORDER_STYLE,
-                borderLeft: BORDER_STYLE,
-                textAlign: 'left',
-            },
-            textRibbon: {
-                borderBottom: BORDER_STYLE,
-                borderLeft: BORDER_STYLE,
-            },
-        })
-        .attach()
-
-    const templateDesktop = `
-        <template id="SideBarDesktop">
-            <div class="${sheetDesktop.classes.innerContainer}">
-                ${sharedHtml.h1(sheetDesktop)}
-                <tsp-text-ribbon class="${
-                    sheetDesktop.classes.textRibbon
-                }"></tsp-text-ribbon>
-                ${sharedHtml.ulContainer(sheetDesktop)}
-                <tsp-satellite-viewer></tsp-satellite-viewer>
-            </div>
-        </template>
-    `
-
-    //****************************** MOBILE ******************************/
     const BUTTON_SIZE = TSP.config.get('styles.dimensions.buttonSize')
+    const MOBILE_MEDIA_QUERY = TSP.config.get('styles.mobile.mediaQuery')
 
-    const sheetMobile = jss.default
+    const sheet = jss.default
         .createStyleSheet({
             main: {
-                ...sharedStyles.main,
+                color: COLOR_HIGHLIGHT1,
+                fontFamily: TSP.config.get('styles.fontFamilies.title'),
+                zIndex: Z_INDEX_SIDE_BAR,
                 width: `${SIDEBAR_WIDTH_MOBILE_PERCENT}%`,
                 height: '100%',
                 position: 'absolute',
@@ -210,7 +58,7 @@
                 },
                 '&.expanded': {
                     transform: 'translateX(0%)',
-                    background: BACKGROUND_MOBILE,
+                    background: BACKGROUND,
                     '& > tsp-expand-menu-button': {
                         display: 'inline-block',
                     },
@@ -225,14 +73,13 @@
                             transform: 'translateX(0%)'
                         },
                     },
-                    '& $expandMenuButtonTop': {
-                        left: `calc(-${BUTTON_SIZE} / 2)`,
-                    },
                 },
-                '&:not(.mainPage):not(.expanded)': {
-                    '& $expandMenuButtonTop': {
-                        left: `-${BUTTON_SIZE}`,
-                    },
+                [MOBILE_MEDIA_QUERY]: {
+                    '&:not(.mainPage):not(.expanded)': {
+                        '& $expandMenuButtonTop': {
+                            left: `-${BUTTON_SIZE}`,
+                        },
+                    },    
                 },
                 '&.mainPage:not(.expanded)': {
                     '& $expandMenuButtonTop': {
@@ -243,14 +90,30 @@
             },
             innerContainer: {},
             h1: {
-                ...sharedStyles.h1,
+                textTransform: 'uppercase',
+                fontFamily: TSP.config.get('styles.fontFamilies.title'),
+                fontWeight: 'normal',
+                fontStyle: 'italic',
+                textAlign: 'right',
+                padding: TSP.config.get('styles.spacings.size1'),
                 paddingLeft: 0,
                 cursor: 'pointer',
             },
             ulContainer: {},
-            ul: {},
             li: {
-                ...sharedStyles.li,
+                fontFamily: TSP.config.get('styles.fontFamilies.title'),
+                color: COLOR_HIGHLIGHT1,
+                textTransform: 'uppercase',
+                fontStyle: 'italic',
+                cursor: 'pointer',
+                '& tsp-anchor': {
+                    display: 'inline-block',
+                    height: '100%',
+                    width: '100%',
+                    padding: TSP.config.get('styles.spacings.size1'),
+                    color: COLOR_HIGHLIGHT1,
+                    pointerEvents: 'all',
+                },
                 textAlign: 'right',
             },
             expandMenuButtonTop: {
@@ -289,27 +152,50 @@
         })
         .attach()
 
-    const templateMobile = `
+    const template = `
         <template id="SideBarMobile">
-            <tsp-top-page-button-container class="${sheetMobile.classes.expandMenuButtonTop}" >
+            <tsp-top-page-button-container class="${sheet.classes.expandMenuButtonTop}" >
                 <tsp-expand-menu-button>
                     ${TSP.components.burgerSvg()}
                     ${TSP.components.crossSvg()}
                 </tsp-expand-menu-button>
             </tsp-top-page-button-container>
 
-            <div class="${sheetMobile.classes.innerContainer}">
-                ${sharedHtml.h1(sheetMobile, 
-                    `<tsp-expand-menu-button
-                        class="${sheetMobile.classes.expandMenuButtonTitle}"
-                    >${TSP.components.triangleSvg()}</tsp-expand-menu-button>`
-                )}
-                ${sharedHtml.ulContainer(sheetMobile)}
+            <div class="${sheet.classes.innerContainer}">
+                <h1 class="${sheet.classes.h1}">
+                    <div>
+                        <p>Six years</p> 
+                        <p>in the</p> 
+                        <p>
+                            <tsp-expand-menu-button
+                                class="${sheet.classes.expandMenuButtonTitle}"
+                            >${TSP.components.triangleSvg()}</tsp-expand-menu-button>
+                            Third Space
+                        </p>
+                    </div>
+                </h1>
+                <div class="${sheet.classes.ulContainer}">
+                    <ul>
+                        <li class="${sheet.classes.li}">
+                            <tsp-anchor href="/book-index">
+                                Index
+                            </tsp-anchor>
+                        </li>
+                        <li class="${sheet.classes.li}">
+                            <tsp-anchor href="/about-this-book">
+                                About this book
+                            </tsp-anchor>
+                        </li>
+                        <li class="${sheet.classes.li}">
+                            <tsp-anchor href="/third-space-collective">
+                                Third space collective
+                            </tsp-anchor>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </template>
     `
-
-    //****************************** Component ******************************/
 
     class SideBar extends HTMLElement {
         constructor() {
@@ -329,16 +215,10 @@
         mountHtml() {
             this.innerHTML = ''
             // Add the `mainPage` by default, to facilitate enter transitions.
-            if (IS_MOBILE()) {
-                this.classList.add(sheetMobile.classes.main)
-                this.classList.add('mainPage')
-                this.appendChild(TSP.utils.template(templateMobile))
-                this.querySelector('h1').addEventListener('click', () => this.querySelector('h1 tsp-expand-menu-button').click(), false)
-            } else {
-                this.classList.add(sheetDesktop.classes.main)
-                this.classList.add('mainPage')
-                this.appendChild(TSP.utils.template(templateDesktop))
-            }
+            this.classList.add(sheet.classes.main)
+            this.classList.add('mainPage')
+            this.appendChild(TSP.utils.template(template))
+            this.querySelector('h1').addEventListener('click', () => this.querySelector('h1 tsp-expand-menu-button').click(), false)
         }
 
         windowDimensionsChanged() {
@@ -355,23 +235,13 @@
 
         currentUrlChanged(url) {
             // On mobile close sidebar when changing page
-            if (IS_MOBILE()) {
-                TSP.state.set('SideBar.expanded', false)
-            }
+            TSP.state.set('SideBar.expanded', false)
             if (url === '') {
                 this.classList.add('mainPage')
-                // On desktop close sidebar when not main page
-                if (!IS_MOBILE()) {
-                    TSP.state.set('SideBar.expanded', false)
-                }
             } else {
                 // Delay a bit the transition to allow page to fade in
                 if (this.classList.contains('mainPage')) {
                     setTimeout(() => this.classList.remove('mainPage'), 0.9 * PAGE_TRANSITION_DURATION)
-                }
-                // On desktop open sidebar when not main page
-                if (!IS_MOBILE()) {
-                    TSP.state.set('SideBar.expanded', true)
                 }
             }
         }

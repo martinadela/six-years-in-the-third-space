@@ -1,7 +1,5 @@
 ;(function () {
     const PLANET_FOCUS_ON_URL = TSP.config.get('planet.focusOnUrl')
-    const MOBILE_TITLE_WIDTH = TSP.config.get('reader.mobileTitleWidth')
-    const IS_MOBILE = TSP.config.get('styles.isMobile')
 
     class Camera {
         constructor() {
@@ -131,18 +129,10 @@
         }
 
         getObjectBoundingBoxOnScreen() {
-            let satelliteViewerBoundingRect = null
-            if (IS_MOBILE()) {
-                satelliteViewerBoundingRect = TSP.state
-                    .get('Reader.component')
-                    .querySelector('tsp-satellite-viewer')
-                    .getBoundingClientRect()
-            } else {
-                satelliteViewerBoundingRect = TSP.state
-                    .get('SideBar.component')
-                    .querySelector('tsp-satellite-viewer')
-                    .getBoundingClientRect()
-            }
+            const satelliteViewerBoundingRect = TSP.state
+                .get('Reader.component')
+                .querySelector('tsp-satellite-viewer')
+                .getBoundingClientRect()
             return new THREE.Box2(
                 new THREE.Vector2(
                     satelliteViewerBoundingRect.left,

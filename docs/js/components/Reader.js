@@ -1,5 +1,7 @@
 ;(function () {
     const COLOR_BACKGROUND = TSP.config.get('styles.colors.ContentBackground')
+    const COLOR_BACKGROUND0 = `rgba(${COLOR_BACKGROUND[0]}, ${COLOR_BACKGROUND[1]}, ${COLOR_BACKGROUND[2]}, 0)`
+    const COLOR_BACKGROUND1 = `rgba(${COLOR_BACKGROUND[0]}, ${COLOR_BACKGROUND[1]}, ${COLOR_BACKGROUND[2]}, 1)`
     const COLOR_SUBTITLE = TSP.config.get('styles.colors.H2Subtitle')
     const COLOR_TEXT_BOLD = TSP.config.get('styles.colors.TextBold')
     const COLOR_H2 = TSP.config.get('styles.colors.H2')
@@ -11,12 +13,14 @@
     const TRANSITION_DURATION = 
         TSP.config.get('transitions.duration') *
         TSP.config.get('transitions.reader')[1]
-    const MOBILE_TITLE_WIDTH = TSP.config.get('reader.mobileTitleWidth')
     const MOBILE_MEDIA_QUERY = TSP.config.get('styles.mobile.mediaQuery')
     const DESKTOP_MEDIA_QUERY = TSP.config.get('styles.desktop.mediaQuery')
     const Z_INDEX_INNER_CONTAINER = TSP.config.get('styles.zIndexes.reader')
     const Z_INDEX_TOP_BUTTONS = TSP.config.get('styles.zIndexes.topButtons')
+    const GRADIENT_PADDING_TOP = '20em'
+    const PAGE_FRAME_PADDING_DESKTOP = TSP.config.get('pageFrame.paddingDesktop')
     const PAGE_FRAME_PADDING_MOBILE = TSP.config.get('pageFrame.paddingMobile')
+    const HEIGHT_HEADER = `min(100vw - 2 * ${PAGE_FRAME_PADDING_DESKTOP}, 100vh - 2 * ${PAGE_FRAME_PADDING_DESKTOP})`
         
     const sheet = jss.default
         .createStyleSheet({
@@ -35,29 +39,61 @@
                     // so we need to reactivate it here
                     pointerEvents: 'initial',
                 },
+            },
+            closeButton: {
+                zIndex: Z_INDEX_TOP_BUTTONS
+            },
+            innerContainer: {
+                overflowY: 'scroll',
+                height: '100%',
+                // To position the satellite viewer
+                position: 'relative',
+                zIndex: Z_INDEX_INNER_CONTAINER,
+                '& .background': {
+                    background: `linear-gradient(180deg, ${COLOR_BACKGROUND0} calc(${HEIGHT_HEADER} - ${GRADIENT_PADDING_TOP}), ${COLOR_BACKGROUND1} calc(${HEIGHT_HEADER}), ${COLOR_BACKGROUND1} 100%)`
+                }
+            },
+            headerContainer: {
+                display: 'flex',
+                // take the width available and remove page padding
+                height: `calc(${HEIGHT_HEADER})`,
+                flexDirection: 'row',
+                '& > *': {
+                    flex: 1,
+                },
+            },
+            h2Container : {
+                width: '50%',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+
                 '& h2': {
+                    textAlign: 'center',
                     color: COLOR_H2,
+                    padding: '0 2em',
                     fontFamily: FONT_FAMILY_TITLE,
                     textTransform: 'uppercase',
-                    textAlign: 'left',
-                    paddingTop: '1em',
                     fontStyle: 'italic',
                     fontSize: '200%',
                     fontWeight: 'normal',
                     [MOBILE_MEDIA_QUERY]: {
-                        width: `${MOBILE_TITLE_WIDTH}%`,
-                        // take the width available and remove page padding
-                        height: `calc((100vw - ${MOBILE_TITLE_WIDTH}vw) - 2 * ${PAGE_FRAME_PADDING_MOBILE})`,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
                         textAlign: 'left',
+                        fontSize: '150%',
+                        paddingLeft: PAGE_FRAME_PADDING_MOBILE,
                     },
                     marginBottom: '0em',
-                    '& .subtitle': {
+                    '& span': {
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    },
+                    '& .title, & .subtitle': {
                         marginBottom: '2em',
                         color: COLOR_SUBTITLE,
                         fontStyle: 'initial',
+                    },
+                    '& .title': {
+                    },
+                    '& .subtitle': {
                         fontSize: '60%',
                         '& a': {
                             color: COLOR_SUBTITLE,
@@ -66,7 +102,15 @@
                 },
             },
             contentContainer: {
+                padding: `0 ${PAGE_FRAME_PADDING_DESKTOP}`,
+                [MOBILE_MEDIA_QUERY]: {
+                    padding: `0 ${PAGE_FRAME_PADDING_MOBILE}`,
+                }
+            },
+            content: {
                 textAlign: 'justify',
+                margin: 'auto',
+                maxWidth: '1000px',
 
                 '& .fullwidthimage': {
                     '& img': {
@@ -127,7 +171,7 @@
                     color: COLOR_TEXT_BOLD,
                     marginTop: '1em',
                 },
-                '&.collaborators $contentContainer': {
+                '&.collaborators $content': {
                     '& .names': {
                         color: 'rgb(248, 51, 16)',
                         marginBottom: '0em',
@@ -144,34 +188,6 @@
                     opacity: 0,
                 },
             },
-            innerContainer: {
-                background: COLOR_BACKGROUND,
-                padding: '2.5rem',
-                [DESKTOP_MEDIA_QUERY]: {
-                    // Smaller padding because of the scrollbar
-                    paddingRight: '2.3em',
-                },
-                overflowY: 'scroll',
-                height: '100%',
-                // To position the satellite viewer
-                position: 'relative',
-                zIndex: Z_INDEX_INNER_CONTAINER
-            },
-            closeButton: {
-                zIndex: Z_INDEX_TOP_BUTTONS
-            },
-            headerContainer: {
-                display: 'flex',
-                flexDirection: 'row',
-                '& > *': {
-                    flex: 1,
-                },
-                [DESKTOP_MEDIA_QUERY]: {
-                    '& tsp-satellite-viewer': {
-                        display: 'none'
-                    }
-                }
-            }
         })
         .attach()
 
@@ -182,11 +198,27 @@
                     <button>${TSP.components.crossSvg()}</button>
                 </tsp-top-page-button-container>
                 <div class="${sheet.classes.innerContainer}">
-                    <div class="${sheet.classes.headerContainer}">
-                        <h2></h2>
-                        <tsp-satellite-viewer></tsp-satellite-viewer>
+                    <div class="background">
+                        <div class="${sheet.classes.headerContainer}">
+                            <div class="${sheet.classes.h2Container}">
+                                <h2>
+                                    <span class="title">
+                                        Stuff asking stuff / Stuff of stuff / Stuff about stuff / Inside out stuff /
+                                        Vital stuff* inside and outside
+                                    </span><br/>
+                            
+                                    <span class="subtitle">
+                                        <tsp-anchor href="/collaborators/kraam">
+                                            Minna Hint & Killu Sukmit (Kraam Art Space)
+                                        </tsp-anchor>
+                                    </span>
+                                </h2>
+                            </div>
+                            <tsp-satellite-viewer></tsp-satellite-viewer>
+                        </div>
+                        <div class="${sheet.classes.contentContainer}">
+                        </div>
                     </div>
-                    <div class="${sheet.classes.contentContainer}"></div>
                 </div>
             </div>
         </template>
@@ -209,11 +241,17 @@
             this.innerContainer = this.querySelector(
                 `.${sheet.classes.innerContainer}`
             )
+            this.contentContainer = this.querySelector(
+                `.${sheet.classes.contentContainer}`
+            )
             this.closeButton = this.querySelector(
                 `.${sheet.classes.closeButton}`
             )
-            this.h2 = this.querySelector(
-                `.${sheet.classes.headerContainer} h2`
+            this.titleElement = this.querySelector(
+                `.${sheet.classes.h2Container} h2 .title`
+            )
+            this.subtitleElement = this.querySelector(
+                `.${sheet.classes.h2Container} h2 .subtitle tsp-anchor`
             )
 
             this.closeButton.addEventListener(
@@ -253,16 +291,14 @@
             
             if (this.contents.contributions[url]) {
                 this.setContent(
-                    'contributions',
                     this.contents.contributions[url]
                 )
             } else if (this.contents.collaborators[url]) {
                 this.setContent(
-                    'collaborators',
                     this.contents.collaborators[url]
                 )
             } else if (this.contents.otherPages[url]) {
-                this.setContent('otherPages', this.contents.otherPages[url])
+                this.setContent(this.contents.otherPages[url])
             } else {
                 debugger
                 this.setContent404()
@@ -273,34 +309,34 @@
             TSP.utils.navigateTo('')
         }
 
-        setContent(className, content) {
-            this.element.classList.remove('contributions')
-            this.element.classList.remove('collaborators')
-            this.element.classList.add(className)
-
-            const exitingContentContainer = this.querySelectorAll(`.${sheet.classes.contentContainer}`)
+        setContent(content) {
+            const exitingContent = this.querySelectorAll(`.${sheet.classes.content}`)
             
-            const enteringContentContainer = document.createElement('div')
-            enteringContentContainer.classList.add(sheet.classes.contentContainer)
-            enteringContentContainer.innerHTML = content.html
+            const enteringContent = document.createElement('div')
+            enteringContent.classList.add(sheet.classes.content)
+            enteringContent.innerHTML = content.html
 
             TSP.utils
-                .elementsTransitionHelper(exitingContentContainer, {
+                .elementsTransitionHelper(exitingContent, {
                     classPrevious: 'enter',
                     classTransition: 'exit',
                     duration: TRANSITION_DURATION,
                 })
-                .then((exitingContentContainer) => {
-                    exitingContentContainer.forEach(element => element.remove())
-                    this.setTitle(enteringContentContainer)
-                    this.headerContainer.after(enteringContentContainer)
+                .then((exitingContent) => {
+                    exitingContent.forEach(element => element.remove())
+
+                    this.titleElement.innerHTML = 'Stuff asking stuff / Stuff of stuff / Stuff about stuff / Inside out stuff / Vital stuff* inside and outside' // content.title
+                    this.subtitleElement.innerHTML = 'Minna Hint & Killu Sukmit (Kraam Art Space)' // content.subtitle
+                    this.subtitleElement.href = '/collaborators/kraam' // content.subtitleUrl
+
+                    this.contentContainer.appendChild(enteringContent)
                     return TSP.utils.waitAtleast(
                         PAGE_TRANSITION_DURATION - 2 * TRANSITION_DURATION, 
-                        TSP.utils.allImagesLoaded(enteringContentContainer)
+                        TSP.utils.allImagesLoaded(enteringContent)
                     )
                 })
                 .then(() => 
-                    TSP.utils.elementsTransitionHelper([enteringContentContainer], {
+                    TSP.utils.elementsTransitionHelper([enteringContent], {
                         classTransition: 'enter',
                         duration: TRANSITION_DURATION,
                     })
@@ -308,19 +344,8 @@
         }
 
         setContent404() {
-            this.h2.innerHTML = 'Page not found'
+            this.titleElement.innerHTML = 'Page not found'
             this.element.classList.add('enter')
-        }
-
-        setTitle(enteringContentContainer) {
-            const enteringH2 = enteringContentContainer.querySelector('h2')
-            if (enteringH2) {
-                this.h2.innerHTML = enteringH2.innerHTML
-                enteringH2.remove()
-            } else {
-                this.h2.innerHTML = 'NO TITLE FOUND'
-                console.error(`h2 not found in page`)
-            }
         }
 
         load() {

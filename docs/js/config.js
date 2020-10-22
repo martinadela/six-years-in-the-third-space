@@ -3,8 +3,8 @@
     const NEBULA_COLOR2 = [255, 199, 149] // Orange
     const NEBULA_GRADIENT = `linear-gradient(17deg, rgba(255,255,255,0.5) 0%, rgba(${NEBULA_COLOR1[0]},${NEBULA_COLOR1[1]},${NEBULA_COLOR1[2]},0.35) 40%, rgba(${NEBULA_COLOR2[0]},${NEBULA_COLOR2[1]},${NEBULA_COLOR2[2]},0.35) 60%, rgba(255,255,255,0.5) 100%)`
 
-    const COLOR_HIGHLIGHT1 = '#3DA6FC'
-    const COLOR_H2 = `rgb(${NEBULA_COLOR2[0] - 25}, ${NEBULA_COLOR2[1] - 25}, ${NEBULA_COLOR2[2] - 25})`
+    const COLOR_HIGHLIGHT1 = '#FA8802'
+    const COLOR_H2 = `#FA8802`
     const COLOR_TEXT = 'rgb(112, 109, 109)'
 
     const STYLES_MOBILE_THRESHOLD = {
@@ -36,11 +36,11 @@
                 // Highlight1: '#FF8575', // orange
                 Links: COLOR_TEXT,
                 Border: COLOR_HIGHLIGHT1,
-                ContentBackground: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 4%, rgba(255,255,255,1.7) 96%, rgba(255,255,255,0) 100%)',
+                ContentBackground: [255, 255, 255],
                 ButtonBackground: 'rgba(255, 255, 255, 0.65)',
                 ScrollbarBackground: 'transparent',
                 ScrollbarBorder: 'LightGrey',
-                Scrollbar: 'LightGrey',
+                Scrollbar: COLOR_HIGHLIGHT1,
                 Text: COLOR_TEXT,
                 TextBold: 'rgb(19, 18, 18)',
                 H2: COLOR_H2,
@@ -89,7 +89,7 @@
             directColor: 0xffffff,
             directIntensity: 4 * Math.PI,
             directPosition: new THREE.Spherical(0, 0, 0),
-            spotIntensity: 100,
+            spotIntensity: 0,
         },
         universe: {
             // 2 colors in RGB format.
@@ -121,7 +121,7 @@
             focusOnUrl: '/third-space-collective',
             rotationAngleStep: (Math.PI / 2) * 0.001,
             color1: [250, 250, 250],
-            color2: [255, 199, 149],
+            color2: [240, 240, 240],
         },
         satellites: {
             planetaryRotationAxisRandomness: Math.PI * 0,
@@ -418,10 +418,6 @@
                 cultural project that aims at fostering inclusivity and diversity. Third Space is  never going to be ready and, as we state, 
                 its identity and thus its practice is transcultural: it too is many, and relative, and transmuting along with its members and makers. At the core, there is this idea of Third Space as an on-going project, both in theory and practice, as a 
                 collective and within the art scene.`,
-        },
-
-        reader: {
-            mobileTitleWidth: 50, // in percents
         },
 
         pageFrame: {
