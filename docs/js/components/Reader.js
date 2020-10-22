@@ -17,7 +17,8 @@
     const DESKTOP_MEDIA_QUERY = TSP.config.get('styles.desktop.mediaQuery')
     const Z_INDEX_INNER_CONTAINER = TSP.config.get('styles.zIndexes.reader')
     const Z_INDEX_TOP_BUTTONS = TSP.config.get('styles.zIndexes.topButtons')
-    const GRADIENT_PADDING_TOP = '20em'
+    const GRADIENT_PADDING_TOP_DESKTOP = '20em'
+    const GRADIENT_PADDING_TOP_MOBILE = '10em'
     const PAGE_FRAME_PADDING_DESKTOP = TSP.config.get('pageFrame.paddingDesktop')
     const PAGE_FRAME_PADDING_MOBILE = TSP.config.get('pageFrame.paddingMobile')
     const HEIGHT_HEADER = `min(100vw - 2 * ${PAGE_FRAME_PADDING_DESKTOP}, 100vh - 2 * ${PAGE_FRAME_PADDING_DESKTOP})`
@@ -50,7 +51,10 @@
                 position: 'relative',
                 zIndex: Z_INDEX_INNER_CONTAINER,
                 '& .background': {
-                    background: `linear-gradient(180deg, ${COLOR_BACKGROUND0} calc(${HEIGHT_HEADER} - ${GRADIENT_PADDING_TOP}), ${COLOR_BACKGROUND1} calc(${HEIGHT_HEADER}), ${COLOR_BACKGROUND1} 100%)`
+                    background: `linear-gradient(180deg, ${COLOR_BACKGROUND0} calc(${HEIGHT_HEADER} - ${GRADIENT_PADDING_TOP_DESKTOP}), ${COLOR_BACKGROUND1} calc(${HEIGHT_HEADER}), ${COLOR_BACKGROUND1} 100%)`,
+                    [MOBILE_MEDIA_QUERY]: {
+                        background: `linear-gradient(180deg, ${COLOR_BACKGROUND0} calc(${HEIGHT_HEADER} - ${GRADIENT_PADDING_TOP_MOBILE}), ${COLOR_BACKGROUND1} calc(${HEIGHT_HEADER}), ${COLOR_BACKGROUND1} 100%)`,
+                    }
                 }
             },
             headerContainer: {
@@ -75,11 +79,11 @@
                     fontFamily: FONT_FAMILY_TITLE,
                     textTransform: 'uppercase',
                     fontStyle: 'italic',
-                    fontSize: '200%',
+                    fontSize: '180%',
                     fontWeight: 'normal',
                     [MOBILE_MEDIA_QUERY]: {
                         textAlign: 'left',
-                        fontSize: '150%',
+                        fontSize: '130%',
                         paddingLeft: PAGE_FRAME_PADDING_MOBILE,
                     },
                     marginBottom: '0em',
@@ -325,9 +329,9 @@
                 .then((exitingContent) => {
                     exitingContent.forEach(element => element.remove())
 
-                    this.titleElement.innerHTML = 'Stuff asking stuff / Stuff of stuff / Stuff about stuff / Inside out stuff / Vital stuff* inside and outside' // content.title
-                    this.subtitleElement.innerHTML = 'Minna Hint & Killu Sukmit (Kraam Art Space)' // content.subtitle
-                    this.subtitleElement.href = '/collaborators/kraam' // content.subtitleUrl
+                    this.titleElement.innerHTML = content.title
+                    this.subtitleElement.innerHTML = content.subtitle
+                    this.subtitleElement.href = content.subtitleUrl
 
                     this.contentContainer.appendChild(enteringContent)
                     return TSP.utils.waitAtleast(
@@ -382,8 +386,12 @@
                 )
             ).then((contents) => {
                 contents.forEach((html, i) => {
-                    this.contents[group][definitions[i].url] = {
+                    const definition = definitions[i]
+                    this.contents[group][definition.url] = {
                         html: html,
+                        title: definition.title,
+                        subtitle: definition.subtitle,
+                        subtitleUrl: definition.subtitleUrl,
                     }
                 })
             })

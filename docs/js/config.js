@@ -126,10 +126,10 @@
         satellites: {
             planetaryRotationAxisRandomness: Math.PI * 0,
             planetaryRotationRadius: [100, 10],
-            planetaryRotationAngleStep: (Math.PI / 2) * 0.0005,
+            planetaryRotationAngleStep: [(Math.PI / 2) * 0.0005, (Math.PI / 2) * 0.0001],
             selfRotationIncrement: [0.003, 0.0015],
             // Hover detection is executed only every N frames :
-            hoverDetectDebounce: 10,
+            hoverDetectDebounce: 4,
         },
         contributions: [
             {

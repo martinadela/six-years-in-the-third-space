@@ -9,6 +9,7 @@
     const Z_INDEX_SIDE_BAR = TSP.config.get('styles.zIndexes.sideBar')
     const BUTTON_SIZE = TSP.config.get('styles.dimensions.buttonSize')
     const MOBILE_MEDIA_QUERY = TSP.config.get('styles.mobile.mediaQuery')
+    const DESKTOP_MEDIA_QUERY = TSP.config.get('styles.desktop.mediaQuery')
 
     const sheet = jss.default
         .createStyleSheet({
@@ -17,6 +18,9 @@
                 fontFamily: TSP.config.get('styles.fontFamilies.title'),
                 zIndex: Z_INDEX_SIDE_BAR,
                 width: `${SIDEBAR_WIDTH_MOBILE_PERCENT}%`,
+                [DESKTOP_MEDIA_QUERY]: {
+                    maxWidth: '20em',
+                },
                 height: '100%',
                 position: 'absolute',
                 top: 0,
@@ -73,6 +77,11 @@
                             transform: 'translateX(0%)'
                         },
                     },
+                    [MOBILE_MEDIA_QUERY]: {
+                        '& $expandMenuButtonTop': {
+                            left: `calc(-${BUTTON_SIZE} / 2)`,
+                        },
+                    }
                 },
                 [MOBILE_MEDIA_QUERY]: {
                     '&:not(.mainPage):not(.expanded)': {
@@ -169,8 +178,8 @@
                         <p>
                             <tsp-expand-menu-button
                                 class="${sheet.classes.expandMenuButtonTitle}"
-                            >${TSP.components.triangleSvg()}</tsp-expand-menu-button>
-                            Third Space
+                            >${TSP.components.triangleSvg()}
+                            </tsp-expand-menu-button>Third Space
                         </p>
                     </div>
                 </h1>
@@ -218,7 +227,9 @@
             this.classList.add(sheet.classes.main)
             this.classList.add('mainPage')
             this.appendChild(TSP.utils.template(template))
-            this.querySelector('h1').addEventListener('click', () => this.querySelector('h1 tsp-expand-menu-button').click(), false)
+            this.querySelector('h1').addEventListener('click', () => {
+                this.querySelector('h1 tsp-expand-menu-button').click()
+            }, false)
         }
 
         windowDimensionsChanged() {

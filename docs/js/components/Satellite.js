@@ -10,7 +10,7 @@
             this.boundingSphere = null
 
             this.planetaryRotationAxis = planetaryRotationAxis
-            this.planetaryRotationAngleStep = TSP.config.get(
+            this.planetaryRotationAngleStep = TSP.config.getRandomized(
                 'satellites.planetaryRotationAngleStep'
             )
             this.planetaryRotationQuaternion = new THREE.Quaternion()
@@ -67,7 +67,7 @@
             )
             this.clickSphere = new THREE.Mesh(
                 new THREE.SphereBufferGeometry(
-                    this.boundingSphere.radius,
+                    this.boundingSphere.radius * (1 + 0.1),
                     6,
                     6
                 ),
