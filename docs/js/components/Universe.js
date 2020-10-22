@@ -84,7 +84,7 @@
                 res1: TSP.utils.randRange(0.5, 2.0),
                 res2: TSP.utils.randRange(0.5, 2.0),
                 resMix: TSP.utils.randRange(0.5, 2.0),
-                nebulaeMap: TEXTURE_GENERATOR.buildTexture({rgbs: [NEBULA_RGB1, NEBULA_RGB2] }),
+                nebulaeMap: TEXTURE_GENERATOR.renderTexture({rgbs: [NEBULA_RGB1, NEBULA_RGB2] }),
             }
 
             this.sphere = TSP.utils.getTexturedSphereMesh(

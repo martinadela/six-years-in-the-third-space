@@ -229,6 +229,7 @@
             } else if (this.contents.otherPages[url]) {
                 this.setContent('otherPages', this.contents.otherPages[url])
             } else {
+                debugger
                 this.setContent404()
             }
         }
