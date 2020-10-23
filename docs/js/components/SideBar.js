@@ -161,7 +161,8 @@
                     width: '0.8em',
                     transform: 'rotate(180deg)',
                     '& path': {
-                        stroke: COLOR_HIGHLIGHT1
+                        stroke: COLOR_HIGHLIGHT1,
+                        fill: 'none',
                     }
                 }
             },

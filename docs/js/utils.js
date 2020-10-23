@@ -37,13 +37,19 @@
         )
     }
 
+    TSP.utils.getScrollOffset = (
+        scrollContainer,
+        scrolledContent,
+    ) =>
+        scrollContainer.getBoundingClientRect().top - scrolledContent.getBoundingClientRect().top
+
     // REF : https://stackoverflow.com/a/55686711/312598
-    TSP.utils.smoothScrollTo = function scrollTo(
+    TSP.utils.smoothScrollTo = (
         scrollContainer,
         scrolledContent,
         offset,
         callback
-    ) {
+    ) => {
         const fixedOffset = (
             scrollContainer.getBoundingClientRect().top + offset
         ).toFixed()

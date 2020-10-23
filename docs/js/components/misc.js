@@ -110,9 +110,15 @@
             viewBox="0 0 20 20"
             version="1.1"
         >
-        <path
-            style="fill:none;fill-opacity:1;stroke-width:1.90134;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-            d="M 18.12581,9.9609181 5,18.259221 V 1.6626149 Z"
+            <style>
+                path.triangleSvg {
+                    stroke-width: 1.90134px;
+                }
+            </style>
+            <path
+                class="triangleSvg"
+                style="fill-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+                d="M 18.12581,9.9609181 5,18.259221 V 1.6626149 Z"
             />
         </svg> 
     `

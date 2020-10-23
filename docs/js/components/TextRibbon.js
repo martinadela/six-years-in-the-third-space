@@ -65,9 +65,6 @@
         <template id="TextRibbon">
             <div class="${sheet.classes.main}">
                 <div>${TEXT_RIBBON}</div>
-                <tsp-expand-menu-button class="${sheet.classes.expandMenuButton}">
-                    ${TSP.components.triangleSvg()}
-                </tsp-expand-menu-button>
             </div>
         </template>
     `
@@ -79,9 +76,6 @@
             this.element = this.querySelector(`.${sheet.classes.main}`)
             this.element.classList.add(this.className)
             this.className = ""
-            if (this.getAttribute('no-expand-button') !== null) {
-                this.element.classList.add('noExpandButton')
-            }
             const boundingRect = this.getBoundingClientRect()
             this.element.style.setProperty('--textRibbonRollTransformStart', `translateX(${boundingRect.width}px)`)
 

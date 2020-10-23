@@ -2,6 +2,14 @@
     const NEBULA_COLOR1 = [235, 194, 226] // Pink
     const NEBULA_COLOR2 = [255, 199, 149] // Orange
     const NEBULA_GRADIENT = `linear-gradient(17deg, rgba(255,255,255,0.2) 0%, rgba(${NEBULA_COLOR1[0]},${NEBULA_COLOR1[1]},${NEBULA_COLOR1[2]},0.2) 40%, rgba(${NEBULA_COLOR2[0]},${NEBULA_COLOR2[1]},${NEBULA_COLOR2[2]},0.2) 60%, rgba(255,255,255,0.2) 100%)`
+    const NEBULA_GRADIENT_SVG = (opacity) => `
+        <linearGradient id="nebulaGradient" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="rgba(255,255,255,${opacity})" />
+            <stop offset="40%" stop-color="rgba(${NEBULA_COLOR1[0]},${NEBULA_COLOR1[1]},${NEBULA_COLOR1[2]},${opacity})" />
+            <stop offset="60%" stop-color="rgba(${NEBULA_COLOR2[0]},${NEBULA_COLOR2[1]},${NEBULA_COLOR2[2]},${opacity})" />
+            <stop offset="100%" stop-color="rgba(255,255,255,${opacity})" />
+        </linearGradient>
+    `
 
     const COLOR_HIGHLIGHT1 = '#FA8802'
     const COLOR_H2 = `#FA8802`
@@ -51,6 +59,8 @@
                 Loader: COLOR_HIGHLIGHT1,
                 LoaderBackground: NEBULA_GRADIENT,
                 SideBarBackground: NEBULA_GRADIENT,
+                GradientBackground: NEBULA_GRADIENT,
+                GradientSvg: NEBULA_GRADIENT_SVG,
             },
             spacings: {
                 size2: '2rem',

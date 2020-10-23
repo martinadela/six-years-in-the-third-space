@@ -1,5 +1,6 @@
 ;(function () {
     const COLOR_BACKGROUND = TSP.config.get('styles.colors.ContentBackground')
+    const COLOR_HIGHLIGHT1 = TSP.config.get('styles.colors.Highlight1')
     const COLOR_BACKGROUND0 = `rgba(${COLOR_BACKGROUND[0]}, ${COLOR_BACKGROUND[1]}, ${COLOR_BACKGROUND[2]}, 0)`
     const COLOR_BACKGROUND1 = `rgba(${COLOR_BACKGROUND[0]}, ${COLOR_BACKGROUND[1]}, ${COLOR_BACKGROUND[2]}, 1)`
     const ENTER_TRANSITION_DELAY =
@@ -24,7 +25,7 @@
                 height: '100%',
                 // necessary to show the button
                 overflow: 'visible',
-                // To allow positioning of button
+                // To allow positioning of buttons
                 position: 'relative',
                 // Transitions
                 transition: `opacity ${TRANSITION_DURATION}ms ease-in-out`,
@@ -58,6 +59,45 @@
                     padding: `0 ${PAGE_FRAME_PADDING_MOBILE}`,
                 }
             },
+            scrollButton: {
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                width: '100%',
+                cursor: 'pointer',
+                textAlign: 'center',
+                transition: `opacity 200ms ease-in-out`,
+                opacity: 1,
+                paddingBottom: '0.5rem',
+                '&.hidden': {
+                    opacity: 0
+                },
+                '@media (max-aspect-ratio: 1/1)': {
+                    display: 'none'
+                },
+                '& svg': {
+                    animation: '$blink 2s ease-in-out infinite',
+                    transform: 'rotate(90deg)',
+                    height: '5em',
+                    width: 'auto',
+                    '& path': {
+                        fill: 'none',
+                        stroke: COLOR_HIGHLIGHT1,
+                        strokeWidth: '0.7px',
+                    }
+                }
+            },
+            '@keyframes blink': {
+                '0%': {
+                    opacity: 1,
+                },
+                '50%': {
+                    opacity: 0,
+                },
+                '100%': {
+                    opacity: 1,
+                },
+            },
         })
         .attach()
 
@@ -70,6 +110,9 @@
                 <div class="${sheet.classes.innerContainer}">
                     <div class="background">
                         <tsp-reader-header></tsp-reader-header>
+                        <div class="${sheet.classes.scrollButton}">
+                            ${TSP.components.triangleSvg()}
+                        </div>
                         <div class="${sheet.classes.contentContainer}">
                             <tsp-reader-content></tsp-reader-content>
                         </div>
@@ -101,11 +144,18 @@
             this.closeButton = this.querySelector(
                 `.${sheet.classes.closeButton}`
             )
+            this.scrollButton = this.querySelector(`.${sheet.classes.scrollButton}`)
 
             this.closeButton.addEventListener(
                 'click',
                 this.closeClicked.bind(this)
             )
+            this.scrollButton.addEventListener(
+                'click',
+                this.scrollButtonClicked.bind(this)
+            )
+            this.innerContainer.addEventListener('scroll', this.containerScrolled.bind(this))
+
             TSP.state.listen(
                 'App.currentUrl',
                 this.currentUrlChanged.bind(this)
@@ -153,6 +203,27 @@
 
         closeClicked() {
             TSP.utils.navigateTo('')
+        }
+
+        scrollButtonClicked() {
+            this.innerContainer.scrollTo({
+                top: this.innerContainer.getBoundingClientRect().height,
+                behavior: 'smooth',
+            })
+        }
+
+        containerScrolled() {
+            // As soon as the container is scrolled once, we hide the scrollButton forever
+            this.scrollButton.classList.add('hidden')
+            // const offset = TSP.utils.getScrollOffset(
+            //     this.innerContainer,
+            //     this.innerContainer.querySelector('.background'),
+            // )
+            // if (offset !== 0) {
+            //     this.scrollButton.classList.add('hidden')
+            // } else {
+            //     this.scrollButton.classList.remove('hidden')
+            // }
         }
 
         setContent(content, hasNoSatellite) {

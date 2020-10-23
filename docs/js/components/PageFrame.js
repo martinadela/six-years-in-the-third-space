@@ -49,7 +49,7 @@
                     <div class="${sheet.classes.readerContainer}">
                         <tsp-reader></tsp-reader>
                     </div>
-                    <tsp-text-ribbon no-expand-button class="${sheet.classes.textRibbon}"></tsp-text-ribbon>
+                    <tsp-text-ribbon class="${sheet.classes.textRibbon}"></tsp-text-ribbon>
                     <tsp-sidebar></tsp-sidebar>
                 </div>
             </div>
