@@ -67,7 +67,7 @@
         }
 
         createObjects() {
-            this.planet = new TSP.components.Planet()
+            // this.planet = new TSP.components.Planet()
             this.universe = new TSP.components.Universe()
             // this.speaker = new TSP.components.Satellite()
             this.orbitControls = new Canvas3DOrbitControls(
@@ -90,7 +90,7 @@
                 return satellite
             })
             TSP.state.set('Canvas3D.satellites', satellitesState)
-            TSP.state.set('Canvas3D.planet', this.planet)
+            // TSP.state.set('Canvas3D.planet', this.planet)
         }
 
         getCamera() {
@@ -114,7 +114,7 @@
                 return satellite.load(this.loader)
             })
             promises.push(this.universe.load())
-            promises.push(this.planet.load())
+            // promises.push(this.planet.load())
             Promise.all(promises).then(() => {
                 TSP.state.set('Canvas3D.loaded', true)
             })
@@ -125,10 +125,10 @@
             this.universe.show(this.scene)
             this.tspCamera.show(this.scene)
 
-            this.pointerEventsManager.hoverableObjectsManager.addHoverable(
-                this.planet.getHoverableObject3D(),
-                this.planet
-            )
+            // this.pointerEventsManager.hoverableObjectsManager.addHoverable(
+            //     this.planet.getHoverableObject3D(),
+            //     this.planet
+            // )
             Object.values(this.satellites).forEach((satellite) => {
                 satellite.show(this.scene)
                 this.pointerEventsManager.hoverableObjectsManager.addHoverable(
@@ -401,6 +401,13 @@
 
         animate() {
             this.frameCount++
+            if (
+                !TSP.state.get('App.isTouch') &&
+                this.frameCount % HOVER_DETECT_DEBOUNCE === 0 &&
+                this.hoverDetectionActive
+            ) {
+                this.refreshHoveredObjectState()
+            }
         }
 
     }

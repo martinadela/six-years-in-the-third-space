@@ -1,6 +1,5 @@
 ;(function () {
     const HIGHLIGHT_COLOR1 = TSP.config.get('styles.colors.Highlight1')
-    const MOBILE_MEDIA_QUERY = TSP.config.get('styles.mobile.mediaQuery')
     const EXPAND_TRANSITION_DURATION = TSP.config.get(
         'transitions.sidebarDuration'
     )
@@ -22,10 +21,6 @@
                 color: HIGHLIGHT_COLOR1,
                 fontFamily: "'Cormorant Infant', serif",
                 textTransform: 'uppercase',
-                [MOBILE_MEDIA_QUERY]: {
-                    borderLeft: 'none',
-                    orderBottom: 'none',
-                },
                 padding: TSP.config.get('styles.spacings.size1'),
                 cursor: 'pointer',
                 userSelect: 'none',
