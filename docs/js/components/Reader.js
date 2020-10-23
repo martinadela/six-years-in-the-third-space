@@ -91,6 +91,7 @@
             this.element = this.querySelector(`.${sheet.classes.main}`)
 
             this.readerHeader = this.querySelector('tsp-reader-header')
+
             this.innerContainer = this.querySelector(
                 `.${sheet.classes.innerContainer}`
             )
@@ -131,7 +132,6 @@
                             duration: TRANSITION_DURATION,
                         })
                     )
-                this.innerContainer.scrollTo({top: 0, behavior: 'smooth'});
             }
             
             if (this.contents.contributions[url]) {
@@ -159,8 +159,16 @@
             const exitingContent = this.querySelector('tsp-reader-content')
             const enteringContent = document.createElement('tsp-reader-content')
             enteringContent.setHtml(content.html)
-
             this.readerHeader.setContent(content.title, content.subtitle, content.subtitleUrl, hasNoSatellite)
+
+            // Since the scroll is not instant, we need to make sure that the camera movement is refreshed
+            // once the scroll is over and all elements are in position.
+            TSP.utils.smoothScrollTo(
+                this.innerContainer,
+                this.innerContainer.querySelector('.background'), 
+                0, 
+                () => TSP.state.get('Canvas3D.component').tspCamera.refresh()
+            )
 
             exitingContent.exitTransition()
                 .then(() => {
