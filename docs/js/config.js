@@ -175,7 +175,7 @@
                 contentUrl: '/pages/contributions/what-keeps-us-going.html',
                 title: 'What keeps us going',
                 subtitle: 'Diana Soria Hernández',
-                subtitleUrl: '/collaborators/Diana-Soria-Hernández',
+                subtitleUrl: '/collaborators/Diana-Soria-Hernandez',
                 
             },
 
@@ -265,7 +265,7 @@
                 contentUrl: '/pages/contributions/RSVP.html',
                 title: 'RSVP - Letters and Dates between Spaces',
                 subtitle: 'RSVP - Letters and Dates between Spaces is a durational project between Third Space and Iida Nissinen, Laura Rämö, Tuisku Lehto, and Oona Heinänen: a group working within the QUERQ community.',
-                subtitleUrl: 'collaborators/Iida Nissinen-Tuisku Lehto-Laura Rämö-Oona Heinänen-QUERQ',
+                subtitleUrl: '/collaborators/Iida-Nissinen-Tuisku-Lehto-Laura-Ramo-Oona-Heinanen-QUERQ',
                 
                 
             },
@@ -311,7 +311,7 @@
             },
 
             {
-                url: '/collaborators/Diana-Soria',
+                url: '/collaborators/Diana-Soria-Hernandez',
                 contentUrl: '/pages/collaborators/Diana-Soria.html',
                 title:'Diana Soria Hernández'
             },
@@ -362,8 +362,8 @@
             },
 
             {
-                url: '/collaborators/Iida Nissinen-Tuisku Lehto-Laura Rämö-Oona Heinänen-QUERQ',
-                contentUrl: '/pages/collaborators/Iida Nissinen-Tuisku Lehto-Laura Rämö-Oona Heinänen-QUERQ.html',
+                url: '/collaborators/Iida-Nissinen-Tuisku-Lehto-Laura-Ramo-Oona-Heinanen-QUERQ',
+                contentUrl: '/pages/collaborators/Iida-Nissinen-Tuisku-Lehto-Laura-Rämö-Oona-Heinänen-QUERQ.html',
                 title:'Iida Nissinen, Tuisku Lehto, Laura Rämö & Oona Heinänen (QUERQ Community)'
             },
 
