@@ -58,23 +58,32 @@
                 }
             },
             headerContainer: {
-                display: 'flex',
+                position: 'relative',
                 // take the width available and remove page padding
                 height: `calc(${HEIGHT_HEADER})`,
-                flexDirection: 'row',
-                '&.hasSatellite': {
-                    '& > *': {
-                        flex: 1,
-                    },
+                '& tsp-satellite-viewer': {
+                    position: 'absolute',
+                    width: '50%',
+                    left: '50%',
+                    top: 0,
+                    height: '100%',
                 },
-                '&:not(.hasSatellite)': {
+                '&.hasNoSatellite': {
                     '& $h2Container': {
                         width: '100%',
                     },
+                    '& tsp-satellite-viewer': {
+                        // We set opacity to 0, otherwise the camera will fail getting a proper 
+                        // position for the object
+                        opacity: 0,
+                        width: '100%',
+                        left: 0,
+                    }
                 }
             },
             h2Container : {
                 width: '50%',
+                height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
@@ -86,14 +95,16 @@
                     fontFamily: FONT_FAMILY_TITLE,
                     textTransform: 'uppercase',
                     fontStyle: 'italic',
-                    fontSize: '180%',
+                    fontSize: '100%',
                     fontWeight: 'normal',
                     [MOBILE_MEDIA_QUERY]: {
-                        textAlign: 'left',
-                        fontSize: '130%',
+                        fontSize: '80%',
                         paddingLeft: PAGE_FRAME_PADDING_MOBILE,
                     },
                     marginBottom: '0em',
+                    '& > div:last-child': {
+                        marginTop: '1em'
+                    },
                     '& span': {
                         backgroundColor: 'rgba(255, 255, 255, 0.9)',
                     },
@@ -103,12 +114,13 @@
                         fontStyle: 'initial',
                     },
                     '& .title': {
+                        fontSize: '180%',
                     },
                     '& .subtitle': {
+                        fontSize: '100%',
                         '& .empty': {
                             display: 'none'
                         },
-                        fontSize: '60%',
                         '& a': {
                             color: COLOR_SUBTITLE,
                         }
@@ -196,11 +208,20 @@
                     color: COLOR_TEXT_BOLD,
                     marginTop: '1em',
                 },
-                '&.collaborators $content': {
-                    '& .names': {
-                        color: 'rgb(248, 51, 16)',
-                        marginBottom: '0em',
-                        marginTop: '3em',
+
+                '& .image-with-side-caption': {
+                    [DESKTOP_MEDIA_QUERY]: {
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        '& > div': {
+                            flex: 1,
+                            width: '50%',
+                            '&.imagecaption:last-child': {
+                                textAlign: 'right'
+                            }
+                        },
                     },
                 },
 
@@ -227,14 +248,18 @@
                         <div class="${sheet.classes.headerContainer}">
                             <div class="${sheet.classes.h2Container}">
                                 <h2>
-                                    <span class="title">
-                                        Stuff asking stuff / Stuff of stuff / Stuff about stuff / Inside out stuff /
-                                        Vital stuff* inside and outside
-                                    </span><br/>
+                                    <div>
+                                        <span class="title">
+                                            Stuff asking stuff / Stuff of stuff / Stuff about stuff / Inside out stuff /
+                                            Vital stuff* inside and outside
+                                        </span>
+                                    </div>
                             
-                                    <span class="subtitle">
-                                        <tsp-anchor href=""></tsp-anchor>
-                                    </span>
+                                    <div>
+                                        <span class="subtitle">
+                                            <tsp-anchor href=""></tsp-anchor>
+                                        </span>
+                                    </div>
                                 </h2>
                             </div>
                             <tsp-satellite-viewer></tsp-satellite-viewer>
@@ -333,12 +358,28 @@
             TSP.utils.navigateTo('')
         }
 
-        setContent(content, hasSatellite) {
+        setContent(content, hasNoSatellite) {
             const exitingContent = this.querySelectorAll(`.${sheet.classes.content}`)
             
             const enteringContent = document.createElement('div')
             enteringContent.classList.add(sheet.classes.content)
             enteringContent.innerHTML = content.html
+
+            if (hasNoSatellite) {
+                this.headerContainer.classList.remove('hasNoSatellite')
+            } else {
+                this.headerContainer.classList.add('hasNoSatellite')
+            }
+
+            this.titleElement.innerHTML = content.title
+            if (content.subtitle) {
+                this.subtitleElement.classList.remove('empty')
+                this.subtitleElement.innerHTML = content.subtitle
+            } else {
+                this.subtitleElement.classList.add('empty')
+            }
+            this.subtitleElement.setAttribute('href', content.subtitleUrl)
+
 
             TSP.utils
                 .elementsTransitionHelper(exitingContent, {
@@ -348,21 +389,6 @@
                 })
                 .then((exitingContent) => {
                     exitingContent.forEach(element => element.remove())
-
-                    if (!hasSatellite) {
-                        this.headerContainer.classList.remove('hasSatellite')
-                    } else {
-                        this.headerContainer.classList.add('hasSatellite')
-                    }
-                    this.titleElement.innerHTML = content.title
-                    if (content.subtitle) {
-                        this.subtitleElement.classList.remove('empty')
-                        this.subtitleElement.innerHTML = content.subtitle
-                    } else {
-                        this.subtitleElement.classList.add('empty')
-                    }
-                    this.subtitleElement.setAttribute('href', content.subtitleUrl)
-
                     this.contentContainer.appendChild(enteringContent)
                     return TSP.utils.waitAtleast(
                         PAGE_TRANSITION_DURATION - 2 * TRANSITION_DURATION, 

@@ -47,27 +47,32 @@
         }
 
         currentUrlChanged(url) {
-            this.focusedObject = null
-            const satellite = TSP.state.get('Canvas3D.satellites')[url]
-            if (url === PLANET_FOCUS_ON_URL) {
-                this.focusedObject = TSP.state.get('Canvas3D.planet')
-                this.withDebugging(() =>
-                    this.animateTransform(this.transformFocused())
-                )
-            } else if (satellite) {
-                this.focusedObject = satellite
-                this.withDebugging(() =>
-                    this.animateTransform(this.transformFocused())
-                )
-            } else if (url === '') {
-                this.withDebugging(() =>
-                    this.animateTransform(this.transformDefault())
-                )
-            } else {
-                this.withDebugging(() =>
-                    this.animateTransform(this.transformOverview())
-                )
-            }
+            // We schedule camera movement to next tick, to allow
+            // all other pages to set themselve up (in particular allowing the satellite-viewer
+            // to get in the right position)
+            setTimeout(() => {
+                this.focusedObject = null
+                const satellite = TSP.state.get('Canvas3D.satellites')[url]
+                if (url === PLANET_FOCUS_ON_URL) {
+                    this.focusedObject = TSP.state.get('Canvas3D.planet')
+                    this.withDebugging(() =>
+                        this.animateTransform(this.transformFocused())
+                    )
+                } else if (satellite) {
+                    this.focusedObject = satellite
+                    this.withDebugging(() =>
+                        this.animateTransform(this.transformFocused())
+                    )
+                } else if (url === '') {
+                    this.withDebugging(() =>
+                        this.animateTransform(this.transformDefault())
+                    )
+                } else {
+                    this.withDebugging(() =>
+                        this.animateTransform(this.transformDefault())
+                    )
+                }    
+            }, 0)
         }
 
         show(scene) {

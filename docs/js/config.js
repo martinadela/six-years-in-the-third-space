@@ -37,7 +37,7 @@
                 Links: COLOR_HIGHLIGHT1,
                 Border: COLOR_HIGHLIGHT1,
                 ContentBackground: [255, 255, 255],
-                ButtonBackground: 'rgba(255, 255, 255, 0.65)',
+                ButtonBackground: 'rgba(255, 255, 255, 0.9)',
                 ScrollbarBackground: 'transparent',
                 ScrollbarBorder: 'white',
                 Scrollbar: COLOR_HIGHLIGHT1,
@@ -183,7 +183,7 @@
                 url: '/contributions/supradigm',
                 satelliteModelUrl: '/satellites/satellite7.glb',
                 contentUrl: '/pages/contributions/supradigm.html',
-                title: 'SUPRADIGM/SUPRADIGMA',
+                title: 'SUPRADIGM / SUPRADIGMA',
                 subtitle: 'Adrián Balseca',
                 subtitleUrl: '/collaborators/Adrian-Balseca',
                 

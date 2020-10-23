@@ -67,7 +67,7 @@
             )
             this.clickSphere = new THREE.Mesh(
                 new THREE.SphereBufferGeometry(
-                    this.boundingSphere.radius * (1 + 0.1),
+                    this.boundingSphere.radius * (1 + 0.3),
                     6,
                     6
                 ),

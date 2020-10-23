@@ -26,31 +26,19 @@
                 /* To allow absolute positioning of side bar */
                 position: 'relative',
                 display: 'flex',
-                flexDirection: 'row',
+                flexDirection: 'column',
                 border: `solid ${COLOR_BORDER} ${TSP.config.get('styles.dimensions.borderThickness')}`,
                 width: '100%',
                 height: '100%',
-                [MOBILE_MEDIA_QUERY]: {
-                    flexDirection: 'column',
-                },
             },
 
             readerContainer: {
                 flex: 1,
-                // Counter-intuitively, with the flex it forces the component to shrink / expand to the right size
-                width: '0%',
-                [MOBILE_MEDIA_QUERY]: {
-                    width: '100%',
-                    height: '0%',
-                },
+                width: '100%',
+                height: '0%',
             },
 
-            textRibbon: {
-                display: 'none',
-                [MOBILE_MEDIA_QUERY]: {
-                    display: 'block',
-                },
-            },
+            textRibbon: {},
         })
         .attach()
 
