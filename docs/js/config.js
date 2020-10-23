@@ -34,7 +34,7 @@
             colors: {
                 Highlight1: COLOR_HIGHLIGHT1, // dark blue sky
                 // Highlight1: '#FF8575', // orange
-                Links: COLOR_TEXT,
+                Links: COLOR_HIGHLIGHT1,
                 Border: COLOR_HIGHLIGHT1,
                 ContentBackground: [255, 255, 255],
                 ButtonBackground: 'rgba(255, 255, 255, 0.65)',

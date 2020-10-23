@@ -66,12 +66,10 @@
                 ul: {
                     listStyle: 'none',
                 },
-                a: {
+                'a, tsp-anchor': {
+                    cursor: 'pointer',
                     color: COLOR_LINK,
                     textDecoration: 'none',
-                },
-                'tsp-anchor': {
-                    cursor: 'pointer'
                 }
             },
             main: {

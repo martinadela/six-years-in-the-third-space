@@ -62,9 +62,16 @@
                 // take the width available and remove page padding
                 height: `calc(${HEIGHT_HEADER})`,
                 flexDirection: 'row',
-                '& > *': {
-                    flex: 1,
+                '&.hasSatellite': {
+                    '& > *': {
+                        flex: 1,
+                    },
                 },
+                '&:not(.hasSatellite)': {
+                    '& $h2Container': {
+                        width: '100%',
+                    },
+                }
             },
             h2Container : {
                 width: '50%',
@@ -98,6 +105,9 @@
                     '& .title': {
                     },
                     '& .subtitle': {
+                        '& .empty': {
+                            display: 'none'
+                        },
                         fontSize: '60%',
                         '& a': {
                             color: COLOR_SUBTITLE,
@@ -115,6 +125,7 @@
                 textAlign: 'justify',
                 margin: 'auto',
                 maxWidth: '1000px',
+                paddingBottom: '2em',
 
                 '& .fullwidthimage': {
                     '& img': {
@@ -144,6 +155,16 @@
                 '& p': {
                     marginBottom: '1em',
                     textAlign: 'justify',
+                },
+
+                '& .intro': {
+                    fontWeight: 'bold',
+                    marginBottom: '8em',
+                },
+
+                '& .bio': {
+                    fontSize: '120%',
+                    margin: '2em 0',
                 },
 
                 '& .textcontent': {
@@ -212,9 +233,7 @@
                                     </span><br/>
                             
                                     <span class="subtitle">
-                                        <tsp-anchor href="/collaborators/kraam">
-                                            Minna Hint & Killu Sukmit (Kraam Art Space)
-                                        </tsp-anchor>
+                                        <tsp-anchor href=""></tsp-anchor>
                                     </span>
                                 </h2>
                             </div>
@@ -295,7 +314,8 @@
             
             if (this.contents.contributions[url]) {
                 this.setContent(
-                    this.contents.contributions[url]
+                    this.contents.contributions[url],
+                    true
                 )
             } else if (this.contents.collaborators[url]) {
                 this.setContent(
@@ -313,7 +333,7 @@
             TSP.utils.navigateTo('')
         }
 
-        setContent(content) {
+        setContent(content, hasSatellite) {
             const exitingContent = this.querySelectorAll(`.${sheet.classes.content}`)
             
             const enteringContent = document.createElement('div')
@@ -329,9 +349,19 @@
                 .then((exitingContent) => {
                     exitingContent.forEach(element => element.remove())
 
+                    if (!hasSatellite) {
+                        this.headerContainer.classList.remove('hasSatellite')
+                    } else {
+                        this.headerContainer.classList.add('hasSatellite')
+                    }
                     this.titleElement.innerHTML = content.title
-                    this.subtitleElement.innerHTML = content.subtitle
-                    this.subtitleElement.href = content.subtitleUrl
+                    if (content.subtitle) {
+                        this.subtitleElement.classList.remove('empty')
+                        this.subtitleElement.innerHTML = content.subtitle
+                    } else {
+                        this.subtitleElement.classList.add('empty')
+                    }
+                    this.subtitleElement.setAttribute('href', content.subtitleUrl)
 
                     this.contentContainer.appendChild(enteringContent)
                     return TSP.utils.waitAtleast(
