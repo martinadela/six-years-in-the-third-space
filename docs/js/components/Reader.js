@@ -3,7 +3,6 @@
     const COLOR_BACKGROUND0 = `rgba(${COLOR_BACKGROUND[0]}, ${COLOR_BACKGROUND[1]}, ${COLOR_BACKGROUND[2]}, 0)`
     const COLOR_BACKGROUND1 = `rgba(${COLOR_BACKGROUND[0]}, ${COLOR_BACKGROUND[1]}, ${COLOR_BACKGROUND[2]}, 1)`
     const COLOR_SUBTITLE = TSP.config.get('styles.colors.H2Subtitle')
-    const COLOR_TEXT_BOLD = TSP.config.get('styles.colors.TextBold')
     const COLOR_H2 = TSP.config.get('styles.colors.H2')
     const FONT_FAMILY_TITLE = TSP.config.get('styles.fontFamilies.title')
     const ENTER_TRANSITION_DELAY =
@@ -14,7 +13,6 @@
         TSP.config.get('transitions.duration') *
         TSP.config.get('transitions.reader')[1]
     const MOBILE_MEDIA_QUERY = TSP.config.get('styles.mobile.mediaQuery')
-    const DESKTOP_MEDIA_QUERY = TSP.config.get('styles.desktop.mediaQuery')
     const Z_INDEX_INNER_CONTAINER = TSP.config.get('styles.zIndexes.reader')
     const Z_INDEX_TOP_BUTTONS = TSP.config.get('styles.zIndexes.topButtons')
     const GRADIENT_PADDING_TOP_DESKTOP = '20em'
@@ -133,107 +131,6 @@
                     padding: `0 ${PAGE_FRAME_PADDING_MOBILE}`,
                 }
             },
-            content: {
-                textAlign: 'justify',
-                margin: 'auto',
-                maxWidth: '1000px',
-                paddingBottom: '2em',
-
-                '& .fullwidthimage': {
-                    '& img': {
-                        width: '100%',
-                        [MOBILE_MEDIA_QUERY]: {
-                            marginTop: '1em',
-                            marginBottom: '1em',
-                        }
-                    },
-                },
-
-                '& .flexibleimage': {
-                    [DESKTOP_MEDIA_QUERY]: {
-                        float: 'right',
-                        marginLeft: '1em',
-                        width: '50%',
-                    },
-                    '& img': {
-                        width: '100%',
-                        [MOBILE_MEDIA_QUERY]: {
-                            marginTop: '1em',
-                            marginBottom: '1em',
-                        }
-                    },
-                },
-
-                '& p': {
-                    marginBottom: '1em',
-                    textAlign: 'justify',
-                },
-
-                '& .intro': {
-                    fontWeight: 'bold',
-                    marginBottom: '8em',
-                },
-
-                '& .bio': {
-                    fontSize: '120%',
-                    margin: '2em 0',
-                },
-
-                '& .textcontent': {
-                    textAlign: 'left',
-                },
-
-                '& .poemparagraph': {
-                    textAlign: 'left',
-                },
-
-                '& .note': {
-                    position: 'relative',
-                    top: '-0.5em',
-                },
-
-                '& .imagecaption': {
-                    marginBottom: '2em',
-                },
-
-                '& .imagecaption-title': {
-                    fontWeight: 'bold',
-                },
-
-                '& .imagecaption-description': {
-                    fontStyle: 'italic',
-                },
-
-                '& .bold': {
-                    color: COLOR_TEXT_BOLD,
-                    marginTop: '1em',
-                },
-
-                '& .image-with-side-caption': {
-                    [DESKTOP_MEDIA_QUERY]: {
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        '& > div': {
-                            flex: 1,
-                            width: '50%',
-                            '&.imagecaption:last-child': {
-                                textAlign: 'right'
-                            }
-                        },
-                    },
-                },
-
-                transition: `opacity ${TRANSITION_DURATION}ms ease-in-out 0ms`,
-                opacity: 0,
-                '&.enter': {
-                    opacity: 1,
-                },
-                '&.exit': {
-                    opacity: 0,
-                },
-            },
         })
         .attach()
 
@@ -265,6 +162,7 @@
                             <tsp-satellite-viewer></tsp-satellite-viewer>
                         </div>
                         <div class="${sheet.classes.contentContainer}">
+                            <tsp-reader-content></tsp-reader-content>
                         </div>
                     </div>
                 </div>
@@ -359,11 +257,9 @@
         }
 
         setContent(content, hasNoSatellite) {
-            const exitingContent = this.querySelectorAll(`.${sheet.classes.content}`)
-            
-            const enteringContent = document.createElement('div')
-            enteringContent.classList.add(sheet.classes.content)
-            enteringContent.innerHTML = content.html
+            const exitingContent = this.querySelector('tsp-reader-content')
+            const enteringContent = document.createElement('tsp-reader-content')
+            enteringContent.setHtml(content.html)
 
             if (hasNoSatellite) {
                 this.headerContainer.classList.remove('hasNoSatellite')
@@ -381,14 +277,8 @@
             this.subtitleElement.setAttribute('href', content.subtitleUrl)
 
 
-            TSP.utils
-                .elementsTransitionHelper(exitingContent, {
-                    classPrevious: 'enter',
-                    classTransition: 'exit',
-                    duration: TRANSITION_DURATION,
-                })
-                .then((exitingContent) => {
-                    exitingContent.forEach(element => element.remove())
+            exitingContent.exitTransition()
+                .then(() => {
                     this.contentContainer.appendChild(enteringContent)
                     return TSP.utils.waitAtleast(
                         PAGE_TRANSITION_DURATION - 2 * TRANSITION_DURATION, 
@@ -396,10 +286,7 @@
                     )
                 })
                 .then(() => 
-                    TSP.utils.elementsTransitionHelper([enteringContent], {
-                        classTransition: 'enter',
-                        duration: TRANSITION_DURATION,
-                    })
+                    enteringContent.enterTransition()
                 )
         }
 

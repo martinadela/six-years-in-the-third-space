@@ -35,6 +35,7 @@
         return Promise.all(Array.prototype.map.call(allImages, TSP.utils.imgLoaded))
     }
 
+    // TODO : clean cancellable promise
     TSP.utils.elementsTransitionHelper = (elements, opts) => {
         const duration = opts.duration === undefined ? 400 : opts.duration
         const classPrevious = opts.classPrevious
@@ -52,7 +53,8 @@
             }
             element.classList.add(classTransition)
         })
-        return TSP.utils.timeoutPromise(duration).then(() => {
+        const timeoutPromise = TSP.utils.timeoutPromise(duration)
+        const finalPromise = timeoutPromise.then(() => {
             elements.forEach(element => {
                 if (classFinal) {
                     element.classList.remove(classTransition)
@@ -60,7 +62,9 @@
                 }
             })
             return elements
-        })        
+        })
+        finalPromise.cancel = timeoutPromise.cancel
+        return finalPromise
     }
 
     TSP.utils.quantize = (value, quantization) =>
