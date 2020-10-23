@@ -138,6 +138,7 @@
                 .get('Reader.component')
                 .querySelector('tsp-satellite-viewer')
                 .getBoundingClientRect()
+            console.log(satelliteViewerBoundingRect)
             return new THREE.Box2(
                 new THREE.Vector2(
                     satelliteViewerBoundingRect.left,

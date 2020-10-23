@@ -7,6 +7,9 @@
     const COLOR_H2 = `#FA8802`
     const COLOR_TEXT = 'rgb(112, 109, 109)'
 
+    const PAGE_FRAME_PADDING_DESKTOP = '2.5rem'
+    const PAGE_FRAME_PADDING_MOBILE = '1rem'
+
     const STYLES_MOBILE_THRESHOLD = {
         width: 800,
         height: 550,
@@ -131,6 +134,16 @@
             // Hover detection is executed only every N frames :
             hoverDetectDebounce: 4,
         },
+
+        pageFrame: {
+            paddingDesktop: PAGE_FRAME_PADDING_DESKTOP,
+            paddingMobile: PAGE_FRAME_PADDING_MOBILE,
+        },
+
+        reader: {
+            headerHeight: `min(100vw - 2 * ${PAGE_FRAME_PADDING_DESKTOP}, 100vh - 2 * ${PAGE_FRAME_PADDING_DESKTOP})`
+        },
+
         contributions: [
             {
                 url: '/contributions/theskymovedcitytocity',
@@ -489,11 +502,6 @@
                 its identity and thus its practice is transcultural: it too is many, and relative, and transmuting along with its members and makers. At the core, there is this idea of Third Space as an on-going project, both in theory and practice, as a 
                 collective and within the art scene.`,
         },
-
-        pageFrame: {
-            paddingDesktop: '2.5rem',
-            paddingMobile: '1rem',
-        }
     }
 
     TSP.config = {}
