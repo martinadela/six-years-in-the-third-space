@@ -2,6 +2,9 @@
     const HOVER_DETECT_DEBOUNCE = TSP.config.get(
         'satellites.hoverDetectDebounce'
     )
+    const SATELLITE_ROTATION_RADIUS = TSP.config.get(
+        'satellites.planetaryRotationRadius'
+    )[0]
     const CONTRIBUTIONS = TSP.config.get('contributions')
     // const SPEAKER = TSP.config.get('speaker')
 
@@ -405,6 +408,10 @@
     class Canvas3DOrbitControls {
         constructor(camera, canvas) {
             this.orbitControls = new THREE.OrbitControls(camera, canvas)
+            this.orbitControls.enableKeys = false
+            this.orbitControls.enablePan = false
+            this.orbitControls.minDistance = SATELLITE_ROTATION_RADIUS / 2
+            this.orbitControls.maxDistance = SATELLITE_ROTATION_RADIUS * 5
             this.orbitControls.addEventListener('end', this.onOrbitInteractionEnd.bind(this))
         }
 

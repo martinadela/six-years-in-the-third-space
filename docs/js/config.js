@@ -1,7 +1,7 @@
 ;(function () {
     const NEBULA_COLOR1 = [235, 194, 226] // Pink
     const NEBULA_COLOR2 = [255, 199, 149] // Orange
-    const NEBULA_GRADIENT = `linear-gradient(17deg, rgba(255,255,255,0.5) 0%, rgba(${NEBULA_COLOR1[0]},${NEBULA_COLOR1[1]},${NEBULA_COLOR1[2]},0.35) 40%, rgba(${NEBULA_COLOR2[0]},${NEBULA_COLOR2[1]},${NEBULA_COLOR2[2]},0.35) 60%, rgba(255,255,255,0.5) 100%)`
+    const NEBULA_GRADIENT = `linear-gradient(17deg, rgba(255,255,255,0.2) 0%, rgba(${NEBULA_COLOR1[0]},${NEBULA_COLOR1[1]},${NEBULA_COLOR1[2]},0.2) 40%, rgba(${NEBULA_COLOR2[0]},${NEBULA_COLOR2[1]},${NEBULA_COLOR2[2]},0.2) 60%, rgba(255,255,255,0.2) 100%)`
 
     const COLOR_HIGHLIGHT1 = '#FA8802'
     const COLOR_H2 = `#FA8802`
@@ -34,12 +34,12 @@
             colors: {
                 Highlight1: COLOR_HIGHLIGHT1, // dark blue sky
                 // Highlight1: '#FF8575', // orange
-                Links: COLOR_TEXT,
+                Links: COLOR_HIGHLIGHT1,
                 Border: COLOR_HIGHLIGHT1,
                 ContentBackground: [255, 255, 255],
                 ButtonBackground: 'rgba(255, 255, 255, 0.65)',
                 ScrollbarBackground: 'transparent',
-                ScrollbarBorder: 'LightGrey',
+                ScrollbarBorder: 'white',
                 Scrollbar: COLOR_HIGHLIGHT1,
                 Text: COLOR_TEXT,
                 TextBold: 'rgb(19, 18, 18)',
@@ -126,10 +126,10 @@
         satellites: {
             planetaryRotationAxisRandomness: Math.PI * 0,
             planetaryRotationRadius: [100, 10],
-            planetaryRotationAngleStep: (Math.PI / 2) * 0.0005,
+            planetaryRotationAngleStep: [(Math.PI / 2) * 0.0005, (Math.PI / 2) * 0.0001],
             selfRotationIncrement: [0.003, 0.0015],
             // Hover detection is executed only every N frames :
-            hoverDetectDebounce: 10,
+            hoverDetectDebounce: 4,
         },
         contributions: [
             {

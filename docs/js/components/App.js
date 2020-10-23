@@ -66,10 +66,11 @@
                 ul: {
                     listStyle: 'none',
                 },
-                a: {
+                'a, tsp-anchor': {
+                    cursor: 'pointer',
                     color: COLOR_LINK,
                     textDecoration: 'none',
-                },
+                }
             },
             main: {
                 '& $innerContainer': {

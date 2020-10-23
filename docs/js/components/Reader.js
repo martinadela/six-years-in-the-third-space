@@ -17,7 +17,8 @@
     const DESKTOP_MEDIA_QUERY = TSP.config.get('styles.desktop.mediaQuery')
     const Z_INDEX_INNER_CONTAINER = TSP.config.get('styles.zIndexes.reader')
     const Z_INDEX_TOP_BUTTONS = TSP.config.get('styles.zIndexes.topButtons')
-    const GRADIENT_PADDING_TOP = '20em'
+    const GRADIENT_PADDING_TOP_DESKTOP = '20em'
+    const GRADIENT_PADDING_TOP_MOBILE = '10em'
     const PAGE_FRAME_PADDING_DESKTOP = TSP.config.get('pageFrame.paddingDesktop')
     const PAGE_FRAME_PADDING_MOBILE = TSP.config.get('pageFrame.paddingMobile')
     const HEIGHT_HEADER = `min(100vw - 2 * ${PAGE_FRAME_PADDING_DESKTOP}, 100vh - 2 * ${PAGE_FRAME_PADDING_DESKTOP})`
@@ -50,7 +51,10 @@
                 position: 'relative',
                 zIndex: Z_INDEX_INNER_CONTAINER,
                 '& .background': {
-                    background: `linear-gradient(180deg, ${COLOR_BACKGROUND0} calc(${HEIGHT_HEADER} - ${GRADIENT_PADDING_TOP}), ${COLOR_BACKGROUND1} calc(${HEIGHT_HEADER}), ${COLOR_BACKGROUND1} 100%)`
+                    background: `linear-gradient(180deg, ${COLOR_BACKGROUND0} calc(${HEIGHT_HEADER} - ${GRADIENT_PADDING_TOP_DESKTOP}), ${COLOR_BACKGROUND1} calc(${HEIGHT_HEADER}), ${COLOR_BACKGROUND1} 100%)`,
+                    [MOBILE_MEDIA_QUERY]: {
+                        background: `linear-gradient(180deg, ${COLOR_BACKGROUND0} calc(${HEIGHT_HEADER} - ${GRADIENT_PADDING_TOP_MOBILE}), ${COLOR_BACKGROUND1} calc(${HEIGHT_HEADER}), ${COLOR_BACKGROUND1} 100%)`,
+                    }
                 }
             },
             headerContainer: {
@@ -58,9 +62,16 @@
                 // take the width available and remove page padding
                 height: `calc(${HEIGHT_HEADER})`,
                 flexDirection: 'row',
-                '& > *': {
-                    flex: 1,
+                '&.hasSatellite': {
+                    '& > *': {
+                        flex: 1,
+                    },
                 },
+                '&:not(.hasSatellite)': {
+                    '& $h2Container': {
+                        width: '100%',
+                    },
+                }
             },
             h2Container : {
                 width: '50%',
@@ -75,11 +86,11 @@
                     fontFamily: FONT_FAMILY_TITLE,
                     textTransform: 'uppercase',
                     fontStyle: 'italic',
-                    fontSize: '200%',
+                    fontSize: '180%',
                     fontWeight: 'normal',
                     [MOBILE_MEDIA_QUERY]: {
                         textAlign: 'left',
-                        fontSize: '150%',
+                        fontSize: '130%',
                         paddingLeft: PAGE_FRAME_PADDING_MOBILE,
                     },
                     marginBottom: '0em',
@@ -94,6 +105,9 @@
                     '& .title': {
                     },
                     '& .subtitle': {
+                        '& .empty': {
+                            display: 'none'
+                        },
                         fontSize: '60%',
                         '& a': {
                             color: COLOR_SUBTITLE,
@@ -111,6 +125,7 @@
                 textAlign: 'justify',
                 margin: 'auto',
                 maxWidth: '1000px',
+                paddingBottom: '2em',
 
                 '& .fullwidthimage': {
                     '& img': {
@@ -140,6 +155,16 @@
                 '& p': {
                     marginBottom: '1em',
                     textAlign: 'justify',
+                },
+
+                '& .intro': {
+                    fontWeight: 'bold',
+                    marginBottom: '8em',
+                },
+
+                '& .bio': {
+                    fontSize: '120%',
+                    margin: '2em 0',
                 },
 
                 '& .textcontent': {
@@ -208,9 +233,7 @@
                                     </span><br/>
                             
                                     <span class="subtitle">
-                                        <tsp-anchor href="/collaborators/kraam">
-                                            Minna Hint & Killu Sukmit (Kraam Art Space)
-                                        </tsp-anchor>
+                                        <tsp-anchor href=""></tsp-anchor>
                                     </span>
                                 </h2>
                             </div>
@@ -291,7 +314,8 @@
             
             if (this.contents.contributions[url]) {
                 this.setContent(
-                    this.contents.contributions[url]
+                    this.contents.contributions[url],
+                    true
                 )
             } else if (this.contents.collaborators[url]) {
                 this.setContent(
@@ -309,7 +333,7 @@
             TSP.utils.navigateTo('')
         }
 
-        setContent(content) {
+        setContent(content, hasSatellite) {
             const exitingContent = this.querySelectorAll(`.${sheet.classes.content}`)
             
             const enteringContent = document.createElement('div')
@@ -325,9 +349,19 @@
                 .then((exitingContent) => {
                     exitingContent.forEach(element => element.remove())
 
-                    this.titleElement.innerHTML = 'Stuff asking stuff / Stuff of stuff / Stuff about stuff / Inside out stuff / Vital stuff* inside and outside' // content.title
-                    this.subtitleElement.innerHTML = 'Minna Hint & Killu Sukmit (Kraam Art Space)' // content.subtitle
-                    this.subtitleElement.href = '/collaborators/kraam' // content.subtitleUrl
+                    if (!hasSatellite) {
+                        this.headerContainer.classList.remove('hasSatellite')
+                    } else {
+                        this.headerContainer.classList.add('hasSatellite')
+                    }
+                    this.titleElement.innerHTML = content.title
+                    if (content.subtitle) {
+                        this.subtitleElement.classList.remove('empty')
+                        this.subtitleElement.innerHTML = content.subtitle
+                    } else {
+                        this.subtitleElement.classList.add('empty')
+                    }
+                    this.subtitleElement.setAttribute('href', content.subtitleUrl)
 
                     this.contentContainer.appendChild(enteringContent)
                     return TSP.utils.waitAtleast(
@@ -382,8 +416,12 @@
                 )
             ).then((contents) => {
                 contents.forEach((html, i) => {
-                    this.contents[group][definitions[i].url] = {
+                    const definition = definitions[i]
+                    this.contents[group][definition.url] = {
                         html: html,
+                        title: definition.title,
+                        subtitle: definition.subtitle,
+                        subtitleUrl: definition.subtitleUrl,
                     }
                 })
             })
