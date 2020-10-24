@@ -169,7 +169,6 @@
                 satelliteModelUrl: '/satellites/satellite2.glb',
                 contentUrl: '/pages/contributions/theskymovedcitytocity.html',
                 title: 'The Sky Moved City to City',
-                subtitle: 'Vidha Saumya',
                 subtitleUrl: '/collaborators/Vidha-Saumya'
             },
             {
@@ -177,7 +176,6 @@
                 satelliteModelUrl: '/satellites/satellite3.glb',
                 contentUrl: '/pages/contributions/fromheretothere.html',
                 title: 'From Here to There',
-                subtitle: 'Marko Timlin',
                 subtitleUrl: '/collaborators/Marko-Timlin',
                 
             },
@@ -186,7 +184,6 @@
                 satelliteModelUrl: '/satellites/satellite4.glb',
                 contentUrl: '/pages/contributions/elaborately-collaborating-and-working-together.html',
                 title: 'elaborately collaborating and working together',
-                subtitle: 'Marten Esko',
                 subtitleUrl: '/collaborators/Marten-Esko',
                 
             },
@@ -196,7 +193,6 @@
                 satelliteModelUrl: '/satellites/satellite5.glb',
                 contentUrl: '/pages/contributions/collaborating-as-a-multiplicity–a-dialogue-with-other-dialogues.html',
                 title: 'Collaborating as a Multiplicity – A Dialogue With Other Dialogues',
-                subtitle: 'Tina Mariane Krogh Madsen',
                 subtitleUrl: '/collaborators/Tina-Madsen',
                 
             },
@@ -206,7 +202,6 @@
                 satelliteModelUrl: '/satellites/satellite6.glb',
                 contentUrl: '/pages/contributions/what-keeps-us-going.html',
                 title: 'What keeps us going',
-                subtitle: 'Diana Soria Hernández',
                 subtitleUrl: '/collaborators/Diana-Soria-Hernandez',
                 
             },
@@ -216,7 +211,6 @@
                 satelliteModelUrl: '/satellites/satellite7.glb',
                 contentUrl: '/pages/contributions/supradigm.html',
                 title: 'SUPRADIGM / SUPRADIGMA',
-                subtitle: 'Adrián Balseca',
                 subtitleUrl: '/collaborators/Adrian-Balseca',  
             },
             {
@@ -224,7 +218,6 @@
                 satelliteModelUrl: '/satellites/satellite8.glb',
                 contentUrl: '/pages/contributions/ALI.html',
                 title: 'SAFE{R}: Evolving the Conditions for Collaboration Or From ‘Safer Spaces’ to ‘Safer People’',
-                subtitle: 'Ali Akbar Mehta',
                 subtitleUrl: '/collaborators/Ali-Akbar-Mehta',  
             },
             {
@@ -232,7 +225,6 @@
                 satelliteModelUrl: '/satellites/satellite9.glb',
                 contentUrl: '/pages/contributions/rec-on.org.html',
                 title: 're-con.org',
-                subtitle: 'Antye Greie Ripatti',
                 subtitleUrl: '/collaborators/Antye-Greie-Ripatti',  
             },
             {
@@ -240,7 +232,6 @@
                 satelliteModelUrl: '/satellites/satellite10.glb',
                 contentUrl: '/pages/contributions/kraamtext.html',
                 title: ' Stuff asking stuff / Stuff of stuff / Stuff about stuff / Inside out stuff / Vital stuff* inside and outside',
-                subtitle: 'Minna Hint & Killu Sukmit (Kraam Art Space)',
                 subtitleUrl: '/collaborators/kraam',
                 
             },
@@ -249,7 +240,6 @@
                 satelliteModelUrl: '/satellites/satellite11.glb',
                 contentUrl: '/pages/contributions/Stretchy-Rooms.html',
                 title: 'Venyvät huoneet / Stretchy Rooms',
-                subtitle: 'Juulia Terho & Milja-Maaria Terho',
                 subtitleUrl: '/collaborators/Juulia-Terho-Milja-Maaria-Terho',
                 
             },
@@ -258,7 +248,6 @@
                 satelliteModelUrl: '/satellites/satellite12.glb',
                 contentUrl: '/pages/contributions/Mythological-Migrations.html',
                 title: 'Mythological Migrations: On Collaboration, Organization, and Production',
-                subtitle: 'Abdullah Qureshi & Danai Anagnostou',
                 subtitleUrl: '/collaborators/Abdullah-Qureshi-Danai-Anagnostou',
             },
             {
@@ -266,7 +255,6 @@
                 satelliteModelUrl: '/satellites/satellite13.glb',
                 contentUrl: '/pages/contributions/Terms-Conditions.html',
                 title: 'Terms & Conditions: What do we need in order to work together?',
-                subtitle: 'Feminist Culture House',
                 subtitleUrl: '/collaborators/Feminist-Culture-House',
             },
             {
@@ -274,7 +262,6 @@
                 satelliteModelUrl: '/satellites/satellite14.glb',
                 contentUrl: '/pages/contributions/Reading-as-collaboration.html',
                 title: 'Reading as collaboration: deconstructing single narratives and the myth of the individual',
-                subtitle: 'Yvonne Billimore',
                 subtitleUrl: '/collaborators/Yvonne-Billimore',
                 
             },
@@ -283,7 +270,6 @@
                 satelliteModelUrl: '/satellites/satellite15.glb',
                 contentUrl: '/pages/contributions/RSVP.html',
                 title: 'RSVP - Letters and Dates between Spaces',
-                subtitle: 'RSVP - Letters and Dates between Spaces is a durational project between Third Space and Iida Nissinen, Laura Rämö, Tuisku Lehto, and Oona Heinänen: a group working within the QUERQ community.',
                 subtitleUrl: '/collaborators/Iida-Nissinen-Tuisku-Lehto-Laura-Ramo-Oona-Heinanen-QUERQ',  
             },
 
@@ -358,34 +344,23 @@
                 contentUrl: '/pages/collaborators/Feminist-Culture-House.html',
                 title:'Feminist Culture House'
             },
-
             {
                 url: '/collaborators/Yvonne-Billimore',
                 contentUrl: '/pages/collaborators/Yvonne-Billimore.html',
                 title:'Yvonne Bilimore'
             },
-
             {
                 url: '/collaborators/Iida-Nissinen-Tuisku-Lehto-Laura-Ramo-Oona-Heinanen-QUERQ',
                 contentUrl: '/pages/collaborators/Iida-Nissinen-Tuisku-Lehto-Laura-Rämö-Oona-Heinänen-QUERQ.html',
                 title:'Iida Nissinen, Tuisku Lehto, Laura Rämö & Oona Heinänen (QUERQ Community)'
-            },
-
-
-           
-            
+            }, 
         ],
 
         otherPages: [
             {
-                url: '/book-index',
-                contentUrl: '/pages/book-index.html',
-                title: 'INDEX'
-            },
-            {
                 url: '/about-this-book',
                 contentUrl: '/pages/about-this-book.html',
-                title: 'PROLOGUE'
+                title: 'Prologue'
             },
             {
                 url: '/third-space-collective',
@@ -494,6 +469,40 @@
                 collective and within the art scene.`,
         },
     }
+
+    // Just a sanity check for the data
+    CONFIG.contributions.forEach((contribution) => {
+        const collaborator = CONFIG.collaborators.filter(collaborator => collaborator.url === contribution.subtitleUrl)[0]
+        if (!collaborator) {
+            throw new Error(`bio for ${contribution.url} not found`)
+        }
+        contribution.subtitle = collaborator.title
+    })
+
+    const indexPage = {
+        url: '/book-index',
+        content: CONFIG.contributions.map(
+            contribution => {
+                const collaborator = CONFIG.collaborators.filter(collaborator => collaborator.url === contribution.subtitleUrl)[0]
+                return `
+                    <div class="index-contribution">
+                        <div class="title">
+                            <tsp-anchor href="${contribution.url}">
+                                ${contribution.title}
+                            </tsp-anchor>
+                        </div>
+                        <div class="collaborator">
+                            <tsp-anchor href="${collaborator.url}">
+                                ${collaborator.title}
+                            </tsp-anchor>
+                        </div>
+                    </div>
+                `
+            }
+        ).join('\n'),
+        title: 'Index'
+    }
+    CONFIG.otherPages.push(indexPage)
 
     TSP.config = {}
 

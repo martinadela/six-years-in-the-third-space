@@ -1,10 +1,12 @@
 ;(function () {
     const COLOR_TEXT_BOLD = TSP.config.get('styles.colors.TextBold')
+    const COLOR_TEXT = TSP.config.get('styles.colors.Text')
     const TRANSITION_DURATION =
         TSP.config.get('transitions.duration') *
         TSP.config.get('transitions.reader')[1]
     const MOBILE_MEDIA_QUERY = TSP.config.get('styles.mobile.mediaQuery')
     const DESKTOP_MEDIA_QUERY = TSP.config.get('styles.desktop.mediaQuery')
+    const FONT_FAMILY_TITLE = TSP.config.get('styles.fontFamilies.title')
 
     const sheet = jss.default
         .createStyleSheet({
@@ -103,6 +105,18 @@
                         '&.right': {
                             flexDirection: 'column',
                         }
+                    }
+                },
+
+                '& .index-contribution': {
+                    marginBottom: '1em',
+                    fontSize: '150%',
+                    fontFamily: FONT_FAMILY_TITLE,
+                    '& .title': {
+                        textTransform: 'uppercase',
+                    },
+                    '& .collaborator tsp-anchor': {
+                        color: COLOR_TEXT,
                     }
                 },
 

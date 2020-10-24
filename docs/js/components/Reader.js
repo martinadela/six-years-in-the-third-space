@@ -283,9 +283,12 @@
 
         loadContent(group, definitions) {
             return Promise.all(
-                definitions.map((definition) =>
-                    TSP.utils.fetch(definition.contentUrl)
-                )
+                definitions.map((definition) => {
+                    if (definition.content) {
+                        return Promise.resolve(definition.content)
+                    }
+                    return TSP.utils.fetch(definition.contentUrl)
+                })
             ).then((contents) => {
                 contents.forEach((html, i) => {
                     const definition = definitions[i]
