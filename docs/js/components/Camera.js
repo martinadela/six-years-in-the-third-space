@@ -98,9 +98,18 @@
                     orbitDiameter * (1 + paddingRatio)
                 )
             )
+
+            // Compute a random translation and a random rotation to make sure that the camera 
+            // is not idle during a transition from page to page
+            const translation = new THREE.Vector3().setFromSpherical(new THREE.Spherical(
+                cameraZ, 
+                0.00001 + Math.random() * (Math.PI - 0.00001),
+                Math.random() * 2 * Math.PI,
+            ))
+            const rotation = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), translation.clone().normalize())
             return {
-                translation: new THREE.Vector3(0, 0, cameraZ),
-                rotation: new THREE.Quaternion(),
+                translation: translation,
+                rotation: rotation,
             }
         }
 

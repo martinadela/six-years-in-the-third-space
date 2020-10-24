@@ -126,7 +126,7 @@
             far: 100000,
             // Padding around the main scene on the index.
             // Given as a ratio of the size of the scene
-            paddingRatio: 0.0,
+            paddingRatio: 0.2,
         },
         planet: {
             radius: 8,

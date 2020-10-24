@@ -85,9 +85,9 @@
                 },
 
                 '& .image-with-side-caption': {
+                    display: 'flex',
+                    flexDirection: 'row',
                     [DESKTOP_MEDIA_QUERY]: {
-                        display: 'flex',
-                        flexDirection: 'row',
                         justifyContent: 'center',
                         alignItems: 'center',
                         '& > div': {
@@ -98,6 +98,12 @@
                             },
                         },
                     },
+                    [MOBILE_MEDIA_QUERY]: {
+                        flexDirection: 'column-reverse',
+                        '&.right': {
+                            flexDirection: 'column',
+                        }
+                    }
                 },
 
                 transition: `opacity ${TRANSITION_DURATION}ms ease-in-out 0ms`,
