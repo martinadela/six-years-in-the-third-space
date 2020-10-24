@@ -1,11 +1,8 @@
 ;(function () {
     const COLOR_BACKGROUND = TSP.config.get('styles.colors.ContentBackground')
+    const COLOR_HIGHLIGHT1 = TSP.config.get('styles.colors.Highlight1')
     const COLOR_BACKGROUND0 = `rgba(${COLOR_BACKGROUND[0]}, ${COLOR_BACKGROUND[1]}, ${COLOR_BACKGROUND[2]}, 0)`
     const COLOR_BACKGROUND1 = `rgba(${COLOR_BACKGROUND[0]}, ${COLOR_BACKGROUND[1]}, ${COLOR_BACKGROUND[2]}, 1)`
-    const COLOR_SUBTITLE = TSP.config.get('styles.colors.H2Subtitle')
-    const COLOR_TEXT_BOLD = TSP.config.get('styles.colors.TextBold')
-    const COLOR_H2 = TSP.config.get('styles.colors.H2')
-    const FONT_FAMILY_TITLE = TSP.config.get('styles.fontFamilies.title')
     const ENTER_TRANSITION_DELAY =
         TSP.config.get('transitions.duration') *
         TSP.config.get('transitions.reader')[0]
@@ -14,14 +11,13 @@
         TSP.config.get('transitions.duration') *
         TSP.config.get('transitions.reader')[1]
     const MOBILE_MEDIA_QUERY = TSP.config.get('styles.mobile.mediaQuery')
-    const DESKTOP_MEDIA_QUERY = TSP.config.get('styles.desktop.mediaQuery')
     const Z_INDEX_INNER_CONTAINER = TSP.config.get('styles.zIndexes.reader')
     const Z_INDEX_TOP_BUTTONS = TSP.config.get('styles.zIndexes.topButtons')
     const GRADIENT_PADDING_TOP_DESKTOP = '20em'
     const GRADIENT_PADDING_TOP_MOBILE = '10em'
     const PAGE_FRAME_PADDING_DESKTOP = TSP.config.get('pageFrame.paddingDesktop')
     const PAGE_FRAME_PADDING_MOBILE = TSP.config.get('pageFrame.paddingMobile')
-    const HEIGHT_HEADER = `min(100vw - 2 * ${PAGE_FRAME_PADDING_DESKTOP}, 100vh - 2 * ${PAGE_FRAME_PADDING_DESKTOP})`
+    const HEIGHT_HEADER = TSP.config.get('reader.headerHeight')
         
     const sheet = jss.default
         .createStyleSheet({
@@ -29,7 +25,7 @@
                 height: '100%',
                 // necessary to show the button
                 overflow: 'visible',
-                // To allow positioning of button
+                // To allow positioning of buttons
                 position: 'relative',
                 // Transitions
                 transition: `opacity ${TRANSITION_DURATION}ms ease-in-out`,
@@ -57,181 +53,49 @@
                     }
                 }
             },
-            headerContainer: {
-                position: 'relative',
-                // take the width available and remove page padding
-                height: `calc(${HEIGHT_HEADER})`,
-                '& tsp-satellite-viewer': {
-                    position: 'absolute',
-                    width: '50%',
-                    left: '50%',
-                    top: 0,
-                    height: '100%',
-                },
-                '&.hasNoSatellite': {
-                    '& $h2Container': {
-                        width: '100%',
-                    },
-                    '& tsp-satellite-viewer': {
-                        // We set opacity to 0, otherwise the camera will fail getting a proper 
-                        // position for the object
-                        opacity: 0,
-                        width: '100%',
-                        left: 0,
-                    }
-                }
-            },
-            h2Container : {
-                width: '50%',
-                height: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-
-                '& h2': {
-                    textAlign: 'center',
-                    color: COLOR_H2,
-                    padding: '0 2em',
-                    fontFamily: FONT_FAMILY_TITLE,
-                    textTransform: 'uppercase',
-                    fontStyle: 'italic',
-                    fontSize: '100%',
-                    fontWeight: 'normal',
-                    [MOBILE_MEDIA_QUERY]: {
-                        fontSize: '80%',
-                        paddingLeft: PAGE_FRAME_PADDING_MOBILE,
-                    },
-                    marginBottom: '0em',
-                    '& > div:last-child': {
-                        marginTop: '1em'
-                    },
-                    '& span': {
-                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    },
-                    '& .title, & .subtitle': {
-                        marginBottom: '2em',
-                        color: COLOR_SUBTITLE,
-                        fontStyle: 'initial',
-                    },
-                    '& .title': {
-                        fontSize: '180%',
-                    },
-                    '& .subtitle': {
-                        fontSize: '100%',
-                        '& .empty': {
-                            display: 'none'
-                        },
-                        '& a': {
-                            color: COLOR_SUBTITLE,
-                        }
-                    },
-                },
-            },
             contentContainer: {
                 padding: `0 ${PAGE_FRAME_PADDING_DESKTOP}`,
                 [MOBILE_MEDIA_QUERY]: {
                     padding: `0 ${PAGE_FRAME_PADDING_MOBILE}`,
                 }
             },
-            content: {
-                textAlign: 'justify',
-                margin: 'auto',
-                maxWidth: '1000px',
-                paddingBottom: '2em',
-
-                '& .fullwidthimage': {
-                    '& img': {
-                        width: '100%',
-                        [MOBILE_MEDIA_QUERY]: {
-                            marginTop: '1em',
-                            marginBottom: '1em',
-                        }
-                    },
+            scrollButton: {
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                width: '100%',
+                cursor: 'pointer',
+                textAlign: 'center',
+                transition: `opacity 200ms ease-in-out`,
+                opacity: 1,
+                paddingBottom: '0.5rem',
+                '&.hidden': {
+                    opacity: 0
                 },
-
-                '& .flexibleimage': {
-                    [DESKTOP_MEDIA_QUERY]: {
-                        float: 'right',
-                        marginLeft: '1em',
-                        width: '50%',
-                    },
-                    '& img': {
-                        width: '100%',
-                        [MOBILE_MEDIA_QUERY]: {
-                            marginTop: '1em',
-                            marginBottom: '1em',
-                        }
-                    },
+                '@media (max-aspect-ratio: 1/1)': {
+                    display: 'none'
                 },
-
-                '& p': {
-                    marginBottom: '1em',
-                    textAlign: 'justify',
-                },
-
-                '& .intro': {
-                    fontWeight: 'bold',
-                    marginBottom: '8em',
-                },
-
-                '& .bio': {
-                    fontSize: '120%',
-                    margin: '2em 0',
-                },
-
-                '& .textcontent': {
-                    textAlign: 'left',
-                },
-
-                '& .poemparagraph': {
-                    textAlign: 'left',
-                },
-
-                '& .note': {
-                    position: 'relative',
-                    top: '-0.5em',
-                },
-
-                '& .imagecaption': {
-                    marginBottom: '2em',
-                },
-
-                '& .imagecaption-title': {
-                    fontWeight: 'bold',
-                },
-
-                '& .imagecaption-description': {
-                    fontStyle: 'italic',
-                },
-
-                '& .bold': {
-                    color: COLOR_TEXT_BOLD,
-                    marginTop: '1em',
-                },
-
-                '& .image-with-side-caption': {
-                    [DESKTOP_MEDIA_QUERY]: {
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        '& > div': {
-                            flex: 1,
-                            width: '50%',
-                            '&.imagecaption:last-child': {
-                                textAlign: 'right'
-                            }
-                        },
-                    },
-                },
-
-                transition: `opacity ${TRANSITION_DURATION}ms ease-in-out 0ms`,
-                opacity: 0,
-                '&.enter': {
+                '& svg': {
+                    animation: '$blink 2s ease-in-out infinite',
+                    transform: 'rotate(90deg)',
+                    height: '5em',
+                    width: 'auto',
+                    '& path': {
+                        fill: 'none',
+                        stroke: COLOR_HIGHLIGHT1,
+                        strokeWidth: '0.7px',
+                    }
+                }
+            },
+            '@keyframes blink': {
+                '0%': {
                     opacity: 1,
                 },
-                '&.exit': {
+                '50%': {
                     opacity: 0,
+                },
+                '100%': {
+                    opacity: 1,
                 },
             },
         })
@@ -245,26 +109,12 @@
                 </tsp-top-page-button-container>
                 <div class="${sheet.classes.innerContainer}">
                     <div class="background">
-                        <div class="${sheet.classes.headerContainer}">
-                            <div class="${sheet.classes.h2Container}">
-                                <h2>
-                                    <div>
-                                        <span class="title">
-                                            Stuff asking stuff / Stuff of stuff / Stuff about stuff / Inside out stuff /
-                                            Vital stuff* inside and outside
-                                        </span>
-                                    </div>
-                            
-                                    <div>
-                                        <span class="subtitle">
-                                            <tsp-anchor href=""></tsp-anchor>
-                                        </span>
-                                    </div>
-                                </h2>
-                            </div>
-                            <tsp-satellite-viewer></tsp-satellite-viewer>
+                        <tsp-reader-header></tsp-reader-header>
+                        <div class="${sheet.classes.scrollButton}">
+                            ${TSP.components.triangleSvg()}
                         </div>
                         <div class="${sheet.classes.contentContainer}">
+                            <tsp-reader-content></tsp-reader-content>
                         </div>
                     </div>
                 </div>
@@ -283,9 +133,8 @@
             this.appendChild(TSP.utils.template(template))
             this.element = this.querySelector(`.${sheet.classes.main}`)
 
-            this.headerContainer = this.querySelector(
-                `.${sheet.classes.headerContainer}`
-            )
+            this.readerHeader = this.querySelector('tsp-reader-header')
+
             this.innerContainer = this.querySelector(
                 `.${sheet.classes.innerContainer}`
             )
@@ -295,25 +144,24 @@
             this.closeButton = this.querySelector(
                 `.${sheet.classes.closeButton}`
             )
-            this.titleElement = this.querySelector(
-                `.${sheet.classes.h2Container} h2 .title`
-            )
-            this.subtitleElement = this.querySelector(
-                `.${sheet.classes.h2Container} h2 .subtitle tsp-anchor`
-            )
+            this.scrollButton = this.querySelector(`.${sheet.classes.scrollButton}`)
 
             this.closeButton.addEventListener(
                 'click',
                 this.closeClicked.bind(this)
             )
+            this.scrollButton.addEventListener(
+                'click',
+                this.scrollButtonClicked.bind(this)
+            )
+            this.innerContainer.addEventListener('scroll', this.containerScrolled.bind(this))
+
             TSP.state.listen(
                 'App.currentUrl',
                 this.currentUrlChanged.bind(this)
             )
             TSP.state.set('Reader.component', this)
         }
-
-        connectedCallback() {}
 
         currentUrlChanged(url) {
             if (url === '') {
@@ -334,7 +182,6 @@
                             duration: TRANSITION_DURATION,
                         })
                     )
-                this.innerContainer.scrollTo({top: 0, behavior: 'smooth'});
             }
             
             if (this.contents.contributions[url]) {
@@ -358,37 +205,44 @@
             TSP.utils.navigateTo('')
         }
 
+        scrollButtonClicked() {
+            this.innerContainer.scrollTo({
+                top: this.innerContainer.getBoundingClientRect().height,
+                behavior: 'smooth',
+            })
+        }
+
+        containerScrolled() {
+            // As soon as the container is scrolled once, we hide the scrollButton forever
+            this.scrollButton.classList.add('hidden')
+            // const offset = TSP.utils.getScrollOffset(
+            //     this.innerContainer,
+            //     this.innerContainer.querySelector('.background'),
+            // )
+            // if (offset !== 0) {
+            //     this.scrollButton.classList.add('hidden')
+            // } else {
+            //     this.scrollButton.classList.remove('hidden')
+            // }
+        }
+
         setContent(content, hasNoSatellite) {
-            const exitingContent = this.querySelectorAll(`.${sheet.classes.content}`)
-            
-            const enteringContent = document.createElement('div')
-            enteringContent.classList.add(sheet.classes.content)
-            enteringContent.innerHTML = content.html
+            const exitingContent = this.querySelector('tsp-reader-content')
+            const enteringContent = document.createElement('tsp-reader-content')
+            enteringContent.setHtml(content.html)
+            this.readerHeader.setContent(content.title, content.subtitle, content.subtitleUrl, hasNoSatellite)
 
-            if (hasNoSatellite) {
-                this.headerContainer.classList.remove('hasNoSatellite')
-            } else {
-                this.headerContainer.classList.add('hasNoSatellite')
-            }
+            // Since the scroll is not instant, we need to make sure that the camera movement is refreshed
+            // once the scroll is over and all elements are in position.
+            TSP.utils.smoothScrollTo(
+                this.innerContainer,
+                this.innerContainer.querySelector('.background'), 
+                0, 
+                () => TSP.state.get('Canvas3D.component').tspCamera.refresh()
+            )
 
-            this.titleElement.innerHTML = content.title
-            if (content.subtitle) {
-                this.subtitleElement.classList.remove('empty')
-                this.subtitleElement.innerHTML = content.subtitle
-            } else {
-                this.subtitleElement.classList.add('empty')
-            }
-            this.subtitleElement.setAttribute('href', content.subtitleUrl)
-
-
-            TSP.utils
-                .elementsTransitionHelper(exitingContent, {
-                    classPrevious: 'enter',
-                    classTransition: 'exit',
-                    duration: TRANSITION_DURATION,
-                })
-                .then((exitingContent) => {
-                    exitingContent.forEach(element => element.remove())
+            exitingContent.exitTransition()
+                .then(() => {
                     this.contentContainer.appendChild(enteringContent)
                     return TSP.utils.waitAtleast(
                         PAGE_TRANSITION_DURATION - 2 * TRANSITION_DURATION, 
@@ -396,10 +250,7 @@
                     )
                 })
                 .then(() => 
-                    TSP.utils.elementsTransitionHelper([enteringContent], {
-                        classTransition: 'enter',
-                        duration: TRANSITION_DURATION,
-                    })
+                    enteringContent.enterTransition()
                 )
         }
 
@@ -412,24 +263,19 @@
             const contributions = TSP.config.get('contributions')
             const collaborators = TSP.config.get('collaborators')
             const otherPages = TSP.config.get('otherPages')
-
-            const loadContributionsPromise = this.loadContent(
-                'contributions',
-                contributions
-            )
-            const loadCollaboratorsPromise = this.loadContent(
-                'collaborators',
-                collaborators
-            )
-            const loadOtherPagesPromise = this.loadContent(
-                'otherPages',
-                otherPages
-            )
-
             Promise.all([
-                loadContributionsPromise,
-                loadCollaboratorsPromise,
-                loadOtherPagesPromise,
+                this.loadContent(
+                    'contributions',
+                    contributions
+                ),
+                this.loadContent(
+                    'collaborators',
+                    collaborators
+                ),
+                this.loadContent(
+                    'otherPages',
+                    otherPages
+                ),
             ]).then(() => {
                 TSP.state.set('Reader.loaded', true)
             })
@@ -437,9 +283,12 @@
 
         loadContent(group, definitions) {
             return Promise.all(
-                definitions.map((definition) =>
-                    TSP.utils.fetch(definition.contentUrl)
-                )
+                definitions.map((definition) => {
+                    if (definition.content) {
+                        return Promise.resolve(definition.content)
+                    }
+                    return TSP.utils.fetch(definition.contentUrl)
+                })
             ).then((contents) => {
                 contents.forEach((html, i) => {
                     const definition = definitions[i]

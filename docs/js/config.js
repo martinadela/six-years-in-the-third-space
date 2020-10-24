@@ -2,10 +2,21 @@
     const NEBULA_COLOR1 = [235, 194, 226] // Pink
     const NEBULA_COLOR2 = [255, 199, 149] // Orange
     const NEBULA_GRADIENT = `linear-gradient(17deg, rgba(255,255,255,0.2) 0%, rgba(${NEBULA_COLOR1[0]},${NEBULA_COLOR1[1]},${NEBULA_COLOR1[2]},0.2) 40%, rgba(${NEBULA_COLOR2[0]},${NEBULA_COLOR2[1]},${NEBULA_COLOR2[2]},0.2) 60%, rgba(255,255,255,0.2) 100%)`
+    const NEBULA_GRADIENT_SVG = (opacity) => `
+        <linearGradient id="nebulaGradient" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="rgba(255,255,255,${opacity})" />
+            <stop offset="40%" stop-color="rgba(${NEBULA_COLOR1[0]},${NEBULA_COLOR1[1]},${NEBULA_COLOR1[2]},${opacity})" />
+            <stop offset="60%" stop-color="rgba(${NEBULA_COLOR2[0]},${NEBULA_COLOR2[1]},${NEBULA_COLOR2[2]},${opacity})" />
+            <stop offset="100%" stop-color="rgba(255,255,255,${opacity})" />
+        </linearGradient>
+    `
 
     const COLOR_HIGHLIGHT1 = '#FA8802'
     const COLOR_H2 = `#FA8802`
     const COLOR_TEXT = 'rgb(112, 109, 109)'
+
+    const PAGE_FRAME_PADDING_DESKTOP = '2.5rem'
+    const PAGE_FRAME_PADDING_MOBILE = '1rem'
 
     const STYLES_MOBILE_THRESHOLD = {
         width: 800,
@@ -48,6 +59,8 @@
                 Loader: COLOR_HIGHLIGHT1,
                 LoaderBackground: NEBULA_GRADIENT,
                 SideBarBackground: NEBULA_GRADIENT,
+                GradientBackground: NEBULA_GRADIENT,
+                GradientSvg: NEBULA_GRADIENT_SVG,
             },
             spacings: {
                 size2: '2rem',
@@ -113,7 +126,7 @@
             far: 100000,
             // Padding around the main scene on the index.
             // Given as a ratio of the size of the scene
-            paddingRatio: 0.0,
+            paddingRatio: 0.2,
         },
         planet: {
             radius: 8,
@@ -123,6 +136,15 @@
             color1: [250, 250, 250],
             color2: [240, 240, 240],
         },
+        speaker: {
+            modelUrl: '/satellites/speaker.glb',
+        },
+        audioPlayer: {
+            trackList: [
+                '/audio/test1.mp3',
+                '/audio/test2.mp3',
+            ]
+        },
         satellites: {
             planetaryRotationAxisRandomness: Math.PI * 0,
             planetaryRotationRadius: [100, 10],
@@ -131,13 +153,22 @@
             // Hover detection is executed only every N frames :
             hoverDetectDebounce: 4,
         },
+
+        pageFrame: {
+            paddingDesktop: PAGE_FRAME_PADDING_DESKTOP,
+            paddingMobile: PAGE_FRAME_PADDING_MOBILE,
+        },
+
+        reader: {
+            headerHeight: `min(100vw - 2 * ${PAGE_FRAME_PADDING_DESKTOP}, 100vh - 2 * ${PAGE_FRAME_PADDING_DESKTOP})`
+        },
+
         contributions: [
             {
                 url: '/contributions/theskymovedcitytocity',
                 satelliteModelUrl: '/satellites/satellite2.glb',
                 contentUrl: '/pages/contributions/theskymovedcitytocity.html',
                 title: 'The Sky Moved City to City',
-                subtitle: 'Vidha Saumya',
                 subtitleUrl: '/collaborators/Vidha-Saumya'
             },
             {
@@ -145,7 +176,6 @@
                 satelliteModelUrl: '/satellites/satellite3.glb',
                 contentUrl: '/pages/contributions/fromheretothere.html',
                 title: 'From Here to There',
-                subtitle: 'Marko Timlin',
                 subtitleUrl: '/collaborators/Marko-Timlin',
                 
             },
@@ -154,7 +184,6 @@
                 satelliteModelUrl: '/satellites/satellite4.glb',
                 contentUrl: '/pages/contributions/elaborately-collaborating-and-working-together.html',
                 title: 'elaborately collaborating and working together',
-                subtitle: 'Marten Esko',
                 subtitleUrl: '/collaborators/Marten-Esko',
                 
             },
@@ -164,7 +193,6 @@
                 satelliteModelUrl: '/satellites/satellite5.glb',
                 contentUrl: '/pages/contributions/collaborating-as-a-multiplicity–a-dialogue-with-other-dialogues.html',
                 title: 'Collaborating as a Multiplicity – A Dialogue With Other Dialogues',
-                subtitle: 'Tina Mariane Krogh Madsen',
                 subtitleUrl: '/collaborators/Tina-Madsen',
                 
             },
@@ -174,7 +202,6 @@
                 satelliteModelUrl: '/satellites/satellite6.glb',
                 contentUrl: '/pages/contributions/what-keeps-us-going.html',
                 title: 'What keeps us going',
-                subtitle: 'Diana Soria Hernández',
                 subtitleUrl: '/collaborators/Diana-Soria-Hernandez',
                 
             },
@@ -184,104 +211,67 @@
                 satelliteModelUrl: '/satellites/satellite7.glb',
                 contentUrl: '/pages/contributions/supradigm.html',
                 title: 'SUPRADIGM / SUPRADIGMA',
-                subtitle: 'Adrián Balseca',
-                subtitleUrl: '/collaborators/Adrian-Balseca',
-                
+                subtitleUrl: '/collaborators/Adrian-Balseca',  
             },
-
             {
                 url: '/contributions/SAFE_R_Evolving-the-Conditions-for-Collaboration-Or-From-Safer-Spaces-to-Safer-People',
                 satelliteModelUrl: '/satellites/satellite8.glb',
                 contentUrl: '/pages/contributions/ALI.html',
                 title: 'SAFE{R}: Evolving the Conditions for Collaboration Or From ‘Safer Spaces’ to ‘Safer People’',
-                subtitle: 'Ali Akbar Mehta',
-                subtitleUrl: '/collaborators/Ali-Akbar-Mehta',
-                
-                
+                subtitleUrl: '/collaborators/Ali-Akbar-Mehta',  
             },
-
             {
                 url: '/contributions/rec-on-org',
                 satelliteModelUrl: '/satellites/satellite9.glb',
                 contentUrl: '/pages/contributions/rec-on.org.html',
                 title: 're-con.org',
-                subtitle: 'Antye Greie Ripatti',
-                subtitleUrl: '/collaborators/Antye-Greie-Ripatti',
-                
-                
+                subtitleUrl: '/collaborators/Antye-Greie-Ripatti',  
             },
-
             {
                 url: '/contributions/Stuff-asking-stuff-Stuff-of-stuff-Stuff-about-stuff-Inside-out-stuff-Vital-stuff-inside-and-outside',
                 satelliteModelUrl: '/satellites/satellite10.glb',
                 contentUrl: '/pages/contributions/kraamtext.html',
                 title: ' Stuff asking stuff / Stuff of stuff / Stuff about stuff / Inside out stuff / Vital stuff* inside and outside',
-                subtitle: 'Minna Hint & Killu Sukmit (Kraam Art Space)',
                 subtitleUrl: '/collaborators/kraam',
                 
             },
-
             {
                 url: '/contributions/Venyvat-Huoneet-Stretchy-Rooms',
                 satelliteModelUrl: '/satellites/satellite11.glb',
                 contentUrl: '/pages/contributions/Stretchy-Rooms.html',
                 title: 'Venyvät huoneet / Stretchy Rooms',
-                subtitle: 'Juulia Terho & Milja-Maaria Terho',
                 subtitleUrl: '/collaborators/Juulia-Terho-Milja-Maaria-Terho',
                 
             },
-
             {
                 url: '/contributions/Mythological-Migrations-On-Collaboration-Organization-and-Production',
                 satelliteModelUrl: '/satellites/satellite12.glb',
                 contentUrl: '/pages/contributions/Mythological-Migrations.html',
                 title: 'Mythological Migrations: On Collaboration, Organization, and Production',
-                subtitle: 'Abdullah Qureshi & Danai Anagnostou',
                 subtitleUrl: '/collaborators/Abdullah-Qureshi-Danai-Anagnostou',
             },
-
             {
                 url: '/contributions/Terms-Conditions-What-do-we-need-in-order-to-work-together',
                 satelliteModelUrl: '/satellites/satellite13.glb',
                 contentUrl: '/pages/contributions/Terms-Conditions.html',
                 title: 'Terms & Conditions: What do we need in order to work together?',
-                subtitle: 'Feminist Culture House',
                 subtitleUrl: '/collaborators/Feminist-Culture-House',
             },
-
             {
                 url: '/contributions/Reading-as-collaboration-deconstructing-single-narratives-and-the-myth-of-the-individual',
                 satelliteModelUrl: '/satellites/satellite14.glb',
                 contentUrl: '/pages/contributions/Reading-as-collaboration.html',
                 title: 'Reading as collaboration: deconstructing single narratives and the myth of the individual',
-                subtitle: 'Yvonne Billimore',
                 subtitleUrl: '/collaborators/Yvonne-Billimore',
                 
             },
-
             {
                 url: '/contributions/RSVP-Letters-and-Dates-between-Spaces',
                 satelliteModelUrl: '/satellites/satellite15.glb',
                 contentUrl: '/pages/contributions/RSVP.html',
                 title: 'RSVP - Letters and Dates between Spaces',
-                subtitle: 'RSVP - Letters and Dates between Spaces is a durational project between Third Space and Iida Nissinen, Laura Rämö, Tuisku Lehto, and Oona Heinänen: a group working within the QUERQ community.',
-                subtitleUrl: '/collaborators/Iida-Nissinen-Tuisku-Lehto-Laura-Ramo-Oona-Heinanen-QUERQ',
-                
-                
+                subtitleUrl: '/collaborators/Iida-Nissinen-Tuisku-Lehto-Laura-Ramo-Oona-Heinanen-QUERQ',  
             },
-
-            {
-                url: '/contributions/speaker',
-                satelliteModelUrl: '/satellites/speaker.glb',
-                contentUrl: '/pages/contributions/RSVP.html',
-                title: 'Reading as collaboration: deconstructing single narratives and the myth of the individual',
-                subtitle: 'Yvonne Billimore',
-                subtitleUrl: '/collaborators/Yvonne-Billimore',
-                
-                
-            },
-            
-
 
         ],
 
@@ -354,34 +344,23 @@
                 contentUrl: '/pages/collaborators/Feminist-Culture-House.html',
                 title:'Feminist Culture House'
             },
-
             {
                 url: '/collaborators/Yvonne-Billimore',
                 contentUrl: '/pages/collaborators/Yvonne-Billimore.html',
                 title:'Yvonne Bilimore'
             },
-
             {
                 url: '/collaborators/Iida-Nissinen-Tuisku-Lehto-Laura-Ramo-Oona-Heinanen-QUERQ',
                 contentUrl: '/pages/collaborators/Iida-Nissinen-Tuisku-Lehto-Laura-Rämö-Oona-Heinänen-QUERQ.html',
                 title:'Iida Nissinen, Tuisku Lehto, Laura Rämö & Oona Heinänen (QUERQ Community)'
-            },
-
-
-           
-            
+            }, 
         ],
 
         otherPages: [
             {
-                url: '/book-index',
-                contentUrl: '/pages/book-index.html',
-                title: 'INDEX'
-            },
-            {
                 url: '/about-this-book',
                 contentUrl: '/pages/about-this-book.html',
-                title: 'PROLOGUE'
+                title: 'Prologue'
             },
             {
                 url: '/third-space-collective',
@@ -489,12 +468,41 @@
                 its identity and thus its practice is transcultural: it too is many, and relative, and transmuting along with its members and makers. At the core, there is this idea of Third Space as an on-going project, both in theory and practice, as a 
                 collective and within the art scene.`,
         },
-
-        pageFrame: {
-            paddingDesktop: '2.5rem',
-            paddingMobile: '1rem',
-        }
     }
+
+    // Just a sanity check for the data
+    CONFIG.contributions.forEach((contribution) => {
+        const collaborator = CONFIG.collaborators.filter(collaborator => collaborator.url === contribution.subtitleUrl)[0]
+        if (!collaborator) {
+            throw new Error(`bio for ${contribution.url} not found`)
+        }
+        contribution.subtitle = collaborator.title
+    })
+
+    const indexPage = {
+        url: '/book-index',
+        content: CONFIG.contributions.map(
+            contribution => {
+                const collaborator = CONFIG.collaborators.filter(collaborator => collaborator.url === contribution.subtitleUrl)[0]
+                return `
+                    <div class="index-contribution">
+                        <div class="title">
+                            <tsp-anchor href="${contribution.url}">
+                                ${contribution.title}
+                            </tsp-anchor>
+                        </div>
+                        <div class="collaborator">
+                            <tsp-anchor href="${collaborator.url}">
+                                ${collaborator.title}
+                            </tsp-anchor>
+                        </div>
+                    </div>
+                `
+            }
+        ).join('\n'),
+        title: 'Index'
+    }
+    CONFIG.otherPages.push(indexPage)
 
     TSP.config = {}
 

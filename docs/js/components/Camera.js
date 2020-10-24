@@ -46,6 +46,10 @@
             this.camera.updateProjectionMatrix()
         }
 
+        refresh() {
+            this.currentUrlChanged(TSP.state.get('App.currentUrl'))
+        }
+
         currentUrlChanged(url) {
             // We schedule camera movement to next tick, to allow
             // all other pages to set themselve up (in particular allowing the satellite-viewer
@@ -94,9 +98,18 @@
                     orbitDiameter * (1 + paddingRatio)
                 )
             )
+
+            // Compute a random translation and a random rotation to make sure that the camera 
+            // is not idle during a transition from page to page
+            const translation = new THREE.Vector3().setFromSpherical(new THREE.Spherical(
+                cameraZ, 
+                0.00001 + Math.random() * (Math.PI - 0.00001),
+                Math.random() * 2 * Math.PI,
+            ))
+            const rotation = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), translation.clone().normalize())
             return {
-                translation: new THREE.Vector3(0, 0, cameraZ),
-                rotation: new THREE.Quaternion(),
+                translation: translation,
+                rotation: rotation,
             }
         }
 
@@ -134,10 +147,15 @@
         }
 
         getObjectBoundingBoxOnScreen() {
-            const satelliteViewerBoundingRect = TSP.state
+            const satelliteViewer = TSP.state
                 .get('Reader.component')
                 .querySelector('tsp-satellite-viewer')
+            // Forces reflow before adding the transition class to ensure animation will be triggered
+            // REF : https://gist.github.com/paulirish/5d52fb081b3570c81e3a
+            // REF : https://stackoverflow.com/questions/21664940/force-browser-to-trigger-reflow-while-changing-css
+            const satelliteViewerBoundingRect = satelliteViewer
                 .getBoundingClientRect()
+
             return new THREE.Box2(
                 new THREE.Vector2(
                     satelliteViewerBoundingRect.left,

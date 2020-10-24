@@ -110,9 +110,15 @@
             viewBox="0 0 20 20"
             version="1.1"
         >
-        <path
-            style="fill:none;fill-opacity:1;stroke-width:1.90134;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-            d="M 18.12581,9.9609181 5,18.259221 V 1.6626149 Z"
+            <style>
+                path.triangleSvg {
+                    stroke-width: 1.90134px;
+                }
+            </style>
+            <path
+                class="triangleSvg"
+                style="fill-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+                d="M 18.12581,9.9609181 5,18.259221 V 1.6626149 Z"
             />
         </svg> 
     `
@@ -142,5 +148,33 @@
                 d="M 0,2.6458372 H 5.292"
             />
         </svg>
-     `
+    `
+
+    TSP.components.pauseSvg = () => `
+        <svg
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:cc="http://creativecommons.org/ns#"
+            xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+            xmlns:svg="http://www.w3.org/2000/svg"
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            version="1.1"
+        >
+            <rect
+            style="fill-opacity:1;stroke:none;stroke-miterlimit:4;stroke-dasharray:none"
+            width="4"
+            height="20"
+            x="13"
+            y="0" />
+            <rect
+            style="fill-opacity:1;stroke:none;stroke-miterlimit:4;stroke-dasharray:none"
+            width="4"
+            height="20"
+            x="3"
+            y="0" />
+        </svg>
+    `
+
 })()

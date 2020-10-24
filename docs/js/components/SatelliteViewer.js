@@ -23,6 +23,7 @@
                 '& svg': {
                     '& path': {
                         stroke: COLOR_HIGHLIGHT1,
+                        fill: 'none',
                     }
                 },
                 '&:first-child': {

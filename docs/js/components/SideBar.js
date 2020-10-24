@@ -61,7 +61,7 @@
                     backgroundColor: 'rgba(255, 255, 255, 0.95)',
                     width: `${SIDEBAR_WIDTH_MOBILE_PERCENT}%`,
                     [DESKTOP_MEDIA_QUERY]: {
-                        maxWidth: '20em',
+                        maxWidth: '25em',
                     },
                     '& > tsp-expand-menu-button': {
                         display: 'inline-block',
@@ -103,6 +103,12 @@
                 overflow: 'hidden'
             },
             h1: {
+                [DESKTOP_MEDIA_QUERY]: {
+                    fontSize: '350%',
+                },
+                '& p': {
+                    marginBottom: '0.75em'
+                },
                 textTransform: 'uppercase',
                 fontFamily: TSP.config.get('styles.fontFamilies.title'),
                 fontWeight: 'normal',
@@ -114,6 +120,9 @@
             },
             ulContainer: {},
             li: {
+                [DESKTOP_MEDIA_QUERY]: {
+                    fontSize: '150%',
+                },
                 fontFamily: TSP.config.get('styles.fontFamilies.title'),
                 color: COLOR_HIGHLIGHT1,
                 textTransform: 'uppercase',
@@ -151,17 +160,17 @@
             },
             expandMenuButtonTitle: {
                 fontSize: '0.7em',
-                position: 'relative',
                 marginRight: '0.15em',
-                top: '0.1em',
                 [MOBILE_MEDIA_QUERY]: {
                     top: '0.2em',
                 },
                 '& svg': {
                     width: '0.8em',
+                    height: 'auto',
                     transform: 'rotate(180deg)',
                     '& path': {
-                        stroke: COLOR_HIGHLIGHT1
+                        stroke: COLOR_HIGHLIGHT1,
+                        fill: 'none',
                     }
                 }
             },

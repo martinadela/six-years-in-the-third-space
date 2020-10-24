@@ -120,6 +120,7 @@
                 <div class="${sheet.classes.loaderContainer} loader">
                     <div class="triangle-skew-spin"><div></div></div>
                 </div>
+                <tsp-audio-player></tsp-audio-player>
             </div>
         </template>
     `
