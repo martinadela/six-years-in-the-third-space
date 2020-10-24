@@ -644,6 +644,7 @@
     }
 
     TSP.utils.interfaces = {
-        hoverable: ['getUrl', 'getHoverableObject3D', 'getBoundingSphere'],
+        hoverable: ['getUrl', 'getHoverableObject3D'],
+        hudTarget: ['getBoundingSphere', 'getHudClassName'],
     }
 })()

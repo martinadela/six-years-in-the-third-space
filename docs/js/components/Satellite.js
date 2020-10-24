@@ -1,8 +1,9 @@
 ;(function () {
     class Satellite {
-        constructor(url, modelUrl, planetaryRotationAxis) {
+        constructor(url, modelUrl, planetaryRotationAxis, hudClassName) {
             this.url = url
             this.modelUrl = modelUrl
+            this.hudClassName = hudClassName
             this.model = null
 
             this.group = new THREE.Group()
@@ -31,9 +32,9 @@
             )
         }
 
-        load(loader) {
+        load() {
             return new Promise((resolve, reject) => {
-                loader.load(
+                TSP.state.get('Canvas3D.gltfLoader').load(
                     TSP.utils.absoluteUrl(this.modelUrl),
                     (gltf) => {
                         console.log('model loaded')
@@ -129,6 +130,10 @@
             )
         }
 
+        getHudClassName() {
+            return this.hudClassName
+        }
+
         getUrl() {
             return this.url
         }
@@ -161,5 +166,7 @@
     }
 
     TSP.utils.assertImplements(Satellite, TSP.utils.interfaces.hoverable)
+    TSP.utils.assertImplements(Satellite, TSP.utils.interfaces.hudTarget)
+
     TSP.components.Satellite = Satellite
 })()

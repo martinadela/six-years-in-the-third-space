@@ -136,6 +136,15 @@
             color1: [250, 250, 250],
             color2: [240, 240, 240],
         },
+        speaker: {
+            modelUrl: '/satellites/speaker.glb',
+        },
+        audioPlayer: {
+            trackList: [
+                '/audio/test1.mp3',
+                '/audio/test2.mp3',
+            ]
+        },
         satellites: {
             planetaryRotationAxisRandomness: Math.PI * 0,
             planetaryRotationRadius: [100, 10],
@@ -208,32 +217,24 @@
                 contentUrl: '/pages/contributions/supradigm.html',
                 title: 'SUPRADIGM / SUPRADIGMA',
                 subtitle: 'Adrián Balseca',
-                subtitleUrl: '/collaborators/Adrian-Balseca',
-                
+                subtitleUrl: '/collaborators/Adrian-Balseca',  
             },
-
             {
                 url: '/contributions/SAFE_R_Evolving-the-Conditions-for-Collaboration-Or-From-Safer-Spaces-to-Safer-People',
                 satelliteModelUrl: '/satellites/satellite8.glb',
                 contentUrl: '/pages/contributions/ALI.html',
                 title: 'SAFE{R}: Evolving the Conditions for Collaboration Or From ‘Safer Spaces’ to ‘Safer People’',
                 subtitle: 'Ali Akbar Mehta',
-                subtitleUrl: '/collaborators/Ali-Akbar-Mehta',
-                
-                
+                subtitleUrl: '/collaborators/Ali-Akbar-Mehta',  
             },
-
             {
                 url: '/contributions/rec-on-org',
                 satelliteModelUrl: '/satellites/satellite9.glb',
                 contentUrl: '/pages/contributions/rec-on.org.html',
                 title: 're-con.org',
                 subtitle: 'Antye Greie Ripatti',
-                subtitleUrl: '/collaborators/Antye-Greie-Ripatti',
-                
-                
+                subtitleUrl: '/collaborators/Antye-Greie-Ripatti',  
             },
-
             {
                 url: '/contributions/Stuff-asking-stuff-Stuff-of-stuff-Stuff-about-stuff-Inside-out-stuff-Vital-stuff-inside-and-outside',
                 satelliteModelUrl: '/satellites/satellite10.glb',
@@ -243,7 +244,6 @@
                 subtitleUrl: '/collaborators/kraam',
                 
             },
-
             {
                 url: '/contributions/Venyvat-Huoneet-Stretchy-Rooms',
                 satelliteModelUrl: '/satellites/satellite11.glb',
@@ -253,7 +253,6 @@
                 subtitleUrl: '/collaborators/Juulia-Terho-Milja-Maaria-Terho',
                 
             },
-
             {
                 url: '/contributions/Mythological-Migrations-On-Collaboration-Organization-and-Production',
                 satelliteModelUrl: '/satellites/satellite12.glb',
@@ -262,7 +261,6 @@
                 subtitle: 'Abdullah Qureshi & Danai Anagnostou',
                 subtitleUrl: '/collaborators/Abdullah-Qureshi-Danai-Anagnostou',
             },
-
             {
                 url: '/contributions/Terms-Conditions-What-do-we-need-in-order-to-work-together',
                 satelliteModelUrl: '/satellites/satellite13.glb',
@@ -271,7 +269,6 @@
                 subtitle: 'Feminist Culture House',
                 subtitleUrl: '/collaborators/Feminist-Culture-House',
             },
-
             {
                 url: '/contributions/Reading-as-collaboration-deconstructing-single-narratives-and-the-myth-of-the-individual',
                 satelliteModelUrl: '/satellites/satellite14.glb',
@@ -281,30 +278,14 @@
                 subtitleUrl: '/collaborators/Yvonne-Billimore',
                 
             },
-
             {
                 url: '/contributions/RSVP-Letters-and-Dates-between-Spaces',
                 satelliteModelUrl: '/satellites/satellite15.glb',
                 contentUrl: '/pages/contributions/RSVP.html',
                 title: 'RSVP - Letters and Dates between Spaces',
                 subtitle: 'RSVP - Letters and Dates between Spaces is a durational project between Third Space and Iida Nissinen, Laura Rämö, Tuisku Lehto, and Oona Heinänen: a group working within the QUERQ community.',
-                subtitleUrl: '/collaborators/Iida-Nissinen-Tuisku-Lehto-Laura-Ramo-Oona-Heinanen-QUERQ',
-                
-                
+                subtitleUrl: '/collaborators/Iida-Nissinen-Tuisku-Lehto-Laura-Ramo-Oona-Heinanen-QUERQ',  
             },
-
-            {
-                url: '/contributions/speaker',
-                satelliteModelUrl: '/satellites/speaker.glb',
-                contentUrl: '/pages/contributions/RSVP.html',
-                title: 'Reading as collaboration: deconstructing single narratives and the myth of the individual',
-                subtitle: 'Yvonne Billimore',
-                subtitleUrl: '/collaborators/Yvonne-Billimore',
-                
-                
-            },
-            
-
 
         ],
 

@@ -9,9 +9,11 @@
         App: {
             currentUrl: document.location.pathname,
             isTouch: false,
+            playing: false,
         },
         Canvas3D: {
             loaded: false,
+            gltfLoader: null,
             hoveredObject: null,
             satellites: {},
             planet: null,

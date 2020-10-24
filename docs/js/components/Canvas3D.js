@@ -6,7 +6,7 @@
         'satellites.planetaryRotationRadius'
     )[0]
     const CONTRIBUTIONS = TSP.config.get('contributions')
-    // const SPEAKER = TSP.config.get('speaker')
+    const SPEAKER = TSP.config.get('speaker')
 
     const sheet = jss.default
         .createStyleSheet({
@@ -45,7 +45,7 @@
             TSP.state.listen('window.dimensions', this.updateSize.bind(this))
 
             // ------------
-            this.loader = new THREE.GLTFLoader()
+            TSP.state.set('Canvas3D.gltfLoader', new THREE.GLTFLoader())
             this.lights = new TSP.components.Lights(
                 this.getCamera(),
                 this.getScene()
@@ -69,22 +69,23 @@
         createObjects() {
             // this.planet = new TSP.components.Planet()
             this.universe = new TSP.components.Universe()
-            // this.speaker = new TSP.components.Satellite()
             this.orbitControls = new Canvas3DOrbitControls(
                 this.getCamera(),
                 this.getCanvas()
             )
 
             const planetaryRotationAxes = TSP.utils
-                .sphericalSpacedOnSphere(CONTRIBUTIONS.length)
+                .sphericalSpacedOnSphere(CONTRIBUTIONS.length + 1) // + 1 for speaker
                 .map((spherical) => new TSP.components.RotationAxis(spherical))
 
             const satellitesState = {}
+            this.speaker = new TSP.components.Satellite(null, SPEAKER.modelUrl, planetaryRotationAxes.pop(), 'soundControls')
             this.satellites = CONTRIBUTIONS.map((contribution, i) => {
                 const satellite = new TSP.components.Satellite(
                     contribution.url,
                     contribution.satelliteModelUrl,
-                    planetaryRotationAxes[i]
+                    planetaryRotationAxes[i],
+                    'arrow'
                 )
                 satellitesState[contribution.url] = satellite
                 return satellite
@@ -111,9 +112,10 @@
 
         load() {
             const promises = Object.values(this.satellites).map((satellite) => {
-                return satellite.load(this.loader)
+                return satellite.load()
             })
             promises.push(this.universe.load())
+            promises.push(this.speaker.load())
             // promises.push(this.planet.load())
             Promise.all(promises).then(() => {
                 TSP.state.set('Canvas3D.loaded', true)
@@ -129,6 +131,13 @@
             //     this.planet.getHoverableObject3D(),
             //     this.planet
             // )
+            
+            this.speaker.show(this.scene)
+            this.pointerEventsManager.hoverableObjectsManager.addHoverable(
+                this.speaker.getHoverableObject3D(),
+                this.speaker
+            )
+
             Object.values(this.satellites).forEach((satellite) => {
                 satellite.show(this.scene)
                 this.pointerEventsManager.hoverableObjectsManager.addHoverable(
@@ -158,6 +167,7 @@
             this.renderer.render(this.scene, this.tspCamera.camera)
             this.tspCamera.animate()
             this.universe.animate()
+            this.speaker.animate()
             // this.planet.animate()
             this.pointerEventsManager.animate()
         }
@@ -384,6 +394,10 @@
 
         navigateToHoveredObject() {
             const hoveredDatum = this.hoverableObjectsManager.getHoveredDatum()
+            const url = hoveredDatum.getUrl()
+            if (url === null) {
+                return
+            }
             this.hoverableObjectsManager.clearState()
             TSP.state.set('Canvas3D.hoveredObject', null)
             TSP.utils.navigateTo(hoveredDatum.getUrl())
