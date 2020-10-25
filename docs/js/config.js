@@ -112,7 +112,7 @@
             // 2 colors in RGB format.
             nebulaColors: [NEBULA_COLOR1, NEBULA_COLOR2],
             // Between 0 and 2
-            starsQuantity: 1.7,
+            starsQuantity: 1.5,
             // Color of the general filter of the sky color
             filterColor: [216, 211, 242],
             filterOpacity: 0.75,
