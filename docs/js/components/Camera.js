@@ -26,6 +26,7 @@
             )
 
             // ------------ initialize
+            this.initialTransition = true
             this.tweens = new TWEEN.Group()
             this.debugCamera = null
             this.focusedObject = null
@@ -75,7 +76,8 @@
                     this.withDebugging(() =>
                         this.animateTransform(this.transformDefault())
                     )
-                }    
+                }
+                this.initialTransition = false  
             }, 0)
         }
 
@@ -99,13 +101,21 @@
                 )
             )
 
+            // On first load of the website, we don't want to do weird camera movement
+            if (this.initialTransition) {
+                return {
+                    translation: new THREE.Vector3(0, 0, cameraZ),
+                    rotation: new THREE.Quaternion(),
+                }
+            }
+
             // Compute a random translation and a random rotation to make sure that the camera 
             // is not idle during a transition from page to page
-            const translation = new THREE.Vector3().setFromSpherical(new THREE.Spherical(
-                cameraZ, 
-                0.00001 + Math.random() * (Math.PI - 0.00001),
-                Math.random() * 2 * Math.PI,
-            ))
+            const sphericalPosition = TSP.utils.v3ToSpherical(this.camera.position) 
+            sphericalPosition.phi = (sphericalPosition.phi + Math.random() * Math.PI / 5) % Math.PI
+            sphericalPosition.theta = (sphericalPosition.theta + Math.random() * Math.PI / 6) % (2 * Math.PI)
+            sphericalPosition.radius = cameraZ
+            const translation = new THREE.Vector3().setFromSpherical(sphericalPosition)
             const rotation = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), translation.clone().normalize())
             return {
                 translation: translation,

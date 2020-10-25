@@ -16,9 +16,15 @@
             )
             this.planetaryRotationQuaternion = new THREE.Quaternion()
             this.planetaryRotationStep = this._planetaryRotationStep.bind(this)
+            this.planetaryRotationQuaternion.setFromAxisAngle(
+                this.planetaryRotationAxis.getV3(),
+                this.planetaryRotationAngleStep
+            )
 
-            this.updatePlanetaryRotation()
-
+            this.planetaryRotationRadius = TSP.config.getRandomized(
+                'satellites.planetaryRotationRadius'
+            )
+            
             this.selfRotationIncrement = TSP.config.getRandomized(
                 'satellites.selfRotationIncrement'
             )
@@ -55,10 +61,17 @@
         show(scene) {
             // Initial position, we take a vector perpendicular to our planetaryRotationAxis
             const sphericalPosition = this.planetaryRotationAxis.getPerpendicularSpherical()
-            sphericalPosition.radius = TSP.config.getRandomized(
-                'satellites.planetaryRotationRadius'
-            )
+            sphericalPosition.radius = this.planetaryRotationRadius
             this.getPosition().setFromSpherical(sphericalPosition)
+            
+            // randomize the initial position
+            this.getPosition().applyQuaternion(
+                new THREE.Quaternion().setFromAxisAngle(
+                    this.planetaryRotationAxis.getV3(),
+                    Math.random() * Math.PI
+                )
+            )
+
             scene.add(this.group)
         }
 
@@ -100,13 +113,6 @@
                     this
                 )
             }
-        }
-
-        updatePlanetaryRotation() {
-            this.planetaryRotationQuaternion.setFromAxisAngle(
-                this.planetaryRotationAxis.getV3(),
-                this.planetaryRotationAngleStep
-            )
         }
 
         getPosition() {

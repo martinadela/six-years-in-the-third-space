@@ -93,8 +93,12 @@
             },
             isMobile: () => {
                 const windowDimensions = TSP.state.get('window.dimensions')
-                return windowDimensions.x < TSP.config.get('styles.mobile.width') || windowDimensions.y < TSP.config.get('styles.mobile.height')
-            }
+                return (
+                    windowDimensions.x <
+                        TSP.config.get('styles.mobile.width') ||
+                    windowDimensions.y < TSP.config.get('styles.mobile.height')
+                )
+            },
         },
         lights: {
             ambientColor: 0xffffff,
@@ -106,17 +110,14 @@
         },
         universe: {
             // 2 colors in RGB format.
-            nebulaColors: [
-                NEBULA_COLOR1,
-                NEBULA_COLOR2,
-            ],
+            nebulaColors: [NEBULA_COLOR1, NEBULA_COLOR2],
             // Between 0 and 2
             starsQuantity: 1.7,
             // Color of the general filter of the sky color
             filterColor: [216, 211, 242],
-            filterOpacity: 0.7,
+            filterOpacity: 0.75,
             nebulaOpacity: 0.8,
-            whiteCloudsIntensity: 0.1,
+            whiteCloudsIntensity: 0.05,
             rotationAngleStep: (Math.PI / 2) * 0.0002,
             radius: 10000,
         },
@@ -141,14 +142,21 @@
         },
         audioPlayer: {
             trackList: [
-                '/audio/test1.mp3',
-                '/audio/test2.mp3',
-            ]
+                '/audio/Bubbatalon_Kuupuu.mp3',
+                '/audio/Mist-Princess_of_Mars.mp3',
+                '/audio/Mostanqa-Khadija.mp3',
+                '/audio/Musta_monoliitti-Marko_Timlin.mp3',
+                '/audio/Times_Up-ALOES.mp3',
+                '/audio/Vixens_maneuver-Ana_Gutieszca.mp3',
+            ],
         },
         satellites: {
             planetaryRotationAxisRandomness: Math.PI * 0,
             planetaryRotationRadius: [100, 10],
-            planetaryRotationAngleStep: [(Math.PI / 2) * 0.0005, (Math.PI / 2) * 0.0001],
+            planetaryRotationAngleStep: [
+                (Math.PI / 2) * 0.0005,
+                (Math.PI / 2) * 0.0001,
+            ],
             selfRotationIncrement: [0.003, 0.0015],
             // Hover detection is executed only every N frames :
             hoverDetectDebounce: 4,
@@ -160,7 +168,7 @@
         },
 
         reader: {
-            headerHeight: `min(100vw - 2 * ${PAGE_FRAME_PADDING_DESKTOP}, 100vh - 2 * ${PAGE_FRAME_PADDING_DESKTOP})`
+            headerHeight: `min(100vw - 2 * ${PAGE_FRAME_PADDING_DESKTOP}, 100vh - 2 * ${PAGE_FRAME_PADDING_DESKTOP})`,
         },
 
         contributions: [
@@ -169,7 +177,7 @@
                 satelliteModelUrl: '/satellites/satellite2.glb',
                 contentUrl: '/pages/contributions/theskymovedcitytocity.html',
                 title: 'The Sky Moved City to City',
-                subtitleUrl: '/collaborators/Vidha-Saumya'
+                subtitleUrl: '/collaborators/Vidha-Saumya',
             },
             {
                 url: '/contributions/fromheretothere',
@@ -177,24 +185,26 @@
                 contentUrl: '/pages/contributions/fromheretothere.html',
                 title: 'From Here to There',
                 subtitleUrl: '/collaborators/Marko-Timlin',
-                
             },
             {
-                url: '/contributions/elaborately-collaborating-and-working-together',
+                url:
+                    '/contributions/elaborately-collaborating-and-working-together',
                 satelliteModelUrl: '/satellites/satellite4.glb',
-                contentUrl: '/pages/contributions/elaborately-collaborating-and-working-together.html',
+                contentUrl:
+                    '/pages/contributions/elaborately-collaborating-and-working-together.html',
                 title: 'elaborately collaborating and working together',
                 subtitleUrl: '/collaborators/Marten-Esko',
-                
             },
 
             {
-                url: '/contributions/collaborating-as-a-multiplicity-a-dialogue-with-other-dialogues',
+                url:
+                    '/contributions/collaborating-as-a-multiplicity-a-dialogue-with-other-dialogues',
                 satelliteModelUrl: '/satellites/satellite5.glb',
-                contentUrl: '/pages/contributions/collaborating-as-a-multiplicity–a-dialogue-with-other-dialogues.html',
-                title: 'Collaborating as a Multiplicity – A Dialogue With Other Dialogues',
+                contentUrl:
+                    '/pages/contributions/collaborating-as-a-multiplicity–a-dialogue-with-other-dialogues.html',
+                title:
+                    'Collaborating as a Multiplicity – A Dialogue With Other Dialogues',
                 subtitleUrl: '/collaborators/Tina-Madsen',
-                
             },
 
             {
@@ -203,7 +213,6 @@
                 contentUrl: '/pages/contributions/what-keeps-us-going.html',
                 title: 'What keeps us going',
                 subtitleUrl: '/collaborators/Diana-Soria-Hernandez',
-                
             },
 
             {
@@ -211,29 +220,32 @@
                 satelliteModelUrl: '/satellites/satellite7.glb',
                 contentUrl: '/pages/contributions/supradigm.html',
                 title: 'SUPRADIGM / SUPRADIGMA',
-                subtitleUrl: '/collaborators/Adrian-Balseca',  
+                subtitleUrl: '/collaborators/Adrian-Balseca',
             },
             {
-                url: '/contributions/SAFE_R_Evolving-the-Conditions-for-Collaboration-Or-From-Safer-Spaces-to-Safer-People',
+                url:
+                    '/contributions/SAFE_R_Evolving-the-Conditions-for-Collaboration-Or-From-Safer-Spaces-to-Safer-People',
                 satelliteModelUrl: '/satellites/satellite8.glb',
                 contentUrl: '/pages/contributions/ALI.html',
-                title: 'SAFE{R}: Evolving the Conditions for Collaboration Or From ‘Safer Spaces’ to ‘Safer People’',
-                subtitleUrl: '/collaborators/Ali-Akbar-Mehta',  
+                title:
+                    'SAFE{R}: Evolving the Conditions for Collaboration Or From ‘Safer Spaces’ to ‘Safer People’',
+                subtitleUrl: '/collaborators/Ali-Akbar-Mehta',
             },
             {
                 url: '/contributions/rec-on-org',
                 satelliteModelUrl: '/satellites/satellite9.glb',
                 contentUrl: '/pages/contributions/rec-on.org.html',
                 title: 're-con.org',
-                subtitleUrl: '/collaborators/Antye-Greie-Ripatti',  
+                subtitleUrl: '/collaborators/Antye-Greie-Ripatti',
             },
             {
-                url: '/contributions/Stuff-asking-stuff-Stuff-of-stuff-Stuff-about-stuff-Inside-out-stuff-Vital-stuff-inside-and-outside',
+                url:
+                    '/contributions/Stuff-asking-stuff-Stuff-of-stuff-Stuff-about-stuff-Inside-out-stuff-Vital-stuff-inside-and-outside',
                 satelliteModelUrl: '/satellites/satellite10.glb',
                 contentUrl: '/pages/contributions/kraamtext.html',
-                title: ' Stuff asking stuff / Stuff of stuff / Stuff about stuff / Inside out stuff / Vital stuff* inside and outside',
+                title:
+                    ' Stuff asking stuff / Stuff of stuff / Stuff about stuff / Inside out stuff / Vital stuff* inside and outside',
                 subtitleUrl: '/collaborators/kraam',
-                
             },
             {
                 url: '/contributions/Venyvat-Huoneet-Stretchy-Rooms',
@@ -241,132 +253,143 @@
                 contentUrl: '/pages/contributions/Stretchy-Rooms.html',
                 title: 'Venyvät huoneet / Stretchy Rooms',
                 subtitleUrl: '/collaborators/Juulia-Terho-Milja-Maaria-Terho',
-                
             },
             {
-                url: '/contributions/Mythological-Migrations-On-Collaboration-Organization-and-Production',
+                url:
+                    '/contributions/Mythological-Migrations-On-Collaboration-Organization-and-Production',
                 satelliteModelUrl: '/satellites/satellite12.glb',
                 contentUrl: '/pages/contributions/Mythological-Migrations.html',
-                title: 'Mythological Migrations: On Collaboration, Organization, and Production',
+                title:
+                    'Mythological Migrations: On Collaboration, Organization, and Production',
                 subtitleUrl: '/collaborators/Abdullah-Qureshi-Danai-Anagnostou',
             },
             {
-                url: '/contributions/Terms-Conditions-What-do-we-need-in-order-to-work-together',
+                url:
+                    '/contributions/Terms-Conditions-What-do-we-need-in-order-to-work-together',
                 satelliteModelUrl: '/satellites/satellite13.glb',
                 contentUrl: '/pages/contributions/Terms-Conditions.html',
-                title: 'Terms & Conditions: What do we need in order to work together?',
+                title:
+                    'Terms & Conditions: What do we need in order to work together?',
                 subtitleUrl: '/collaborators/Feminist-Culture-House',
             },
             {
-                url: '/contributions/Reading-as-collaboration-deconstructing-single-narratives-and-the-myth-of-the-individual',
+                url:
+                    '/contributions/Reading-as-collaboration-deconstructing-single-narratives-and-the-myth-of-the-individual',
                 satelliteModelUrl: '/satellites/satellite14.glb',
-                contentUrl: '/pages/contributions/Reading-as-collaboration.html',
-                title: 'Reading as collaboration: deconstructing single narratives and the myth of the individual',
+                contentUrl:
+                    '/pages/contributions/Reading-as-collaboration.html',
+                title:
+                    'Reading as collaboration: deconstructing single narratives and the myth of the individual',
                 subtitleUrl: '/collaborators/Yvonne-Billimore',
-                
             },
             {
                 url: '/contributions/RSVP-Letters-and-Dates-between-Spaces',
                 satelliteModelUrl: '/satellites/satellite15.glb',
                 contentUrl: '/pages/contributions/RSVP.html',
                 title: 'RSVP - Letters and Dates between Spaces',
-                subtitleUrl: '/collaborators/Iida-Nissinen-Tuisku-Lehto-Laura-Ramo-Oona-Heinanen-QUERQ',  
+                subtitleUrl:
+                    '/collaborators/Iida-Nissinen-Tuisku-Lehto-Laura-Ramo-Oona-Heinanen-QUERQ',
             },
-
         ],
 
         collaborators: [
             {
                 url: '/collaborators/Vidha-Saumya',
                 contentUrl: '/pages/collaborators/Vidha-Saumya.html',
-                title: 'Vidha Saumya'
+                title: 'Vidha Saumya',
             },
 
             {
                 url: '/collaborators/Marten-Esko',
                 contentUrl: '/pages/collaborators/Marten-Esko.html',
-                title: 'Marten Esko'
+                title: 'Marten Esko',
             },
 
             {
                 url: '/collaborators/Marko-Timlin',
                 contentUrl: '/pages/collaborators/Marko-Timlin.html',
-                title: 'Marko Timlin'
+                title: 'Marko Timlin',
             },
 
             {
                 url: '/collaborators/Tina-Madsen',
                 contentUrl: '/pages/collaborators/Tina-Madsen.html',
-                title: 'Tina Mariane Krogh Madsen'
+                title: 'Tina Mariane Krogh Madsen',
             },
 
             {
                 url: '/collaborators/Diana-Soria-Hernandez',
                 contentUrl: '/pages/collaborators/Diana-Soria.html',
-                title:'Diana Soria Hernández'
+                title: 'Diana Soria Hernández',
             },
 
             {
                 url: '/collaborators/Adrian-Balseca',
                 contentUrl: '/pages/collaborators/Adrian-Balseca.html',
-                title:'Adrián Balseca'
+                title: 'Adrián Balseca',
             },
             {
                 url: '/collaborators/Ali-Akbar-Mehta',
                 contentUrl: '/pages/collaborators/Ali-Akbar-Mehta.html',
-                title: 'Ali Akbar Mehta (Museum of Impossible Forms)'
+                title: 'Ali Akbar Mehta (Museum of Impossible Forms)',
             },
 
             {
                 url: '/collaborators/Antye-Greie-Ripatti',
                 contentUrl: '/pages/collaborators/Antye-Greie-Ripatti.html',
-                title:'Antye Greie-Ripatti'
+                title: 'Antye Greie-Ripatti',
             },
 
             {
                 url: '/collaborators/kraam',
                 contentUrl: '/pages/collaborators/kraam.html',
-                title:'Minna Hint & Killu Sukmit (Kraam Art Space)'
+                title: 'Minna Hint & Killu Sukmit (Kraam Art Space)',
             },
             {
                 url: '/collaborators/Juulia-Terho-Milja-Maaria-Terho',
-                contentUrl: '/pages/collaborators/Juulia-Terho-Milja-Maaria-Terho.html',
-                title:'Milja-Maaria Terho & Juulia Terho'
+                contentUrl:
+                    '/pages/collaborators/Juulia-Terho-Milja-Maaria-Terho.html',
+                title: 'Milja-Maaria Terho & Juulia Terho',
             },
             {
                 url: '/collaborators/Abdullah-Qureshi-Danai-Anagnostou',
-                contentUrl: '/pages/collaborators/Abdullah-Qureshi-Danai-Anagnostou.html',
-                title:'Abdullah Qureshi & Danai Anagnostou'
+                contentUrl:
+                    '/pages/collaborators/Abdullah-Qureshi-Danai-Anagnostou.html',
+                title: 'Abdullah Qureshi & Danai Anagnostou',
             },
 
             {
                 url: '/collaborators/Feminist-Culture-House',
                 contentUrl: '/pages/collaborators/Feminist-Culture-House.html',
-                title:'Feminist Culture House'
+                title: 'Feminist Culture House',
             },
             {
                 url: '/collaborators/Yvonne-Billimore',
                 contentUrl: '/pages/collaborators/Yvonne-Billimore.html',
-                title:'Yvonne Bilimore'
+                title: 'Yvonne Bilimore',
             },
             {
-                url: '/collaborators/Iida-Nissinen-Tuisku-Lehto-Laura-Ramo-Oona-Heinanen-QUERQ',
-                contentUrl: '/pages/collaborators/Iida-Nissinen-Tuisku-Lehto-Laura-Rämö-Oona-Heinänen-QUERQ.html',
-                title:'Iida Nissinen, Tuisku Lehto, Laura Rämö & Oona Heinänen (QUERQ Community)'
-            }, 
+                url:
+                    '/collaborators/Iida-Nissinen-Tuisku-Lehto-Laura-Ramo-Oona-Heinanen-QUERQ',
+                contentUrl:
+                    '/pages/collaborators/Iida-Nissinen-Tuisku-Lehto-Laura-Rämö-Oona-Heinänen-QUERQ.html',
+                title:
+                    'Iida Nissinen, Tuisku Lehto, Laura Rämö & Oona Heinänen (QUERQ Community)',
+            },
         ],
 
         otherPages: [
             {
                 url: '/about-this-book',
                 contentUrl: '/pages/about-this-book.html',
-                title: 'Prologue'
+                title: 'Prologue',
             },
             {
                 url: '/third-space-collective',
                 contentUrl: '/pages/third-space-collective.html',
-                title:' Cartography of 6 years at Third Space.',
-                subtitle: 'This is a conversation between the current members of Third Space Collective on the past,the present, and future of the space.'
+                title: ' Cartography of 6 years at Third Space.',
+                subtitle:
+                    'This is a conversation between the current members of Third Space Collective on the past,the present, and future of the space.',
             },
         ],
 
@@ -374,7 +397,7 @@
             desktopWidth: 30, // in percents
             mobileWidth: 50, // in percents
             textRollDuration: 1620, // in seconds
-            textRolling:`  
+            textRolling: `  
                 ***Cartography of 6 years at Third Space***
                 Sepideh: So we're gonna start the conversation, what does (the) Third Space mean to us. Who wants to start?
                 
@@ -472,7 +495,9 @@
 
     // Just a sanity check for the data
     CONFIG.contributions.forEach((contribution) => {
-        const collaborator = CONFIG.collaborators.filter(collaborator => collaborator.url === contribution.subtitleUrl)[0]
+        const collaborator = CONFIG.collaborators.filter(
+            (collaborator) => collaborator.url === contribution.subtitleUrl
+        )[0]
         if (!collaborator) {
             throw new Error(`bio for ${contribution.url} not found`)
         }
@@ -481,9 +506,12 @@
 
     const indexPage = {
         url: '/book-index',
-        content: CONFIG.contributions.map(
-            contribution => {
-                const collaborator = CONFIG.collaborators.filter(collaborator => collaborator.url === contribution.subtitleUrl)[0]
+        content: CONFIG.contributions
+            .map((contribution) => {
+                const collaborator = CONFIG.collaborators.filter(
+                    (collaborator) =>
+                        collaborator.url === contribution.subtitleUrl
+                )[0]
                 return `
                     <div class="index-contribution">
                         <div class="title">
@@ -498,9 +526,9 @@
                         </div>
                     </div>
                 `
-            }
-        ).join('\n'),
-        title: 'Index'
+            })
+            .join('\n'),
+        title: 'Index',
     }
     CONFIG.otherPages.push(indexPage)
 

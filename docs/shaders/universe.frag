@@ -136,17 +136,16 @@ void main() {
 	n2 = pow(n2, 9.0);
     n2 *= c2;
     n2 *= sub1;
-	// Invert colors
-	vec3 starsColor = 1.0 - vec3(clamp(n2, 0.0, 1.0));
-    starsColor = starsColor * (1.0 - filterOpacity) + filterOpacity * starsFilter;
+
+	vec3 starsColor = vec3(clamp(n2, 0.0, 1.0));
+	vec3 skyColor = vec3(1.0) * (1.0 - filterOpacity) + filterOpacity * starsFilter;
+	vec3 starsAndSkyColor = starsColor + skyColor;
+	
 
     // Blend stars and nebula
     float nebulaIntensity = length(nebulaColor) / sqrt(3.0);
     vec3 totalColor = nebulaColor * nebulaOpacity;
-    totalColor += starsColor * (1.0 - nebulaIntensity);
-    // vec3 totalColor = starsColor + nebulaColor * nebulaOpacity;
-    // vec3 totalColor = starsColor;
-    // vec3 totalColor = nebulaColor;
+    totalColor += starsAndSkyColor * (1.0 - nebulaIntensity);
 
     vec4 total = vec4(totalColor, 1.0);
 

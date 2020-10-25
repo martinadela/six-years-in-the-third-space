@@ -67,6 +67,15 @@
                 '& .note': {
                     position: 'relative',
                     top: '-0.5em',
+                    fontSize: '80%',
+                },
+
+                '& .footnotes': {
+                    borderTop: `1px solid ${COLOR_TEXT}`,
+                    paddingTop: '1em',
+                    '& .index': {
+                        fontWeight: 'bold',
+                    }
                 },
 
                 '& .imagecaption': {
