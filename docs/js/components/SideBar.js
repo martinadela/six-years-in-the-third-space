@@ -69,6 +69,11 @@
                     '& $innerContainer': {
                         opacity: 1,
                         background: BACKGROUND,
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
                     },
                     '& $expandMenuButtonTitle': {
                         display: 'none'
@@ -98,9 +103,7 @@
                     },
                 }
             },
-            innerContainer: {
-                height: '100%',
-            },
+            innerContainer: {},
             h1: {
                 [DESKTOP_MEDIA_QUERY]: {
                     fontSize: '350%',
