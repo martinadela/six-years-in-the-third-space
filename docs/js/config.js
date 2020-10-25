@@ -1,4 +1,6 @@
 ;(function () {
+    const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1
+    
     const NEBULA_COLOR1 = [235, 194, 226] // Pink
     const NEBULA_COLOR2 = [255, 199, 149] // Orange
     const NEBULA_GRADIENT = `linear-gradient(17deg, rgba(255,255,255,0.2) 0%, rgba(${NEBULA_COLOR1[0]},${NEBULA_COLOR1[1]},${NEBULA_COLOR1[2]},0.2) 40%, rgba(${NEBULA_COLOR2[0]},${NEBULA_COLOR2[1]},${NEBULA_COLOR2[2]},0.2) 60%, rgba(255,255,255,0.2) 100%)`
@@ -117,7 +119,7 @@
             filterColor: [216, 211, 242],
             filterOpacity: 0.75,
             nebulaOpacity: 0.8,
-            whiteCloudsIntensity: 0.05,
+            whiteCloudsIntensity: isFirefox ? 0.0 : 0.05, // There's a bug in firefox with clouds,
             rotationAngleStep: (Math.PI / 2) * 0.0002,
             radius: 10000,
         },

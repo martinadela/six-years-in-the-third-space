@@ -35,6 +35,9 @@
             readerContainer: {
                 flex: 1,
                 width: '100%',
+                // Necessary for forcing the flex item to shrink:
+                // REF : https://stackoverflow.com/a/36247448
+                minHeight: 0,
                 height: '0%',
             },
 
