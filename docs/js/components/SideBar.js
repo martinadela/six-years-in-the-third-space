@@ -100,7 +100,6 @@
             },
             innerContainer: {
                 height: '100%',
-                overflow: 'hidden'
             },
             h1: {
                 [DESKTOP_MEDIA_QUERY]: {
