@@ -378,6 +378,15 @@
                 title:
                     'Iida Nissinen, Tuisku Lehto, Laura Rämö & Oona Heinänen (QUERQ Community)',
             },
+
+            {
+                url:
+                    '/collaborators/Third-Space-Collective-bio',
+                contentUrl:
+                    '/pages/collaborators/Third-Space-Collective-bio.html',
+                title:
+                    'Third Space Collective bio',
+            },
         ],
 
         otherPages: [
