@@ -15,6 +15,7 @@
                 margin: 'auto',
                 maxWidth: '1000px',
                 paddingBottom: '2em',
+                fontSize: "125%",
 
                 '& .fullwidthimage': {
                     '& img': {
@@ -119,7 +120,8 @@
 
                 '& .index-contribution': {
                     marginBottom: '1em',
-                    fontSize: '150%',
+                    fontSize: '120%',
+                    textAlign: 'left',
                     fontFamily: FONT_FAMILY_TITLE,
                     '& .title': {
                         textTransform: 'uppercase',
