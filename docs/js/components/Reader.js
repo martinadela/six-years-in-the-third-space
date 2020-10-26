@@ -76,7 +76,7 @@
                     display: 'none'
                 },
                 '& svg': {
-                    animation: '$blink 2s ease-in-out infinite',
+                    animation: '$blink 4s ease-in-out infinite',
                     transform: 'rotate(90deg)',
                     height: '5em',
                     width: 'auto',
@@ -89,13 +89,19 @@
             },
             '@keyframes blink': {
                 '0%': {
-                    opacity: 1,
+                    opacity: 0.1,
+                },
+                '30%': {
+                    opacity: 0.1,
                 },
                 '50%': {
-                    opacity: 0,
+                    opacity: 1,
+                },
+                '80%': {
+                    opacity: 0.1,
                 },
                 '100%': {
-                    opacity: 1,
+                    opacity: 0.1,
                 },
             },
         })
@@ -213,17 +219,15 @@
         }
 
         containerScrolled() {
-            // As soon as the container is scrolled once, we hide the scrollButton forever
-            this.scrollButton.classList.add('hidden')
-            // const offset = TSP.utils.getScrollOffset(
-            //     this.innerContainer,
-            //     this.innerContainer.querySelector('.background'),
-            // )
-            // if (offset !== 0) {
-            //     this.scrollButton.classList.add('hidden')
-            // } else {
-            //     this.scrollButton.classList.remove('hidden')
-            // }
+            const offset = TSP.utils.getScrollOffset(
+                this.innerContainer,
+                this.innerContainer.querySelector('.background'),
+            )
+            if (offset !== 0) {
+                this.scrollButton.classList.add('hidden')
+            } else {
+                this.scrollButton.classList.remove('hidden')
+            }
         }
 
         setContent(content, hasNoSatellite) {

@@ -154,7 +154,7 @@
         },
         satellites: {
             planetaryRotationAxisRandomness: Math.PI * 0,
-            planetaryRotationRadius: [100, 10],
+            planetaryRotationRadius: [50, 3],
             planetaryRotationAngleStep: [
                 (Math.PI / 2) * 0.0005,
                 (Math.PI / 2) * 0.0001,
