@@ -368,7 +368,7 @@
             {
                 url: '/collaborators/Yvonne-Billimore',
                 contentUrl: '/pages/collaborators/Yvonne-Billimore.html',
-                title: 'Yvonne Bilimore',
+                title: 'Yvonne Billimore',
             },
             {
                 url:
